@@ -9,6 +9,8 @@ import Dashboard from "./pages/Dashboard";
 import VehicleDetails from "./pages/VehicleDetails";
 import MapView from "./pages/MapView";
 import BatteryAnalytics from "./pages/BatteryAnalytics";
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,6 +27,8 @@ const App = () => (
           <Route path="/vehicle" element={<VehicleDetails />} />
           <Route path="/map" element={<MapView />} />
           <Route path="/analytics" element={<BatteryAnalytics />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/settings" element={<Settings />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
