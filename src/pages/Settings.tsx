@@ -12,11 +12,14 @@ import {
   Moon, 
   Sun, 
   LayoutDashboard,
-  Check 
+  Check,
+  ChevronRight
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function Settings() {
   const [activeTab, setActiveTab] = useState('Appearance');
@@ -29,6 +32,7 @@ export default function Settings() {
     chargingComplete: true,
     weeklyReports: false
   });
+  const isMobile = useIsMobile();
 
   const savePreferences = () => {
     toast.success('Settings saved successfully!');
@@ -36,39 +40,71 @@ export default function Settings() {
 
   const handleThemeChange = (newTheme: string) => {
     setTheme(newTheme);
-    // In a real app, you would actually change the theme here
+    toast('Theme changed to ' + newTheme, {
+      description: 'Your theme preferences have been updated.'
+    });
   };
 
   const handleColorChange = (color: string) => {
     setAccentColor(color);
-    // In a real app, you would actually change the accent color here
+    toast('Accent color changed', {
+      description: 'Your color preferences have been updated.'
+    });
   };
 
   const handleDensityChange = (newDensity: string) => {
     setDensity(newDensity);
-    // In a real app, you would adjust the UI density
+    toast('UI density changed to ' + newDensity, {
+      description: 'Your layout preferences have been updated.'
+    });
   };
 
-  const renderContent = () => {
-    switch(activeTab) {
-      case 'Appearance':
-        return (
-          <Card className="bg-gray-900 border-gray-800">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Moon className="mr-2 h-5 w-5 text-revithalize-green" />
-                Appearance
-              </CardTitle>
-              <CardDescription className="text-gray-400">
-                Customize how the application looks
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-6">
-                {/* Theme Selection */}
-                <div>
-                  <h3 className="text-white font-medium mb-3">Theme</h3>
-                  <div className="grid grid-cols-3 gap-3">
+  const handleNotificationToggle = (key: keyof typeof notifications) => {
+    setNotifications(prev => {
+      const newValue = !prev[key];
+      toast(newValue ? 'Notification enabled' : 'Notification disabled', {
+        description: `${key} notifications have been ${newValue ? 'enabled' : 'disabled'}.`
+      });
+      return {...prev, [key]: newValue};
+    });
+  };
+
+  // For mobile, we'll use Tabs component for better experience
+  if (isMobile) {
+    return (
+      <DashboardLayout>
+        <div className="space-y-4 px-1">
+          <header className="mb-4">
+            <h1 className="text-2xl font-heading font-bold text-white">Settings</h1>
+            <p className="text-gray-400 text-sm">Customize your app experience</p>
+          </header>
+          
+          <Tabs defaultValue="Appearance" className="w-full">
+            <TabsList className="w-full grid grid-cols-3 h-auto p-1 bg-gray-800 rounded-xl mb-4">
+              <TabsTrigger value="Appearance" className="rounded-lg data-[state=active]:bg-revithalize-dark data-[state=active]:text-revithalize-green py-2">
+                <Moon size={16} className="mr-1" />
+                <span className="text-xs">Appearance</span>
+              </TabsTrigger>
+              <TabsTrigger value="Notifications" className="rounded-lg data-[state=active]:bg-revithalize-dark data-[state=active]:text-revithalize-green py-2">
+                <Bell size={16} className="mr-1" />
+                <span className="text-xs">Notifications</span>
+              </TabsTrigger>
+              <TabsTrigger value="Account" className="rounded-lg data-[state=active]:bg-revithalize-dark data-[state=active]:text-revithalize-green py-2">
+                <User size={16} className="mr-1" />
+                <span className="text-xs">Account</span>
+              </TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="Appearance" className="mt-0 space-y-4">
+              <Card className="bg-gray-900 border-gray-800">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-white text-lg flex items-center">
+                    <Moon className="mr-2 h-4 w-4 text-revithalize-green" />
+                    Theme
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-3 gap-2">
                     {[
                       { name: "System", icon: SettingsIcon },
                       { name: "Dark", icon: Moon },
@@ -79,7 +115,7 @@ export default function Settings() {
                       return (
                         <div
                           key={themeOption.name}
-                          className={`flex flex-col items-center justify-center p-4 rounded-lg cursor-pointer border transition-all ${
+                          className={`flex flex-col items-center justify-center p-3 rounded-lg cursor-pointer border transition-all ${
                             isActive 
                               ? 'border-revithalize-green bg-gray-800' 
                               : 'border-gray-800 bg-gray-800/50 hover:bg-gray-800'
@@ -87,27 +123,33 @@ export default function Settings() {
                           onClick={() => handleThemeChange(themeOption.name)}
                         >
                           <Icon 
-                            size={24} 
-                            className={`mb-2 ${isActive ? 'text-revithalize-green' : 'text-gray-400'}`} 
+                            size={18} 
+                            className={`mb-1 ${isActive ? 'text-revithalize-green' : 'text-gray-400'}`} 
                           />
-                          <span className={isActive ? 'text-white' : 'text-gray-400'}>
+                          <span className={`text-xs ${isActive ? 'text-white' : 'text-gray-400'}`}>
                             {themeOption.name}
                           </span>
                           {isActive && (
-                            <div className="absolute top-2 right-2">
-                              <Check size={16} className="text-revithalize-green" />
+                            <div className="absolute top-1 right-1">
+                              <Check size={12} className="text-revithalize-green" />
                             </div>
                           )}
                         </div>
                       );
                     })}
                   </div>
-                </div>
-
-                {/* Color Accents */}
-                <div>
-                  <h3 className="text-white font-medium mb-3">Accent Color</h3>
-                  <div className="flex flex-wrap gap-3">
+                </CardContent>
+              </Card>
+              
+              <Card className="bg-gray-900 border-gray-800">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-white text-lg flex items-center">
+                    <div className="w-4 h-4 rounded-full bg-revithalize-green mr-2"></div>
+                    Accent Color
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-wrap gap-3 justify-center">
                     {[
                       { color: 'bg-revithalize-green', name: 'green' },
                       { color: 'bg-blue-500', name: 'blue' },
@@ -132,110 +174,127 @@ export default function Settings() {
                       </div>
                     ))}
                   </div>
-                </div>
-
-                {/* Layout Density */}
-                <div>
-                  <h3 className="text-white font-medium mb-3">Layout Density</h3>
-                  <div className="grid grid-cols-3 gap-3">
+                </CardContent>
+              </Card>
+              
+              <Card className="bg-gray-900 border-gray-800">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-white text-lg flex items-center">
+                    <LayoutDashboard className="mr-2 h-4 w-4 text-revithalize-green" />
+                    Layout Density
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-3 gap-2">
                     {['Compact', 'Default', 'Comfortable'].map((densityOption) => (
                       <div
                         key={densityOption}
                         onClick={() => handleDensityChange(densityOption)}
-                        className={`text-center p-3 rounded-lg cursor-pointer border transition-colors ${
+                        className={`text-center p-2 rounded-lg cursor-pointer border transition-colors ${
                           density === densityOption 
                             ? 'border-revithalize-green bg-gray-800' 
                             : 'border-gray-800 bg-gray-800/50 hover:bg-gray-800'
                         }`}
                       >
-                        <span className={density === densityOption ? 'text-white' : 'text-gray-400'}>
+                        <span className={`text-xs ${density === densityOption ? 'text-white' : 'text-gray-400'}`}>
                           {densityOption}
                         </span>
                       </div>
                     ))}
                   </div>
-                </div>
-
-                <div className="flex justify-end pt-4">
-                  <Button onClick={savePreferences} className="bg-revithalize-green hover:bg-green-600 text-black font-medium transition-colors">
-                    Save Preferences
-                  </Button>
-                </div>
+                </CardContent>
+              </Card>
+              
+              <div className="pt-4">
+                <Button onClick={savePreferences} className="w-full bg-revithalize-green hover:bg-green-600 text-black font-medium transition-colors">
+                  Save Changes
+                </Button>
               </div>
-            </CardContent>
-          </Card>
-        );
-      case 'Notifications':
-        return (
-          <Card className="bg-gray-900 border-gray-800">
-            <CardHeader>
-              <CardTitle className="text-white flex items-center">
-                <Bell className="mr-2 h-5 w-5 text-revithalize-green" />
-                Notifications
-              </CardTitle>
-              <CardDescription className="text-gray-400">
-                Configure app notifications and alerts
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {[
-                  { id: 'appUpdates', label: 'App Updates', description: 'Get notified about new features and improvements' },
-                  { id: 'batteryAlerts', label: 'Battery Alerts', description: 'Receive alerts when battery is low or needs attention' },
-                  { id: 'chargingComplete', label: 'Charging Complete', description: 'Get notified when vehicle charging is complete' },
-                  { id: 'weeklyReports', label: 'Weekly Reports', description: 'Receive weekly usage and efficiency reports' },
-                ].map((item) => (
-                  <div key={item.id} className="flex items-center justify-between p-3 rounded-lg bg-gray-800/50 border border-gray-800">
-                    <div>
-                      <h4 className="text-white font-medium">{item.label}</h4>
-                      <p className="text-sm text-gray-400">{item.description}</p>
-                    </div>
-                    <Switch
-                      checked={notifications[item.id as keyof typeof notifications]}
-                      onCheckedChange={(checked) => {
-                        setNotifications({
-                          ...notifications,
-                          [item.id]: checked
-                        });
-                      }}
-                      className="data-[state=checked]:bg-revithalize-green"
-                    />
+            </TabsContent>
+            
+            <TabsContent value="Notifications" className="mt-0 space-y-4">
+              <Card className="bg-gray-900 border-gray-800">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-white text-lg flex items-center">
+                    <Bell className="mr-2 h-4 w-4 text-revithalize-green" />
+                    Notifications
+                  </CardTitle>
+                  <CardDescription className="text-gray-400 text-xs">
+                    Configure app notifications and alerts
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {[
+                      { id: 'appUpdates', label: 'App Updates', description: 'Get notified about new features' },
+                      { id: 'batteryAlerts', label: 'Battery Alerts', description: 'Low battery notifications' },
+                      { id: 'chargingComplete', label: 'Charging Complete', description: 'When charging is done' },
+                      { id: 'weeklyReports', label: 'Weekly Reports', description: 'Usage and efficiency reports' },
+                    ].map((item) => (
+                      <div key={item.id} className="flex items-center justify-between p-3 rounded-lg bg-gray-800/70 border border-gray-800 active:bg-gray-800 transition-colors">
+                        <div className="pr-4">
+                          <h4 className="text-white text-sm font-medium">{item.label}</h4>
+                          <p className="text-xs text-gray-400">{item.description}</p>
+                        </div>
+                        <Switch
+                          checked={notifications[item.id as keyof typeof notifications]}
+                          onCheckedChange={() => handleNotificationToggle(item.id as keyof typeof notifications)}
+                          className="data-[state=checked]:bg-revithalize-green"
+                        />
+                      </div>
+                    ))}
                   </div>
-                ))}
-                
-                <div className="flex justify-end pt-4">
-                  <Button onClick={savePreferences} className="bg-revithalize-green hover:bg-green-600 text-black font-medium transition-colors">
-                    Save Settings
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        );
-      default:
-        return (
-          <Card className="bg-gray-900 border-gray-800">
-            <CardHeader>
-              <CardTitle className="text-white">
-                {activeTab}
-              </CardTitle>
-              <CardDescription className="text-gray-400">
-                This section is under development
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="p-6 text-center">
-                <div className="mb-4 bg-gray-800 h-32 rounded-lg flex items-center justify-center">
-                  <p className="text-gray-400">Coming soon</p>
-                </div>
-                <p className="text-gray-300">We're working on this feature and it will be available soon.</p>
-              </div>
-            </CardContent>
-          </Card>
-        );
-    }
-  };
+                  
+                  <div className="pt-5">
+                    <Button onClick={savePreferences} className="w-full bg-revithalize-green hover:bg-green-600 text-black font-medium transition-colors">
+                      Save Settings
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            
+            <TabsContent value="Account" className="mt-0 space-y-4">
+              <Card className="bg-gray-900 border-gray-800">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-white text-lg flex items-center">
+                    <User className="mr-2 h-4 w-4 text-revithalize-green" />
+                    Account Settings
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {[
+                      { label: 'Profile Information', icon: User, action: 'Edit' },
+                      { label: 'Security Settings', icon: Shield, action: 'Manage' },
+                      { label: 'Language', icon: Globe, action: 'Change' },
+                      { label: 'Vehicle Settings', icon: Battery, action: 'Configure' },
+                    ].map((item, index) => {
+                      const Icon = item.icon;
+                      return (
+                        <div key={index} className="flex items-center justify-between p-3 rounded-lg bg-gray-800/70 border border-gray-800 active:bg-gray-700 transition-colors cursor-pointer">
+                          <div className="flex items-center">
+                            <Icon size={16} className="text-revithalize-green mr-3" />
+                            <span className="text-white text-sm">{item.label}</span>
+                          </div>
+                          <div className="flex items-center text-gray-400 text-xs">
+                            <span>{item.action}</span>
+                            <ChevronRight size={14} className="ml-1" />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </DashboardLayout>
+    );
+  }
 
+  // Desktop version
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -287,7 +346,182 @@ export default function Settings() {
 
           {/* Dynamic Content Area */}
           <div className="lg:col-span-2 space-y-6">
-            {renderContent()}
+            {activeTab === 'Appearance' && (
+              <Card className="bg-gray-900 border-gray-800">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center">
+                    <Moon className="mr-2 h-5 w-5 text-revithalize-green" />
+                    Appearance
+                  </CardTitle>
+                  <CardDescription className="text-gray-400">
+                    Customize how the application looks
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-6">
+                    {/* Theme Selection */}
+                    <div>
+                      <h3 className="text-white font-medium mb-3">Theme</h3>
+                      <div className="grid grid-cols-3 gap-3">
+                        {[
+                          { name: "System", icon: SettingsIcon },
+                          { name: "Dark", icon: Moon },
+                          { name: "Light", icon: Sun },
+                        ].map((themeOption) => {
+                          const Icon = themeOption.icon;
+                          const isActive = theme === themeOption.name;
+                          return (
+                            <div
+                              key={themeOption.name}
+                              className={`flex flex-col items-center justify-center p-4 rounded-lg cursor-pointer border transition-all ${
+                                isActive 
+                                  ? 'border-revithalize-green bg-gray-800' 
+                                  : 'border-gray-800 bg-gray-800/50 hover:bg-gray-800'
+                              }`}
+                              onClick={() => handleThemeChange(themeOption.name)}
+                            >
+                              <Icon 
+                                size={24} 
+                                className={`mb-2 ${isActive ? 'text-revithalize-green' : 'text-gray-400'}`} 
+                              />
+                              <span className={isActive ? 'text-white' : 'text-gray-400'}>
+                                {themeOption.name}
+                              </span>
+                              {isActive && (
+                                <div className="absolute top-2 right-2">
+                                  <Check size={16} className="text-revithalize-green" />
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Color Accents */}
+                    <div>
+                      <h3 className="text-white font-medium mb-3">Accent Color</h3>
+                      <div className="flex flex-wrap gap-3">
+                        {[
+                          { color: 'bg-revithalize-green', name: 'green' },
+                          { color: 'bg-blue-500', name: 'blue' },
+                          { color: 'bg-purple-500', name: 'purple' },
+                          { color: 'bg-red-500', name: 'red' },
+                          { color: 'bg-orange-500', name: 'orange' },
+                          { color: 'bg-pink-500', name: 'pink' },
+                        ].map((item) => (
+                          <div key={item.name} className="relative">
+                            <div
+                              onClick={() => handleColorChange(item.name)}
+                              className={`h-8 w-8 rounded-full cursor-pointer ${item.color} ${
+                                accentColor === item.name ? 'ring-2 ring-white ring-offset-2 ring-offset-gray-900' : ''
+                              }`}
+                            >
+                              {accentColor === item.name && (
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                  <Check size={14} className="text-white" />
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Layout Density */}
+                    <div>
+                      <h3 className="text-white font-medium mb-3">Layout Density</h3>
+                      <div className="grid grid-cols-3 gap-3">
+                        {['Compact', 'Default', 'Comfortable'].map((densityOption) => (
+                          <div
+                            key={densityOption}
+                            onClick={() => handleDensityChange(densityOption)}
+                            className={`text-center p-3 rounded-lg cursor-pointer border transition-colors ${
+                              density === densityOption 
+                                ? 'border-revithalize-green bg-gray-800' 
+                                : 'border-gray-800 bg-gray-800/50 hover:bg-gray-800'
+                            }`}
+                          >
+                            <span className={density === densityOption ? 'text-white' : 'text-gray-400'}>
+                              {densityOption}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="flex justify-end pt-4">
+                      <Button onClick={savePreferences} className="bg-revithalize-green hover:bg-green-600 text-black font-medium transition-colors">
+                        Save Preferences
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+            
+            {activeTab === 'Notifications' && (
+              <Card className="bg-gray-900 border-gray-800">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center">
+                    <Bell className="mr-2 h-5 w-5 text-revithalize-green" />
+                    Notifications
+                  </CardTitle>
+                  <CardDescription className="text-gray-400">
+                    Configure app notifications and alerts
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {[
+                      { id: 'appUpdates', label: 'App Updates', description: 'Get notified about new features and improvements' },
+                      { id: 'batteryAlerts', label: 'Battery Alerts', description: 'Receive alerts when battery is low or needs attention' },
+                      { id: 'chargingComplete', label: 'Charging Complete', description: 'Get notified when vehicle charging is complete' },
+                      { id: 'weeklyReports', label: 'Weekly Reports', description: 'Receive weekly usage and efficiency reports' },
+                    ].map((item) => (
+                      <div key={item.id} className="flex items-center justify-between p-3 rounded-lg bg-gray-800/50 border border-gray-800">
+                        <div>
+                          <h4 className="text-white font-medium">{item.label}</h4>
+                          <p className="text-sm text-gray-400">{item.description}</p>
+                        </div>
+                        <Switch
+                          checked={notifications[item.id as keyof typeof notifications]}
+                          onCheckedChange={() => handleNotificationToggle(item.id as keyof typeof notifications)}
+                          className="data-[state=checked]:bg-revithalize-green"
+                        />
+                      </div>
+                    ))}
+                    
+                    <div className="flex justify-end pt-4">
+                      <Button onClick={savePreferences} className="bg-revithalize-green hover:bg-green-600 text-black font-medium transition-colors">
+                        Save Settings
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+            
+            {activeTab !== 'Appearance' && activeTab !== 'Notifications' && (
+              <Card className="bg-gray-900 border-gray-800">
+                <CardHeader>
+                  <CardTitle className="text-white">
+                    {activeTab}
+                  </CardTitle>
+                  <CardDescription className="text-gray-400">
+                    This section is under development
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="p-6 text-center">
+                    <div className="mb-4 bg-gray-800 h-32 rounded-lg flex items-center justify-center">
+                      <p className="text-gray-400">Coming soon</p>
+                    </div>
+                    <p className="text-gray-300">We're working on this feature and it will be available soon.</p>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
       </div>
