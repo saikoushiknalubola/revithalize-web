@@ -1,157 +1,160 @@
 
 import React from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { User, Mail, Phone, MapPin, Calendar, Settings, Shield, Bell } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { User, Mail, Phone, MapPin, Calendar, Edit, LogOut, Battery, Car } from 'lucide-react';
+import { toast } from 'sonner';
 
 export default function Profile() {
+  const handleEditProfile = () => {
+    toast.info('Edit profile functionality coming soon!');
+  };
+
+  const handleLogout = () => {
+    toast.info('Logout functionality coming soon!');
+  };
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
         <header>
-          <h1 className="text-3xl font-heading font-bold text-white">Your Profile</h1>
+          <h1 className="text-3xl font-heading font-bold text-white">My Profile</h1>
           <p className="text-gray-400 mt-1">Manage your account and preferences</p>
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* User Profile Card */}
+          {/* Profile Card */}
           <Card className="lg:col-span-1 bg-gray-900 border-gray-800">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-white">User Information</CardTitle>
-              <CardDescription className="text-gray-400">Your personal details</CardDescription>
+            <CardHeader className="pb-2 text-center">
+              <div className="mx-auto mb-4 relative">
+                <div className="w-24 h-24 bg-gradient-to-br from-revithalize-green to-revithalize-blue rounded-full flex items-center justify-center text-black text-3xl font-bold">
+                  AT
+                </div>
+                <button 
+                  className="absolute bottom-0 right-0 bg-gray-800 p-1.5 rounded-full border border-gray-700 hover:bg-gray-700 transition-colors"
+                  onClick={handleEditProfile}
+                >
+                  <Edit size={14} className="text-white" />
+                </button>
+              </div>
+              <CardTitle className="text-white text-xl">Alex Thompson</CardTitle>
+              <p className="text-gray-400">EV Enthusiast</p>
             </CardHeader>
-            <CardContent>
-              <div className="flex flex-col items-center mb-6">
-                <div className="w-24 h-24 rounded-full bg-revithalize-dark flex items-center justify-center mb-4">
-                  <User size={48} className="text-revithalize-green" />
-                </div>
-                <h3 className="text-xl font-medium text-white">Alex Johnson</h3>
-                <p className="text-gray-400">EV Enthusiast</p>
-              </div>
-
+            <CardContent className="pt-4">
               <div className="space-y-3">
-                <div className="flex items-center gap-3 pb-3 border-b border-gray-800">
-                  <Mail className="h-5 w-5 text-gray-400" />
-                  <div>
-                    <p className="text-sm text-gray-400">Email</p>
-                    <p className="text-white">alex.johnson@example.com</p>
-                  </div>
+                <div className="flex items-center gap-3 text-gray-300">
+                  <Mail size={16} className="text-revithalize-green" />
+                  <span>alex.t@example.com</span>
                 </div>
-                <div className="flex items-center gap-3 pb-3 border-b border-gray-800">
-                  <Phone className="h-5 w-5 text-gray-400" />
-                  <div>
-                    <p className="text-sm text-gray-400">Phone</p>
-                    <p className="text-white">+91 9876 543 210</p>
-                  </div>
+                <div className="flex items-center gap-3 text-gray-300">
+                  <Phone size={16} className="text-revithalize-green" />
+                  <span>+1 (555) 123-4567</span>
                 </div>
-                <div className="flex items-center gap-3 pb-3 border-b border-gray-800">
-                  <MapPin className="h-5 w-5 text-gray-400" />
-                  <div>
-                    <p className="text-sm text-gray-400">Location</p>
-                    <p className="text-white">Hyderabad, Telangana</p>
-                  </div>
+                <div className="flex items-center gap-3 text-gray-300">
+                  <MapPin size={16} className="text-revithalize-green" />
+                  <span>San Francisco, CA</span>
                 </div>
-                <div className="flex items-center gap-3">
-                  <Calendar className="h-5 w-5 text-gray-400" />
-                  <div>
-                    <p className="text-sm text-gray-400">Member Since</p>
-                    <p className="text-white">March 2023</p>
-                  </div>
+                <div className="flex items-center gap-3 text-gray-300">
+                  <Calendar size={16} className="text-revithalize-green" />
+                  <span>Member since May 2023</span>
                 </div>
               </div>
-
-              <button className="w-full mt-6 bg-revithalize-dark hover:bg-gray-800 text-white font-medium py-2 px-4 rounded-lg transition-colors">
-                Edit Profile
-              </button>
             </CardContent>
+            <CardFooter className="pt-4 flex justify-center">
+              <Button 
+                variant="outline" 
+                className="w-full text-red-400 border-red-400/30 hover:bg-red-400/10"
+                onClick={handleLogout}
+              >
+                <LogOut size={16} className="mr-2" />
+                Sign Out
+              </Button>
+            </CardFooter>
           </Card>
 
-          {/* Settings and Preferences */}
           <div className="lg:col-span-2 space-y-6">
+            {/* Vehicle Information */}
             <Card className="bg-gray-900 border-gray-800">
               <CardHeader>
                 <CardTitle className="text-white flex items-center">
-                  <Settings className="mr-2 h-5 w-5 text-revithalize-green" />
-                  Account Settings
+                  <Car className="mr-2 h-5 w-5 text-revithalize-green" />
+                  My Vehicles
                 </CardTitle>
+                <CardDescription className="text-gray-400">
+                  Manage your connected electric vehicles
+                </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  {[
-                    { 
-                      title: "Notification Preferences", 
-                      description: "Manage how you receive alerts and updates", 
-                      icon: Bell 
-                    },
-                    { 
-                      title: "Privacy & Security", 
-                      description: "Control your data and account security settings", 
-                      icon: Shield 
-                    },
-                    { 
-                      title: "App Preferences", 
-                      description: "Customize your experience and display settings", 
-                      icon: Settings 
-                    },
-                  ].map((item, index) => {
-                    const Icon = item.icon;
-                    return (
-                      <div key={index} className="flex items-start justify-between p-4 bg-gray-800 rounded-lg">
-                        <div className="flex items-start gap-3">
-                          <div className="p-2 bg-gray-700 rounded-md">
-                            <Icon size={16} className="text-revithalize-green" />
-                          </div>
-                          <div>
-                            <h3 className="font-medium text-white">{item.title}</h3>
-                            <p className="text-sm text-gray-400">{item.description}</p>
-                          </div>
-                        </div>
-                        <button className="text-sm text-revithalize-green hover:text-green-400 transition-colors">
-                          Configure
-                        </button>
+                <div className="p-4 bg-gray-800 rounded-lg border border-gray-700 hover:border-revithalize-green/50 transition-colors cursor-pointer">
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+                    <div className="flex items-center gap-3 mb-3 md:mb-0">
+                      <div className="w-12 h-12 bg-revithalize-dark rounded-lg flex items-center justify-center">
+                        <Battery className="h-6 w-6 text-revithalize-green" />
                       </div>
-                    );
-                  })}
+                      <div>
+                        <h3 className="text-white font-medium">Tesla Model 3</h3>
+                        <p className="text-sm text-gray-400">Added May 15, 2023</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="bg-gray-900 px-3 py-1 rounded-full text-xs text-white">
+                        75% Charged
+                      </div>
+                      <div className="bg-revithalize-green/20 text-revithalize-green px-3 py-1 rounded-full text-xs">
+                        Active
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-4 flex justify-center">
+                  <Button variant="outline" className="border-dashed border-gray-700 hover:border-revithalize-green hover:bg-gray-800">
+                    <span className="mr-2 text-lg">+</span> Add New Vehicle
+                  </Button>
                 </div>
               </CardContent>
             </Card>
 
+            {/* Usage Statistics */}
             <Card className="bg-gray-900 border-gray-800">
               <CardHeader>
-                <CardTitle className="text-white">Vehicle Information</CardTitle>
-                <CardDescription className="text-gray-400">Your EV's details</CardDescription>
+                <CardTitle className="text-white">Usage Statistics</CardTitle>
+                <CardDescription className="text-gray-400">
+                  Your EV usage over the last 30 days
+                </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-sm text-gray-400">Vehicle Model</p>
-                      <p className="text-white font-medium">RevithaEV Pro X</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-400">Registration</p>
-                      <p className="text-white font-medium">TS 12 AB 3456</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-400">Purchase Date</p>
-                      <p className="text-white font-medium">June 2023</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-400">Warranty Until</p>
-                      <p className="text-white font-medium">June 2028</p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                    <p className="text-gray-400 text-sm mb-1">Total Distance</p>
+                    <p className="text-2xl font-bold text-white">437 km</p>
+                    <div className="mt-2 text-xs text-green-400 flex items-center">
+                      <span className="mr-1">↑</span> 12% from last month
                     </div>
                   </div>
                   
-                  <div className="mt-4 pt-4 border-t border-gray-800">
-                    <p className="text-sm text-gray-400 mb-2">Battery Warranty Status</p>
-                    <div className="flex items-center">
-                      <div className="relative w-full h-2 bg-gray-800 rounded-full overflow-hidden mr-3">
-                        <div className="absolute top-0 left-0 h-full bg-green-500 rounded-full" style={{ width: '92%' }} />
-                      </div>
-                      <span className="text-white font-medium">92%</span>
+                  <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                    <p className="text-gray-400 text-sm mb-1">Energy Used</p>
+                    <p className="text-2xl font-bold text-white">89 kWh</p>
+                    <div className="mt-2 text-xs text-red-400 flex items-center">
+                      <span className="mr-1">↓</span> 5% from last month
                     </div>
-                    <p className="text-xs text-gray-400 mt-2">58 months remaining</p>
                   </div>
+                  
+                  <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                    <p className="text-gray-400 text-sm mb-1">Charging Sessions</p>
+                    <p className="text-2xl font-bold text-white">17</p>
+                    <div className="mt-2 text-xs text-green-400 flex items-center">
+                      <span className="mr-1">↑</span> 8% from last month
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="mt-4 text-center">
+                  <Button className="bg-revithalize-blue hover:bg-blue-600 text-black">
+                    View Detailed Analytics
+                  </Button>
                 </div>
               </CardContent>
             </Card>
