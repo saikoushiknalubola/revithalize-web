@@ -1,9 +1,10 @@
 
 import React from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { BarChart, ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { ChartConfig, ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Calendar, Clock, TrendingDown, TrendingUp, Zap, Battery, BarChart2 } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from 'recharts';
 
 export default function BatteryAnalytics() {
   // Sample data for charts
@@ -135,19 +136,27 @@ export default function BatteryAnalytics() {
           </CardHeader>
           <CardContent className="h-80">
             <ChartContainer config={config}>
-              <BarChart
-                data={weeklyUsageData}
-                className="w-full h-full"
-                categories={["value"]}
-                colors={["usage"]}
-                valueFormatter={(value) => `${value} kWh`}
-                showLegend={false}
-                showGridLines
-              >
-                <ChartTooltip>
-                  <ChartTooltipContent />
-                </ChartTooltip>
-              </BarChart>
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={weeklyUsageData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#444" />
+                  <XAxis dataKey="name" stroke="#888" />
+                  <YAxis stroke="#888" />
+                  <Tooltip 
+                    content={(props) => {
+                      if (props.active && props.payload) {
+                        return (
+                          <div className="bg-gray-800 border border-gray-700 p-2 rounded-md">
+                            <p className="text-white font-medium">{props.label}</p>
+                            <p className="text-revithalize-green">{`${props.payload[0]?.value} kWh`}</p>
+                          </div>
+                        );
+                      }
+                      return null;
+                    }}
+                  />
+                  <Bar dataKey="value" fill="#00FF94" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
             </ChartContainer>
           </CardContent>
         </Card>
