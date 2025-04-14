@@ -36,9 +36,6 @@ const App = () => (
           <Route path="/analytics" element={<BatteryAnalytics />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/settings" element={<Settings />} />
-          {/* Redirect /settings/ to /settings */}
-          <Route path="/settings/" element={<Navigate to="/settings" replace />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

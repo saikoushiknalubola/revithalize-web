@@ -68,15 +68,17 @@ export default function Settings() {
     toast.success(`Battery mode changed to ${value}`);
   };
 
+  console.log("Rendering Settings Page");
+
   return (
     <DashboardLayout>
       <div className="container mx-auto space-y-6 p-4 md:p-6">
-        <header>
+        <header className="mb-6">
           <h1 className="text-3xl font-bold text-white font-poppins">Settings</h1>
           <p className="text-gray-400 mt-1 font-poppins">Manage your application preferences</p>
         </header>
 
-        <Tabs defaultValue="general" className="space-y-4">
+        <Tabs defaultValue="general" className="space-y-6">
           <TabsList className="w-full bg-gray-900 p-1 overflow-x-auto flex md:flex-wrap">
             <TabsTrigger 
               value="general"
