@@ -250,7 +250,7 @@ export default function BatteryAnalytics() {
                 </li>
                 <li className="flex items-start">
                   <span className="inline-block bg-yellow-500/20 text-yellow-400 p-1 rounded mr-2">!</span>
-                  <span>Charging efficiency drops in high temperatures (>35°C)</span>
+                  <span>Charging efficiency drops in high temperatures (&gt;35°C)</span>
                 </li>
                 <li className="flex items-start">
                   <span className="inline-block bg-blue-500/20 text-blue-400 p-1 rounded mr-2">i</span>
