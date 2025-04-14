@@ -4,15 +4,27 @@ import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
-import { Bell, Lock, Eye, BellOff, Zap, Battery, Moon, Sun, Smartphone } from 'lucide-react';
+import { 
+  Bell, Lock, Eye, BellOff, Zap, Battery, 
+  Moon, Sun, Smartphone, Shield, CloudRain, Wallet, 
+  CreditCard, AlarmClock, Bluetooth
+} from 'lucide-react';
 import { toast } from 'sonner';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
 
 export default function Settings() {
+  // State for settings
   const [notifications, setNotifications] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
   const [locationTracking, setLocationTracking] = useState(true);
   const [powerSaving, setPowerSaving] = useState(false);
   const [autoCharge, setAutoCharge] = useState(true);
+  const [weatherAlerts, setWeatherAlerts] = useState(true);
+  const [paymentNotifications, setPaymentNotifications] = useState(true);
+  const [batteryMode, setBatteryMode] = useState('balanced');
+  const [bluetoothEnabled, setBluetoothEnabled] = useState(true);
   
   const handleToggleChange = (setting: string, value: boolean) => {
     switch(setting) {
@@ -36,7 +48,24 @@ export default function Settings() {
         setAutoCharge(value);
         toast.success(`Auto charging ${value ? 'enabled' : 'disabled'}`);
         break;
+      case 'weatherAlerts':
+        setWeatherAlerts(value);
+        toast.success(`Weather alerts ${value ? 'enabled' : 'disabled'}`);
+        break;
+      case 'paymentNotifications':
+        setPaymentNotifications(value);
+        toast.success(`Payment notifications ${value ? 'enabled' : 'disabled'}`);
+        break;
+      case 'bluetoothEnabled':
+        setBluetoothEnabled(value);
+        toast.success(`Bluetooth ${value ? 'enabled' : 'disabled'}`);
+        break;
     }
+  };
+
+  const handleBatteryModeChange = (value: string) => {
+    setBatteryMode(value);
+    toast.success(`Battery mode changed to ${value}`);
   };
 
   return (
@@ -73,6 +102,12 @@ export default function Settings() {
             >
               Display
             </TabsTrigger>
+            <TabsTrigger 
+              value="advanced" 
+              className="flex-1 min-w-[100px] data-[state=active]:bg-revithalize-green data-[state=active]:text-black"
+            >
+              Advanced
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="general" className="space-y-4">
@@ -107,6 +142,28 @@ export default function Settings() {
                     className="data-[state=checked]:bg-revithalize-green"
                   />
                 </div>
+
+                <div className="mt-6 border-t border-gray-800 pt-4">
+                  <h3 className="text-white mb-3">Battery Operating Mode</h3>
+                  <RadioGroup 
+                    value={batteryMode} 
+                    onValueChange={handleBatteryModeChange}
+                    className="space-y-2"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="eco" id="eco" />
+                      <Label htmlFor="eco" className="text-gray-300">Eco Mode</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="balanced" id="balanced" />
+                      <Label htmlFor="balanced" className="text-gray-300">Balanced</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="performance" id="performance" />
+                      <Label htmlFor="performance" className="text-gray-300">Performance</Label>
+                    </div>
+                  </RadioGroup>
+                </div>
               </CardContent>
             </Card>
             
@@ -125,6 +182,18 @@ export default function Settings() {
                   </div>
                   <Switch 
                     defaultChecked
+                    className="data-[state=checked]:bg-revithalize-green"
+                  />
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <div className="text-white">Bluetooth Connection</div>
+                    <div className="text-gray-400 text-sm">Connect to vehicle via Bluetooth</div>
+                  </div>
+                  <Switch 
+                    checked={bluetoothEnabled}
+                    onCheckedChange={(checked) => handleToggleChange('bluetoothEnabled', checked)}
                     className="data-[state=checked]:bg-revithalize-green"
                   />
                 </div>
@@ -174,6 +243,30 @@ export default function Settings() {
                     className="data-[state=checked]:bg-revithalize-green"
                   />
                 </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <div className="text-white">Weather Alerts</div>
+                    <div className="text-gray-400 text-sm">Receive alerts about weather affecting charging</div>
+                  </div>
+                  <Switch 
+                    checked={weatherAlerts}
+                    onCheckedChange={(checked) => handleToggleChange('weatherAlerts', checked)}
+                    className="data-[state=checked]:bg-revithalize-green"
+                  />
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <div className="text-white">Payment Notifications</div>
+                    <div className="text-gray-400 text-sm">Notifications about billing and payments</div>
+                  </div>
+                  <Switch 
+                    checked={paymentNotifications}
+                    onCheckedChange={(checked) => handleToggleChange('paymentNotifications', checked)}
+                    className="data-[state=checked]:bg-revithalize-green"
+                  />
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
@@ -209,6 +302,26 @@ export default function Settings() {
                     className="data-[state=checked]:bg-revithalize-green"
                   />
                 </div>
+
+                <div className="mt-6 border-t border-gray-800 pt-4">
+                  <h3 className="text-white mb-3">Data Collection</h3>
+                  <div className="space-y-3">
+                    <div className="flex items-top space-x-2">
+                      <Checkbox id="analytics" defaultChecked/>
+                      <div className="grid gap-1.5">
+                        <Label htmlFor="analytics" className="text-gray-300">Analytics</Label>
+                        <p className="text-gray-400 text-xs">Share usage statistics to help improve the app</p>
+                      </div>
+                    </div>
+                    <div className="flex items-top space-x-2">
+                      <Checkbox id="crash-reports" defaultChecked/>
+                      <div className="grid gap-1.5">
+                        <Label htmlFor="crash-reports" className="text-gray-300">Crash Reports</Label>
+                        <p className="text-gray-400 text-xs">Send diagnostic information when the app crashes</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
@@ -236,6 +349,41 @@ export default function Settings() {
                     />
                     <Moon size={18} className="text-gray-400" />
                   </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="advanced" className="space-y-4">
+            <Card className="bg-gray-900 border-gray-800">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center">
+                  <Shield className="mr-2 h-5 w-5 text-purple-400" />
+                  Advanced Settings
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <div className="text-white">Developer Mode</div>
+                    <div className="text-gray-400 text-sm">Enable additional debugging features</div>
+                  </div>
+                  <Switch 
+                    className="data-[state=checked]:bg-revithalize-green"
+                  />
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <div className="text-white">Reset All Settings</div>
+                    <div className="text-gray-400 text-sm">Restore all settings to default values</div>
+                  </div>
+                  <button 
+                    className="px-3 py-1 bg-red-600 text-white rounded-md text-sm hover:bg-red-700"
+                    onClick={() => toast.info("This would reset all settings to defaults")}
+                  >
+                    Reset
+                  </button>
                 </div>
               </CardContent>
             </Card>
