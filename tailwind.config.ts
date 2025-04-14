@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -52,10 +51,12 @@ export default {
         }
       },
       fontFamily: {
-        'body': ['Space Grotesk', 'sans-serif'],
-        'heading': ['Syne', 'sans-serif'],
+        'body': ['Poppins', 'sans-serif'],
+        'heading': ['Poppins', 'sans-serif'],
+        'poppins': ['Poppins', 'sans-serif'],
+        'space': ['Space Grotesk', 'sans-serif'],
+        'syne': ['Syne', 'sans-serif'],
       },
-      // Extending existing Tailwind animations for smooth interactions
       animation: {
         'fade-in': 'fadeIn 0.3s ease-out',
         'scale-in': 'scaleIn 0.2s ease-out',

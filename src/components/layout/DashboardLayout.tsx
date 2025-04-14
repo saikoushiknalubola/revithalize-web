@@ -17,7 +17,7 @@ const NavItem = ({ icon: Icon, label, to, active }: NavItemProps) => {
     <Link
       to={to}
       className={cn(
-        "flex items-center gap-3 px-3 py-2 rounded-lg transition-colors",
+        "flex items-center gap-3 px-3 py-2 rounded-lg transition-colors font-poppins",
         active 
           ? "bg-revithalize-dark text-revithalize-green" 
           : "text-gray-400 hover:text-white hover:bg-gray-800"
@@ -43,7 +43,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   ];
 
   return (
-    <div className="flex min-h-screen bg-black">
+    <div className="flex min-h-screen bg-black font-poppins">
       {/* Mobile sidebar toggle */}
       <button
         className="fixed top-4 left-4 z-50 p-2 bg-revithalize-dark rounded-lg text-white md:hidden"
@@ -61,7 +61,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       >
         <div className="flex flex-col h-full p-4">
           <div className="flex items-center mb-8 mt-4">
-            <h1 className="text-3xl font-heading font-bold text-revithalize-green">
+            <h1 className="text-3xl font-poppins font-bold text-revithalize-green">
               Revithalize<span className="text-white ml-1">EV</span>
             </h1>
           </div>
@@ -118,7 +118,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
                   )}
                 >
                   <Icon size={20} />
-                  <span className="text-xs mt-1">{item.label}</span>
+                  <span className="text-xs mt-1 font-poppins">{item.label}</span>
                 </Link>
               );
             })}

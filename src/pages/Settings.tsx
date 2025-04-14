@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { 
   Bell, Lock, Eye, BellOff, Zap, Battery, 
@@ -72,39 +72,39 @@ export default function Settings() {
     <DashboardLayout>
       <div className="space-y-6 p-4 md:p-6">
         <header>
-          <h1 className="text-3xl font-heading font-bold text-white">Settings</h1>
-          <p className="text-gray-400 mt-1">Manage your application preferences</p>
+          <h1 className="text-3xl font-poppins font-bold text-white">Settings</h1>
+          <p className="text-gray-400 mt-1 font-poppins">Manage your application preferences</p>
         </header>
 
         <Tabs defaultValue="general" className="space-y-4">
           <TabsList className="w-full bg-gray-900 p-1 overflow-x-auto flex md:flex-wrap">
             <TabsTrigger 
               value="general"
-              className="flex-1 min-w-[100px] data-[state=active]:bg-revithalize-green data-[state=active]:text-black"
+              className="flex-1 min-w-[100px] font-poppins data-[state=active]:bg-revithalize-green data-[state=active]:text-black"
             >
               General
             </TabsTrigger>
             <TabsTrigger 
               value="notifications" 
-              className="flex-1 min-w-[100px] data-[state=active]:bg-revithalize-green data-[state=active]:text-black"
+              className="flex-1 min-w-[100px] font-poppins data-[state=active]:bg-revithalize-green data-[state=active]:text-black"
             >
               Notifications
             </TabsTrigger>
             <TabsTrigger 
               value="privacy" 
-              className="flex-1 min-w-[100px] data-[state=active]:bg-revithalize-green data-[state=active]:text-black"
+              className="flex-1 min-w-[100px] font-poppins data-[state=active]:bg-revithalize-green data-[state=active]:text-black"
             >
               Privacy
             </TabsTrigger>
             <TabsTrigger 
               value="display" 
-              className="flex-1 min-w-[100px] data-[state=active]:bg-revithalize-green data-[state=active]:text-black"
+              className="flex-1 min-w-[100px] font-poppins data-[state=active]:bg-revithalize-green data-[state=active]:text-black"
             >
               Display
             </TabsTrigger>
             <TabsTrigger 
               value="advanced" 
-              className="flex-1 min-w-[100px] data-[state=active]:bg-revithalize-green data-[state=active]:text-black"
+              className="flex-1 min-w-[100px] font-poppins data-[state=active]:bg-revithalize-green data-[state=active]:text-black"
             >
               Advanced
             </TabsTrigger>
@@ -113,7 +113,7 @@ export default function Settings() {
           <TabsContent value="general" className="space-y-4">
             <Card className="bg-gray-900 border-gray-800">
               <CardHeader>
-                <CardTitle className="text-white flex items-center">
+                <CardTitle className="text-white flex items-center font-poppins">
                   <Zap className="mr-2 h-5 w-5 text-revithalize-green" />
                   Power Management
                 </CardTitle>
@@ -121,8 +121,8 @@ export default function Settings() {
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <div className="text-white">Power Saving Mode</div>
-                    <div className="text-gray-400 text-sm">Extends battery life by reducing performance</div>
+                    <div className="text-white font-poppins">Power Saving Mode</div>
+                    <div className="text-gray-400 text-sm font-poppins">Extends battery life by reducing performance</div>
                   </div>
                   <Switch 
                     checked={powerSaving}
@@ -133,8 +133,8 @@ export default function Settings() {
                 
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <div className="text-white">Automatic Charging</div>
-                    <div className="text-gray-400 text-sm">Schedule charging during off-peak hours</div>
+                    <div className="text-white font-poppins">Automatic Charging</div>
+                    <div className="text-gray-400 text-sm font-poppins">Schedule charging during off-peak hours</div>
                   </div>
                   <Switch 
                     checked={autoCharge}
@@ -144,7 +144,7 @@ export default function Settings() {
                 </div>
 
                 <div className="mt-6 border-t border-gray-800 pt-4">
-                  <h3 className="text-white mb-3">Battery Operating Mode</h3>
+                  <h3 className="text-white mb-3 font-poppins">Battery Operating Mode</h3>
                   <RadioGroup 
                     value={batteryMode} 
                     onValueChange={handleBatteryModeChange}
@@ -152,15 +152,15 @@ export default function Settings() {
                   >
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="eco" id="eco" />
-                      <Label htmlFor="eco" className="text-gray-300">Eco Mode</Label>
+                      <Label htmlFor="eco" className="text-gray-300 font-poppins">Eco Mode</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="balanced" id="balanced" />
-                      <Label htmlFor="balanced" className="text-gray-300">Balanced</Label>
+                      <Label htmlFor="balanced" className="text-gray-300 font-poppins">Balanced</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="performance" id="performance" />
-                      <Label htmlFor="performance" className="text-gray-300">Performance</Label>
+                      <Label htmlFor="performance" className="text-gray-300 font-poppins">Performance</Label>
                     </div>
                   </RadioGroup>
                 </div>
@@ -169,7 +169,7 @@ export default function Settings() {
             
             <Card className="bg-gray-900 border-gray-800">
               <CardHeader>
-                <CardTitle className="text-white flex items-center">
+                <CardTitle className="text-white flex items-center font-poppins">
                   <Smartphone className="mr-2 h-5 w-5 text-revithalize-blue" />
                   Mobile App Settings
                 </CardTitle>
@@ -177,8 +177,8 @@ export default function Settings() {
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <div className="text-white">Background Refresh</div>
-                    <div className="text-gray-400 text-sm">Update data when app is in background</div>
+                    <div className="text-white font-poppins">Background Refresh</div>
+                    <div className="text-gray-400 text-sm font-poppins">Update data when app is in background</div>
                   </div>
                   <Switch 
                     defaultChecked
@@ -188,8 +188,8 @@ export default function Settings() {
 
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <div className="text-white">Bluetooth Connection</div>
-                    <div className="text-gray-400 text-sm">Connect to vehicle via Bluetooth</div>
+                    <div className="text-white font-poppins">Bluetooth Connection</div>
+                    <div className="text-gray-400 text-sm font-poppins">Connect to vehicle via Bluetooth</div>
                   </div>
                   <Switch 
                     checked={bluetoothEnabled}
@@ -204,7 +204,7 @@ export default function Settings() {
           <TabsContent value="notifications" className="space-y-4">
             <Card className="bg-gray-900 border-gray-800">
               <CardHeader>
-                <CardTitle className="text-white flex items-center">
+                <CardTitle className="text-white flex items-center font-poppins">
                   <Bell className="mr-2 h-5 w-5 text-yellow-400" />
                   Notification Preferences
                 </CardTitle>
@@ -212,8 +212,8 @@ export default function Settings() {
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <div className="text-white">Push Notifications</div>
-                    <div className="text-gray-400 text-sm">Receive alerts on your device</div>
+                    <div className="text-white font-poppins">Push Notifications</div>
+                    <div className="text-gray-400 text-sm font-poppins">Receive alerts on your device</div>
                   </div>
                   <Switch 
                     checked={notifications}
@@ -224,8 +224,8 @@ export default function Settings() {
                 
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <div className="text-white">Battery Alerts</div>
-                    <div className="text-gray-400 text-sm">Get notifications when battery is low or fully charged</div>
+                    <div className="text-white font-poppins">Battery Alerts</div>
+                    <div className="text-gray-400 text-sm font-poppins">Get notifications when battery is low or fully charged</div>
                   </div>
                   <Switch 
                     defaultChecked 
@@ -235,8 +235,8 @@ export default function Settings() {
                 
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <div className="text-white">Maintenance Reminders</div>
-                    <div className="text-gray-400 text-sm">Receive service and maintenance notifications</div>
+                    <div className="text-white font-poppins">Maintenance Reminders</div>
+                    <div className="text-gray-400 text-sm font-poppins">Receive service and maintenance notifications</div>
                   </div>
                   <Switch 
                     defaultChecked 
@@ -246,8 +246,8 @@ export default function Settings() {
 
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <div className="text-white">Weather Alerts</div>
-                    <div className="text-gray-400 text-sm">Receive alerts about weather affecting charging</div>
+                    <div className="text-white font-poppins">Weather Alerts</div>
+                    <div className="text-gray-400 text-sm font-poppins">Receive alerts about weather affecting charging</div>
                   </div>
                   <Switch 
                     checked={weatherAlerts}
@@ -258,8 +258,8 @@ export default function Settings() {
 
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <div className="text-white">Payment Notifications</div>
-                    <div className="text-gray-400 text-sm">Notifications about billing and payments</div>
+                    <div className="text-white font-poppins">Payment Notifications</div>
+                    <div className="text-gray-400 text-sm font-poppins">Notifications about billing and payments</div>
                   </div>
                   <Switch 
                     checked={paymentNotifications}
@@ -274,7 +274,7 @@ export default function Settings() {
           <TabsContent value="privacy" className="space-y-4">
             <Card className="bg-gray-900 border-gray-800">
               <CardHeader>
-                <CardTitle className="text-white flex items-center">
+                <CardTitle className="text-white flex items-center font-poppins">
                   <Lock className="mr-2 h-5 w-5 text-red-400" />
                   Privacy Settings
                 </CardTitle>
@@ -282,8 +282,8 @@ export default function Settings() {
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <div className="text-white">Location Tracking</div>
-                    <div className="text-gray-400 text-sm">Allow app to access your location</div>
+                    <div className="text-white font-poppins">Location Tracking</div>
+                    <div className="text-gray-400 text-sm font-poppins">Allow app to access your location</div>
                   </div>
                   <Switch 
                     checked={locationTracking}
@@ -294,8 +294,8 @@ export default function Settings() {
                 
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <div className="text-white">Data Sharing</div>
-                    <div className="text-gray-400 text-sm">Share anonymous usage data to improve services</div>
+                    <div className="text-white font-poppins">Data Sharing</div>
+                    <div className="text-gray-400 text-sm font-poppins">Share anonymous usage data to improve services</div>
                   </div>
                   <Switch 
                     defaultChecked 
@@ -304,20 +304,20 @@ export default function Settings() {
                 </div>
 
                 <div className="mt-6 border-t border-gray-800 pt-4">
-                  <h3 className="text-white mb-3">Data Collection</h3>
+                  <h3 className="text-white mb-3 font-poppins">Data Collection</h3>
                   <div className="space-y-3">
                     <div className="flex items-top space-x-2">
                       <Checkbox id="analytics" defaultChecked/>
                       <div className="grid gap-1.5">
-                        <Label htmlFor="analytics" className="text-gray-300">Analytics</Label>
-                        <p className="text-gray-400 text-xs">Share usage statistics to help improve the app</p>
+                        <Label htmlFor="analytics" className="text-gray-300 font-poppins">Analytics</Label>
+                        <p className="text-gray-400 text-xs font-poppins">Share usage statistics to help improve the app</p>
                       </div>
                     </div>
                     <div className="flex items-top space-x-2">
                       <Checkbox id="crash-reports" defaultChecked/>
                       <div className="grid gap-1.5">
-                        <Label htmlFor="crash-reports" className="text-gray-300">Crash Reports</Label>
-                        <p className="text-gray-400 text-xs">Send diagnostic information when the app crashes</p>
+                        <Label htmlFor="crash-reports" className="text-gray-300 font-poppins">Crash Reports</Label>
+                        <p className="text-gray-400 text-xs font-poppins">Send diagnostic information when the app crashes</p>
                       </div>
                     </div>
                   </div>
@@ -329,7 +329,7 @@ export default function Settings() {
           <TabsContent value="display" className="space-y-4">
             <Card className="bg-gray-900 border-gray-800">
               <CardHeader>
-                <CardTitle className="text-white flex items-center">
+                <CardTitle className="text-white flex items-center font-poppins">
                   <Eye className="mr-2 h-5 w-5 text-revithalize-blue" />
                   Display Settings
                 </CardTitle>
@@ -337,8 +337,8 @@ export default function Settings() {
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <div className="text-white">Dark Mode</div>
-                    <div className="text-gray-400 text-sm">Switch between light and dark themes</div>
+                    <div className="text-white font-poppins">Dark Mode</div>
+                    <div className="text-gray-400 text-sm font-poppins">Switch between light and dark themes</div>
                   </div>
                   <div className="flex items-center gap-2">
                     <Sun size={18} className="text-yellow-400" />
@@ -357,7 +357,7 @@ export default function Settings() {
           <TabsContent value="advanced" className="space-y-4">
             <Card className="bg-gray-900 border-gray-800">
               <CardHeader>
-                <CardTitle className="text-white flex items-center">
+                <CardTitle className="text-white flex items-center font-poppins">
                   <Shield className="mr-2 h-5 w-5 text-purple-400" />
                   Advanced Settings
                 </CardTitle>
@@ -365,8 +365,8 @@ export default function Settings() {
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <div className="text-white">Developer Mode</div>
-                    <div className="text-gray-400 text-sm">Enable additional debugging features</div>
+                    <div className="text-white font-poppins">Developer Mode</div>
+                    <div className="text-gray-400 text-sm font-poppins">Enable additional debugging features</div>
                   </div>
                   <Switch 
                     className="data-[state=checked]:bg-revithalize-green"
@@ -375,11 +375,11 @@ export default function Settings() {
 
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <div className="text-white">Reset All Settings</div>
-                    <div className="text-gray-400 text-sm">Restore all settings to default values</div>
+                    <div className="text-white font-poppins">Reset All Settings</div>
+                    <div className="text-gray-400 text-sm font-poppins">Restore all settings to default values</div>
                   </div>
                   <button 
-                    className="px-3 py-1 bg-red-600 text-white rounded-md text-sm hover:bg-red-700"
+                    className="px-3 py-1 bg-red-600 text-white rounded-md text-sm hover:bg-red-700 font-poppins"
                     onClick={() => toast.info("This would reset all settings to defaults")}
                   >
                     Reset
