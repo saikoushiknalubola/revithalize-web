@@ -13,6 +13,8 @@ import { toast } from 'sonner';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { ChargingScheduler } from '@/components/features/ChargingScheduler';
 
 export default function Settings() {
   // State for settings
@@ -25,6 +27,7 @@ export default function Settings() {
   const [paymentNotifications, setPaymentNotifications] = useState(true);
   const [batteryMode, setBatteryMode] = useState('balanced');
   const [bluetoothEnabled, setBluetoothEnabled] = useState(true);
+  const isMobile = useIsMobile();
   
   const handleToggleChange = (setting: string, value: boolean) => {
     switch(setting) {
@@ -168,6 +171,8 @@ export default function Settings() {
                 </div>
               </CardContent>
             </Card>
+            
+            <ChargingScheduler />
             
             <Card className="bg-gray-900 border-gray-800">
               <CardHeader>

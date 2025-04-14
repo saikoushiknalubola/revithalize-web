@@ -3,7 +3,8 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Home, Battery, MapPin, BarChart2, User, Settings, Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface NavItemProps {
   icon: React.ElementType;
@@ -32,6 +33,14 @@ const NavItem = ({ icon: Icon, label, to, active }: NavItemProps) => {
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const isMobile = useIsMobile();
+
+  // Close sidebar when route changes on mobile
+  useEffect(() => {
+    if (isMobile) {
+      setSidebarOpen(false);
+    }
+  }, [location.pathname, isMobile]);
 
   const navItems = [
     { icon: Home, label: "Home", to: "/" },
@@ -48,6 +57,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       <button
         className="fixed top-4 left-4 z-50 p-2 bg-revithalize-dark rounded-lg text-white md:hidden"
         onClick={() => setSidebarOpen(!sidebarOpen)}
+        aria-label="Toggle sidebar"
       >
         {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
       </button>
@@ -93,17 +103,26 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
         </div>
       </aside>
 
+      {/* Overlay to close sidebar on mobile */}
+      {sidebarOpen && isMobile && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-30 md:hidden" 
+          onClick={() => setSidebarOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
       {/* Main content */}
       <main className={cn(
         "flex-1 transition-all duration-200 ease-in-out",
         "md:ml-64"
       )}>
-        <div className="min-h-screen bg-black py-4">
+        <div className="min-h-screen bg-black py-4 pt-16 md:pt-4">
           {children}
         </div>
         
         {/* Mobile bottom navigation */}
-        <div className="fixed inset-x-0 bottom-0 bg-revithalize-dark border-t border-gray-800 md:hidden">
+        <div className="fixed inset-x-0 bottom-0 bg-revithalize-dark border-t border-gray-800 md:hidden z-30">
           <div className="flex justify-around py-2">
             {navItems.slice(0, 5).map((item) => {
               const Icon = item.icon;
