@@ -70,9 +70,9 @@ export default function Settings() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6 p-4 md:p-6">
+      <div className="container mx-auto space-y-6 p-4 md:p-6">
         <header>
-          <h1 className="text-3xl font-poppins font-bold text-white">Settings</h1>
+          <h1 className="text-3xl font-bold text-white font-poppins">Settings</h1>
           <p className="text-gray-400 mt-1 font-poppins">Manage your application preferences</p>
         </header>
 

@@ -80,14 +80,14 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
 
           <div className="mt-auto pt-6 border-t border-gray-800">
             <div className="bg-gray-900 rounded-lg p-4">
-              <h3 className="text-sm font-medium text-gray-300 mb-2">Battery Status</h3>
+              <h3 className="text-sm font-medium text-gray-300 mb-2 font-poppins">Battery Status</h3>
               <div className="flex items-center gap-3">
                 <div className="relative w-full h-2 bg-gray-800 rounded-full overflow-hidden">
                   <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-revithalize-green to-revithalize-blue rounded-full" style={{ width: '75%' }} />
                 </div>
-                <span className="text-white font-medium">75%</span>
+                <span className="text-white font-medium font-poppins">75%</span>
               </div>
-              <p className="text-xs text-gray-400 mt-2">Estimated Range: 120 km</p>
+              <p className="text-xs text-gray-400 mt-2 font-poppins">Estimated Range: 120 km</p>
             </div>
           </div>
         </div>
@@ -98,7 +98,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
         "flex-1 transition-all duration-200 ease-in-out",
         "md:ml-64"
       )}>
-        <div className="p-6">
+        <div className="min-h-screen bg-black py-4">
           {children}
         </div>
         
