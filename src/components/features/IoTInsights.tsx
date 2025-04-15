@@ -22,7 +22,9 @@ export function IoTInsights() {
             </div>
             <span className="text-sm font-semibold text-white font-poppins">92%</span>
           </div>
-          <Progress value={92} className="h-2 bg-gray-800" indicatorClassName="bg-gradient-to-r from-revithalize-green to-revithalize-blue" />
+          <div className="relative h-2 bg-gray-800 rounded-full overflow-hidden">
+            <Progress value={92} className="absolute inset-0 bg-gradient-to-r from-revithalize-green to-revithalize-blue" />
+          </div>
         </div>
         
         <div className="space-y-3">
@@ -33,7 +35,9 @@ export function IoTInsights() {
             </div>
             <span className="text-sm font-semibold text-white font-poppins">85%</span>
           </div>
-          <Progress value={85} className="h-2 bg-gray-800" indicatorClassName="bg-gradient-to-r from-revithalize-blue to-revithalize-green" />
+          <div className="relative h-2 bg-gray-800 rounded-full overflow-hidden">
+            <Progress value={85} className="absolute inset-0 bg-gradient-to-r from-revithalize-blue to-revithalize-green" />
+          </div>
         </div>
         
         <div className="space-y-3">
@@ -44,7 +48,9 @@ export function IoTInsights() {
             </div>
             <span className="text-sm font-semibold text-white font-poppins">78%</span>
           </div>
-          <Progress value={78} className="h-2 bg-gray-800" indicatorClassName="bg-gradient-to-r from-yellow-400 to-revithalize-green" />
+          <div className="relative h-2 bg-gray-800 rounded-full overflow-hidden">
+            <Progress value={78} className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-revithalize-green" />
+          </div>
         </div>
         
         <div className="mt-6 space-y-4">
