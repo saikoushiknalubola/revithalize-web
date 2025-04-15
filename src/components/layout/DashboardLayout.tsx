@@ -1,10 +1,11 @@
 
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Home, Battery, MapPin, BarChart2, User, Settings, Menu, X } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Home, Battery, MapPin, BarChart2, User, Settings, Menu, X, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useState, useEffect } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { toast } from 'sonner';
 
 interface NavItemProps {
   icon: React.ElementType;
@@ -32,6 +33,7 @@ const NavItem = ({ icon: Icon, label, to, active }: NavItemProps) => {
 
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
+  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const isMobile = useIsMobile();
 
@@ -41,6 +43,13 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       setSidebarOpen(false);
     }
   }, [location.pathname, isMobile]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('user');
+    toast.success('Logged out successfully');
+    navigate('/auth');
+  };
 
   const navItems = [
     { icon: Home, label: "Home", to: "/" },
@@ -89,7 +98,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
           </nav>
 
           <div className="mt-auto pt-6 border-t border-gray-800">
-            <div className="bg-gray-900 rounded-lg p-4">
+            <div className="bg-gray-900 rounded-lg p-4 mb-4">
               <h3 className="text-sm font-medium text-gray-300 mb-2 font-poppins">Battery Status</h3>
               <div className="flex items-center gap-3">
                 <div className="relative w-full h-2 bg-gray-800 rounded-full overflow-hidden">
@@ -99,6 +108,14 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
               </div>
               <p className="text-xs text-gray-400 mt-2 font-poppins">Estimated Range: 120 km</p>
             </div>
+            
+            <button 
+              onClick={handleLogout}
+              className="w-full flex items-center gap-2 px-3 py-2 text-red-400 hover:bg-gray-800 rounded-lg transition-colors"
+            >
+              <LogOut size={18} />
+              <span className="font-poppins">Logout</span>
+            </button>
           </div>
         </div>
       </aside>

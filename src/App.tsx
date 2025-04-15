@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import VehicleDetails from "./pages/VehicleDetails";
@@ -12,6 +13,7 @@ import BatteryAnalytics from "./pages/BatteryAnalytics";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
+import Auth from "./pages/Auth";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,13 +31,19 @@ const App = () => (
       <Sonner position="top-right" />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Dashboard />} />
+          {/* Public routes */}
+          <Route path="/auth" element={<Auth />} />
           <Route path="/welcome" element={<Index />} />
-          <Route path="/vehicle" element={<VehicleDetails />} />
-          <Route path="/map" element={<MapView />} />
-          <Route path="/analytics" element={<BatteryAnalytics />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/settings" element={<Settings />} />
+          
+          {/* Protected routes */}
+          <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/vehicle" element={<ProtectedRoute><VehicleDetails /></ProtectedRoute>} />
+          <Route path="/map" element={<ProtectedRoute><MapView /></ProtectedRoute>} />
+          <Route path="/analytics" element={<ProtectedRoute><BatteryAnalytics /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+          
+          {/* Not found route */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

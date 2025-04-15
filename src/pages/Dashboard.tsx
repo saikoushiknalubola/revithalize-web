@@ -1,20 +1,34 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Battery, Bolt, Gauge, ThermometerSnowflake, Clock, Zap, MapPin, Bell } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { BatteryMetrics } from '@/components/features/BatteryMetrics';
+import { ChargingScheduler } from '@/components/features/ChargingScheduler';
+import { IoTInsights } from '@/components/features/IoTInsights';
+import { useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
+  const navigate = useNavigate();
+  
+  // Check for authentication
+  useEffect(() => {
+    const isAuthenticated = localStorage.getItem('isAuthenticated');
+    if (!isAuthenticated) {
+      navigate('/auth');
+    }
+  }, [navigate]);
+
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-6 px-4 pb-16 md:pb-4">
         <header>
           <h1 className="text-3xl font-heading font-bold text-white">Welcome back, Alex</h1>
           <p className="text-gray-400 mt-1">Here's the current status of your EV</p>
         </header>
 
         {/* Vehicle status overview */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Card className="bg-gray-900 border-gray-800">
             <CardHeader className="pb-2">
               <CardDescription className="text-gray-400 flex items-center">
@@ -73,37 +87,16 @@ export default function Dashboard() {
           </Card>
         </div>
 
-        {/* Recent activity and quick actions */}
+        {/* Analytics Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <BatteryMetrics />
+          <ChargingScheduler />
+        </div>
+
+        {/* Additional Analytics */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
-            <Card className="bg-gray-900 border-gray-800">
-              <CardHeader>
-                <CardTitle className="text-white">Recent Activity</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {[
-                    { icon: Clock, title: "Charged at Home", time: "Today, 08:30 AM", desc: "Added 45% battery (10.2 kWh)" },
-                    { icon: Zap, title: "Performance Check", time: "Yesterday, 06:15 PM", desc: "All systems operational" },
-                    { icon: MapPin, title: "Trip Completed", time: "Yesterday, 04:30 PM", desc: "Home to Office - 15 km (6% used)" },
-                  ].map((item, index) => {
-                    const Icon = item.icon;
-                    return (
-                      <div key={index} className="flex items-start gap-4 pb-4 border-b border-gray-800">
-                        <div className="bg-gray-800 p-2 rounded-lg">
-                          <Icon size={18} className="text-revithalize-green" />
-                        </div>
-                        <div>
-                          <h3 className="font-medium text-white">{item.title}</h3>
-                          <p className="text-xs text-gray-400">{item.time}</p>
-                          <p className="text-sm text-gray-300 mt-1">{item.desc}</p>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </CardContent>
-            </Card>
+            <IoTInsights />
           </div>
 
           <div>
