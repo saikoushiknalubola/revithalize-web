@@ -29,7 +29,7 @@ export default function Profile() {
             <CardHeader className="pb-2 text-center">
               <div className="mx-auto mb-4 relative">
                 <div className="w-24 h-24 bg-gradient-to-br from-revithalize-green to-revithalize-blue rounded-full flex items-center justify-center text-black text-3xl font-bold">
-                  AT
+                  RS
                 </div>
                 <button 
                   className="absolute bottom-0 right-0 bg-gray-800 p-1.5 rounded-full border border-gray-700 hover:bg-gray-700 transition-colors"
@@ -38,22 +38,22 @@ export default function Profile() {
                   <Edit size={14} className="text-white" />
                 </button>
               </div>
-              <CardTitle className="text-white text-xl">Alex Thompson</CardTitle>
+              <CardTitle className="text-white text-xl">Rajesh Sharma</CardTitle>
               <p className="text-gray-400">EV Enthusiast</p>
             </CardHeader>
             <CardContent className="pt-4">
               <div className="space-y-3">
                 <div className="flex items-center gap-3 text-gray-300">
                   <Mail size={16} className="text-revithalize-green" />
-                  <span>alex.t@example.com</span>
+                  <span>rajesh.sharma@example.com</span>
                 </div>
                 <div className="flex items-center gap-3 text-gray-300">
                   <Phone size={16} className="text-revithalize-green" />
-                  <span>+1 (555) 123-4567</span>
+                  <span>+91 98765 43210</span>
                 </div>
                 <div className="flex items-center gap-3 text-gray-300">
                   <MapPin size={16} className="text-revithalize-green" />
-                  <span>San Francisco, CA</span>
+                  <span>Delhi, India</span>
                 </div>
                 <div className="flex items-center gap-3 text-gray-300">
                   <Calendar size={16} className="text-revithalize-green" />
@@ -93,7 +93,7 @@ export default function Profile() {
                         <Battery className="h-6 w-6 text-revithalize-green" />
                       </div>
                       <div>
-                        <h3 className="text-white font-medium">Tesla Model 3</h3>
+                        <h3 className="text-white font-medium">Tata Nexon EV</h3>
                         <p className="text-sm text-gray-400">Added May 15, 2023</p>
                       </div>
                     </div>

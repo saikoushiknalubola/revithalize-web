@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -16,20 +17,20 @@ import { cn } from '@/lib/utils';
 
 // Login form schema
 const loginSchema = z.object({
-  email: z.string().email('कृपया वैध ईमेल पता दर्ज करें (Please enter a valid email)'),
-  password: z.string().min(6, 'पासवर्ड कम से कम 6 अक्षर होना चाहिए (Password must be at least 6 characters)'),
+  email: z.string().email('Please enter a valid email'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
 // Registration form schema with name fields
 const registerSchema = z.object({
-  firstName: z.string().min(2, 'नाम कम से कम 2 अक्षर होना चाहिए (First name must be at least 2 characters)'),
-  lastName: z.string().min(1, 'उपनाम दर्ज करें (Please enter your last name)'),
-  email: z.string().email('कृपया वैध ईमेल पता दर्ज करें (Please enter a valid email)'),
-  city: z.string().min(2, 'शहर का नाम दर्ज करें (Please enter your city)'),
-  password: z.string().min(6, 'पासवर्ड कम से कम 6 अक्षर होना चाहिए (Password must be at least 6 characters)'),
+  firstName: z.string().min(2, 'First name must be at least 2 characters'),
+  lastName: z.string().min(1, 'Please enter your last name'),
+  email: z.string().email('Please enter a valid email'),
+  city: z.string().min(2, 'Please enter your city'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
   confirmPassword: z.string(),
 }).refine(data => data.password === data.confirmPassword, {
-  message: 'पासवर्ड मेल नहीं खाते (Passwords do not match)',
+  message: 'Passwords do not match',
   path: ['confirmPassword'],
 });
 
@@ -92,10 +93,10 @@ export default function Auth() {
       localStorage.setItem('isAuthenticated', 'true');
       localStorage.setItem('user', JSON.stringify({ 
         email: values.email,
-        name: 'उपयोगकर्ता' // Default name if logging in without registration
+        name: 'User' // Default name if logging in without registration
       }));
-      toast.success('सफलतापूर्वक लॉग इन हो गया! (Successfully logged in!)', {
-        description: 'आपका स्वागत है (Welcome back)'
+      toast.success('Successfully logged in!', {
+        description: 'Welcome back'
       });
       navigate('/');
       setIsLoading(false);
@@ -114,8 +115,8 @@ export default function Auth() {
         name: `${values.firstName} ${values.lastName}`,
         city: values.city
       }));
-      toast.success('खाता सफलतापूर्वक बनाया गया! (Account created successfully!)', {
-        description: 'स्वागत है, ' + values.firstName
+      toast.success('Account created successfully!', {
+        description: 'Welcome, ' + values.firstName
       });
       navigate('/');
       setIsLoading(false);
@@ -129,8 +130,7 @@ export default function Auth() {
           <h1 className="text-4xl font-poppins font-bold text-revithalize-green mb-2 animate-scale-in">
             Revithalize<span className="text-white">EV</span>
           </h1>
-          <p className="text-gray-400 animate-fade-in">भारत का स्मार्ट ईवी प्रबंधन प्लेटफॉर्म</p>
-          <p className="text-gray-400">(India's Smart EV Management Platform)</p>
+          <p className="text-gray-400 animate-fade-in">India's Smart EV Management Platform</p>
         </div>
         
         <Tabs defaultValue="login" value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -139,13 +139,13 @@ export default function Auth() {
               value="login" 
               className="font-poppins data-[state=active]:bg-revithalize-green data-[state=active]:text-black rounded-lg transition-all duration-300"
             >
-              लॉग इन (Login)
+              Login
             </TabsTrigger>
             <TabsTrigger 
               value="register" 
               className="font-poppins data-[state=active]:bg-revithalize-blue data-[state=active]:text-black rounded-lg transition-all duration-300"
             >
-              रजिस्टर (Register)
+              Register
             </TabsTrigger>
           </TabsList>
           
@@ -156,9 +156,9 @@ export default function Auth() {
               <Form {...loginForm}>
                 <form onSubmit={loginForm.handleSubmit(handleLogin)}>
                   <CardHeader>
-                    <CardTitle className="text-white font-poppins">वापसी पर स्वागत है (Welcome back)</CardTitle>
+                    <CardTitle className="text-white font-poppins">Welcome back</CardTitle>
                     <CardDescription className="text-gray-400 font-poppins">
-                      अपने खाते तक पहुंचने के लिए अपने क्रेडेंशियल्स दर्ज करें
+                      Enter your credentials to access your account
                     </CardDescription>
                   </CardHeader>
                   
@@ -170,7 +170,7 @@ export default function Auth() {
                         <FormItem className="space-y-2">
                           <FormLabel className="text-white font-poppins flex items-center">
                             <AtSign className="h-4 w-4 mr-2 text-revithalize-green" />
-                            ईमेल (Email)
+                            Email
                           </FormLabel>
                           <FormControl>
                             <div className="relative">
@@ -194,7 +194,7 @@ export default function Auth() {
                         <FormItem className="space-y-2">
                           <FormLabel className="text-white font-poppins flex items-center">
                             <Key className="h-4 w-4 mr-2 text-revithalize-green" />
-                            पासवर्ड (Password)
+                            Password
                           </FormLabel>
                           <FormControl>
                             <div className="relative">
@@ -217,7 +217,7 @@ export default function Auth() {
                         className="text-sm text-revithalize-green hover:underline transition-all"
                         onClick={() => {}} // Would handle password reset
                       >
-                        पासवर्ड भूल गए? (Forgot password?)
+                        Forgot password?
                       </button>
                     </div>
                   </CardContent>
@@ -231,10 +231,10 @@ export default function Auth() {
                       {isLoading ? (
                         <div className="flex items-center">
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          लॉग इन हो रहा है... (Logging in...)
+                          Logging in...
                         </div>
                       ) : (
-                        "लॉग इन करें (Login)"
+                        "Login"
                       )}
                     </Button>
                   </CardFooter>
@@ -250,9 +250,9 @@ export default function Auth() {
               <Form {...registerForm}>
                 <form onSubmit={registerForm.handleSubmit(handleRegister)}>
                   <CardHeader>
-                    <CardTitle className="text-white font-poppins">खाता बनाएँ (Create an account)</CardTitle>
+                    <CardTitle className="text-white font-poppins">Create an account</CardTitle>
                     <CardDescription className="text-gray-400 font-poppins">
-                      अपना खाता बनाने के लिए अपना विवरण दर्ज करें
+                      Enter your details to create your account
                     </CardDescription>
                   </CardHeader>
                   
@@ -265,11 +265,12 @@ export default function Auth() {
                           <FormItem className="space-y-2">
                             <FormLabel className="text-white font-poppins flex items-center">
                               <User className="h-4 w-4 mr-2 text-revithalize-blue" />
-                              पहला नाम (First name)
+                              First name
                             </FormLabel>
                             <FormControl>
                               <Input 
                                 {...field}
+                                placeholder="Rajesh"
                                 className="bg-gray-800 border-gray-700 text-white transition-all focus:border-revithalize-blue"
                               />
                             </FormControl>
@@ -285,11 +286,12 @@ export default function Auth() {
                           <FormItem className="space-y-2">
                             <FormLabel className="text-white font-poppins flex items-center">
                               <User className="h-4 w-4 mr-2 text-revithalize-blue" />
-                              उपनाम (Last name)
+                              Last name
                             </FormLabel>
                             <FormControl>
                               <Input 
                                 {...field}
+                                placeholder="Sharma"
                                 className="bg-gray-800 border-gray-700 text-white transition-all focus:border-revithalize-blue"
                               />
                             </FormControl>
@@ -306,14 +308,14 @@ export default function Auth() {
                         <FormItem className="space-y-2">
                           <FormLabel className="text-white font-poppins flex items-center">
                             <AtSign className="h-4 w-4 mr-2 text-revithalize-blue" />
-                            ईमेल (Email)
+                            Email
                           </FormLabel>
                           <FormControl>
                             <div className="relative">
                               <Input 
                                 {...field}
                                 type="email" 
-                                placeholder="name@example.com"
+                                placeholder="rajesh.sharma@example.com"
                                 className="bg-gray-800 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-blue"
                               />
                               <AtSign className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
@@ -331,13 +333,13 @@ export default function Auth() {
                         <FormItem className="space-y-2">
                           <FormLabel className="text-white font-poppins flex items-center">
                             <MapPin className="h-4 w-4 mr-2 text-revithalize-blue" />
-                            शहर (City)
+                            City
                           </FormLabel>
                           <FormControl>
                             <div className="relative">
                               <Input 
                                 {...field}
-                                placeholder="दिल्ली, मुंबई, बैंगलोर, आदि" 
+                                placeholder="Delhi, Mumbai, Bangalore, etc." 
                                 className="bg-gray-800 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-blue"
                               />
                               <MapPin className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
@@ -355,7 +357,7 @@ export default function Auth() {
                         <FormItem className="space-y-2">
                           <FormLabel className="text-white font-poppins flex items-center">
                             <Shield className="h-4 w-4 mr-2 text-revithalize-blue" />
-                            पासवर्ड (Password)
+                            Password
                           </FormLabel>
                           <FormControl>
                             <div className="relative">
@@ -369,7 +371,7 @@ export default function Auth() {
                           </FormControl>
                           <div className="mt-2 space-y-1">
                             <div className="flex justify-between items-center">
-                              <span className="text-xs text-gray-400">पासवर्ड स्ट्रेंथ (Password strength)</span>
+                              <span className="text-xs text-gray-400">Password strength</span>
                               <span 
                                 className={cn(
                                   "text-xs font-semibold",
@@ -378,9 +380,9 @@ export default function Auth() {
                                   "text-green-400"
                                 )}
                               >
-                                {passwordStrength < 40 ? "कमज़ोर (Weak)" : 
-                                 passwordStrength < 70 ? "मध्यम (Medium)" : 
-                                 "मजबूत (Strong)"}
+                                {passwordStrength < 40 ? "Weak" : 
+                                 passwordStrength < 70 ? "Medium" : 
+                                 "Strong"}
                               </span>
                             </div>
                             <Progress 
@@ -405,7 +407,7 @@ export default function Auth() {
                         <FormItem className="space-y-2">
                           <FormLabel className="text-white font-poppins flex items-center">
                             <Shield className="h-4 w-4 mr-2 text-revithalize-blue" />
-                            पासवर्ड की पुष्टि करें (Confirm Password)
+                            Confirm Password
                           </FormLabel>
                           <FormControl>
                             <div className="relative">
@@ -432,10 +434,10 @@ export default function Auth() {
                       {isLoading ? (
                         <div className="flex items-center">
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          खाता बना रहा है... (Creating account...)
+                          Creating account...
                         </div>
                       ) : (
-                        "खाता बनाएं (Create account)"
+                        "Create account"
                       )}
                     </Button>
                   </CardFooter>
@@ -446,7 +448,7 @@ export default function Auth() {
         </Tabs>
         
         <div className="text-center text-sm text-gray-500 animate-fade-in">
-          <p>© 2025 RevithalizeEV • भारत में बनाया गया (Made in India) 🇮🇳</p>
+          <p>© 2025 RevithalizeEV • Made in India 🇮🇳</p>
         </div>
       </div>
     </div>
