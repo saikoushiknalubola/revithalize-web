@@ -12,8 +12,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { Progress } from '@/components/ui/progress';
-import { AtSign, Key, User, Loader2, Shield, MapPin } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { AtSign, Key, User, Loader2, Shield, MapPin, Phone, Briefcase, Building } from 'lucide-react';
+import { cn } from "@/lib/utils";
 
 // Login form schema
 const loginSchema = z.object({
@@ -21,12 +21,16 @@ const loginSchema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
-// Registration form schema with name fields
+// Enhanced registration form schema with more details
 const registerSchema = z.object({
   firstName: z.string().min(2, 'First name must be at least 2 characters'),
   lastName: z.string().min(1, 'Please enter your last name'),
   email: z.string().email('Please enter a valid email'),
+  phone: z.string().min(10, 'Please enter a valid Indian phone number'),
+  address: z.string().min(5, 'Please enter your full address'),
   city: z.string().min(2, 'Please enter your city'),
+  occupation: z.string().min(2, 'Please enter your occupation'),
+  company: z.string().optional(),
   password: z.string().min(6, 'Password must be at least 6 characters'),
   confirmPassword: z.string(),
 }).refine(data => data.password === data.confirmPassword, {
@@ -49,14 +53,18 @@ export default function Auth() {
     },
   });
 
-  // Register form
+  // Register form with enhanced fields
   const registerForm = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
       firstName: '',
       lastName: '',
       email: '',
+      phone: '',
+      address: '',
       city: '',
+      occupation: '',
+      company: '',
       password: '',
       confirmPassword: '',
     },
@@ -90,31 +98,53 @@ export default function Auth() {
     
     // Simulate authentication
     setTimeout(() => {
-      localStorage.setItem('isAuthenticated', 'true');
-      localStorage.setItem('user', JSON.stringify({ 
-        email: values.email,
-        name: 'User' // Default name if logging in without registration
-      }));
-      toast.success('Successfully logged in!', {
-        description: 'Welcome back'
-      });
-      navigate('/');
+      // Get existing user data if available
+      const existingUsers = JSON.parse(localStorage.getItem('users') || '[]');
+      const user = existingUsers.find((u: any) => u.email === values.email);
+      
+      if (user && user.password === values.password) {
+        localStorage.setItem('isAuthenticated', 'true');
+        localStorage.setItem('user', JSON.stringify(user));
+        toast.success('Successfully logged in!', {
+          description: 'Welcome back'
+        });
+        navigate('/');
+      } else {
+        toast.error('Login failed', {
+          description: 'Invalid email or password'
+        });
+      }
       setIsLoading(false);
     }, 1500);
   };
 
-  // Handle Registration
+  // Handle Registration with enhanced data
   const handleRegister = (values: z.infer<typeof registerSchema>) => {
     setIsLoading(true);
     
     // Simulate registration
     setTimeout(() => {
-      localStorage.setItem('isAuthenticated', 'true');
-      localStorage.setItem('user', JSON.stringify({ 
+      const newUser = { 
         email: values.email,
+        password: values.password, // In a real app, this would be hashed
         name: `${values.firstName} ${values.lastName}`,
-        city: values.city
-      }));
+        phone: values.phone,
+        address: values.address,
+        city: values.city,
+        occupation: values.occupation,
+        company: values.company || 'Not specified',
+        joinDate: new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long' })
+      };
+      
+      // Save to users collection in localStorage
+      const existingUsers = JSON.parse(localStorage.getItem('users') || '[]');
+      existingUsers.push(newUser);
+      localStorage.setItem('users', JSON.stringify(existingUsers));
+      
+      // Set as current user
+      localStorage.setItem('isAuthenticated', 'true');
+      localStorage.setItem('user', JSON.stringify(newUser));
+      
       toast.success('Account created successfully!', {
         description: 'Welcome, ' + values.firstName
       });
@@ -215,7 +245,7 @@ export default function Auth() {
                       <button 
                         type="button"
                         className="text-sm text-revithalize-green hover:underline transition-all"
-                        onClick={() => {}} // Would handle password reset
+                        onClick={() => toast.info('Password reset functionality coming soon!')}
                       >
                         Forgot password?
                       </button>
@@ -328,18 +358,42 @@ export default function Auth() {
                     
                     <FormField
                       control={registerForm.control}
-                      name="city"
+                      name="phone"
                       render={({ field }) => (
                         <FormItem className="space-y-2">
                           <FormLabel className="text-white font-poppins flex items-center">
-                            <MapPin className="h-4 w-4 mr-2 text-revithalize-blue" />
-                            City
+                            <Phone className="h-4 w-4 mr-2 text-revithalize-blue" />
+                            Phone Number
                           </FormLabel>
                           <FormControl>
                             <div className="relative">
                               <Input 
                                 {...field}
-                                placeholder="Delhi, Mumbai, Bangalore, etc." 
+                                placeholder="+91 98765 43210" 
+                                className="bg-gray-800 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-blue"
+                              />
+                              <Phone className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
+                            </div>
+                          </FormControl>
+                          <FormMessage className="text-red-400" />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={registerForm.control}
+                      name="address"
+                      render={({ field }) => (
+                        <FormItem className="space-y-2">
+                          <FormLabel className="text-white font-poppins flex items-center">
+                            <MapPin className="h-4 w-4 mr-2 text-revithalize-blue" />
+                            Address
+                          </FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <Input 
+                                {...field}
+                                placeholder="123, Green Park, Sector-15" 
                                 className="bg-gray-800 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-blue"
                               />
                               <MapPin className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
@@ -349,6 +403,74 @@ export default function Auth() {
                         </FormItem>
                       )}
                     />
+                    
+                    <FormField
+                      control={registerForm.control}
+                      name="city"
+                      render={({ field }) => (
+                        <FormItem className="space-y-2">
+                          <FormLabel className="text-white font-poppins flex items-center">
+                            <Building className="h-4 w-4 mr-2 text-revithalize-blue" />
+                            City
+                          </FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <Input 
+                                {...field}
+                                placeholder="Delhi, Mumbai, Bangalore, etc." 
+                                className="bg-gray-800 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-blue"
+                              />
+                              <Building className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
+                            </div>
+                          </FormControl>
+                          <FormMessage className="text-red-400" />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      <FormField
+                        control={registerForm.control}
+                        name="occupation"
+                        render={({ field }) => (
+                          <FormItem className="space-y-2">
+                            <FormLabel className="text-white font-poppins flex items-center">
+                              <Briefcase className="h-4 w-4 mr-2 text-revithalize-blue" />
+                              Occupation
+                            </FormLabel>
+                            <FormControl>
+                              <Input 
+                                {...field}
+                                placeholder="Engineer, Doctor, etc."
+                                className="bg-gray-800 border-gray-700 text-white transition-all focus:border-revithalize-blue"
+                              />
+                            </FormControl>
+                            <FormMessage className="text-red-400" />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={registerForm.control}
+                        name="company"
+                        render={({ field }) => (
+                          <FormItem className="space-y-2">
+                            <FormLabel className="text-white font-poppins flex items-center">
+                              <Building className="h-4 w-4 mr-2 text-revithalize-blue" />
+                              Company
+                            </FormLabel>
+                            <FormControl>
+                              <Input 
+                                {...field}
+                                placeholder="Optional"
+                                className="bg-gray-800 border-gray-700 text-white transition-all focus:border-revithalize-blue"
+                              />
+                            </FormControl>
+                            <FormMessage className="text-red-400" />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                     
                     <FormField
                       control={registerForm.control}

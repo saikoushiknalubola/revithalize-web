@@ -3,26 +3,51 @@ import React, { useEffect, useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { User, Mail, Phone, MapPin, Calendar, Edit, LogOut, Battery, Car } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { 
+  User, Mail, Phone, MapPin, Calendar, Edit, 
+  LogOut, Battery, Car, Briefcase, Building
+} from 'lucide-react';
 import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 
 interface UserData {
   name: string;
   email: string;
   phone: string;
   address: string;
+  city: string;
+  occupation: string;
+  company: string;
   joinDate: string;
   initials: string;
 }
 
 export default function Profile() {
+  const navigate = useNavigate();
   const [userData, setUserData] = useState<UserData>({
     name: 'Rajesh Sharma',
     email: 'rajesh.sharma@example.com',
     phone: '+91 98765 43210',
     address: 'Delhi, India',
+    city: 'Delhi',
+    occupation: 'Software Engineer',
+    company: 'Tech Solutions Ltd',
     joinDate: 'May 2023',
     initials: 'RS'
+  });
+  
+  const [isEditing, setIsEditing] = useState(false);
+  const [editForm, setEditForm] = useState<Omit<UserData, 'initials'>>({
+    name: '',
+    email: '',
+    phone: '',
+    address: '',
+    city: '',
+    occupation: '',
+    company: '',
+    joinDate: ''
   });
 
   useEffect(() => {
@@ -44,8 +69,23 @@ export default function Profile() {
           email: parsedUser.email || 'rajesh.sharma@example.com',
           phone: parsedUser.phone || '+91 98765 43210',
           address: parsedUser.address || 'Delhi, India',
+          city: parsedUser.city || 'Delhi',
+          occupation: parsedUser.occupation || 'Software Engineer',
+          company: parsedUser.company || 'Tech Solutions Ltd',
           joinDate: parsedUser.joinDate || 'May 2023',
           initials: initials
+        });
+        
+        // Initialize edit form with current data
+        setEditForm({
+          name: parsedUser.name || 'Rajesh Sharma',
+          email: parsedUser.email || 'rajesh.sharma@example.com',
+          phone: parsedUser.phone || '+91 98765 43210',
+          address: parsedUser.address || 'Delhi, India',
+          city: parsedUser.city || 'Delhi',
+          occupation: parsedUser.occupation || 'Software Engineer',
+          company: parsedUser.company || 'Tech Solutions Ltd',
+          joinDate: parsedUser.joinDate || 'May 2023'
         });
       } catch (error) {
         console.error('Error parsing user data:', error);
@@ -54,7 +94,70 @@ export default function Profile() {
   }, []);
 
   const handleEditProfile = () => {
-    toast.info('Edit profile functionality coming soon!');
+    setIsEditing(true);
+  };
+  
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    // Reset form to current user data
+    setEditForm({
+      name: userData.name,
+      email: userData.email,
+      phone: userData.phone,
+      address: userData.address,
+      city: userData.city,
+      occupation: userData.occupation,
+      company: userData.company,
+      joinDate: userData.joinDate
+    });
+  };
+  
+  const handleSaveProfile = () => {
+    // Update local state
+    const updatedUser = {
+      ...editForm,
+      initials: editForm.name
+        .split(' ')
+        .map((n: string) => n[0])
+        .join('')
+        .toUpperCase()
+    };
+    
+    setUserData(updatedUser);
+    
+    // Update localStorage
+    const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+    const updatedStoredUser = {
+      ...storedUser,
+      name: editForm.name,
+      email: editForm.email,
+      phone: editForm.phone,
+      address: editForm.address,
+      city: editForm.city,
+      occupation: editForm.occupation,
+      company: editForm.company
+    };
+    
+    localStorage.setItem('user', JSON.stringify(updatedStoredUser));
+    
+    // Update in 'users' collection if it exists
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const updatedUsers = users.map((user: any) => {
+      if (user.email === storedUser.email) {
+        return updatedStoredUser;
+      }
+      return user;
+    });
+    
+    localStorage.setItem('users', JSON.stringify(updatedUsers));
+    
+    setIsEditing(false);
+    toast.success('Profile updated successfully!');
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setEditForm(prev => ({ ...prev, [name]: value }));
   };
 
   const handleLogout = () => {
@@ -66,7 +169,7 @@ export default function Profile() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-6 animate-fade-in">
         <header>
           <h1 className="text-3xl font-heading font-bold text-white">My Profile</h1>
           <p className="text-gray-400 mt-1">Manage your account and preferences</p>
@@ -74,10 +177,10 @@ export default function Profile() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Profile Card */}
-          <Card className="lg:col-span-1 bg-gray-900 border-gray-800">
+          <Card className="lg:col-span-1 bg-gray-900 border-gray-800 hover:border-gray-700 transition-all">
             <CardHeader className="pb-2 text-center">
               <div className="mx-auto mb-4 relative">
-                <div className="w-24 h-24 bg-gradient-to-br from-revithalize-green to-revithalize-blue rounded-full flex items-center justify-center text-black text-3xl font-bold animate-fade-in">
+                <div className="w-24 h-24 bg-gradient-to-br from-revithalize-green to-revithalize-blue rounded-full flex items-center justify-center text-black text-3xl font-bold animate-scale-in">
                   {userData.initials}
                 </div>
                 <button 
@@ -88,7 +191,7 @@ export default function Profile() {
                 </button>
               </div>
               <CardTitle className="text-white text-xl">{userData.name}</CardTitle>
-              <p className="text-gray-400">EV Enthusiast</p>
+              <p className="text-gray-400">{userData.occupation}</p>
             </CardHeader>
             <CardContent className="pt-4">
               <div className="space-y-3">
@@ -103,6 +206,14 @@ export default function Profile() {
                 <div className="flex items-center gap-3 text-gray-300">
                   <MapPin size={16} className="text-revithalize-green" />
                   <span>{userData.address}</span>
+                </div>
+                <div className="flex items-center gap-3 text-gray-300">
+                  <Building size={16} className="text-revithalize-green" />
+                  <span>{userData.city}</span>
+                </div>
+                <div className="flex items-center gap-3 text-gray-300">
+                  <Briefcase size={16} className="text-revithalize-green" />
+                  <span>{userData.company}</span>
                 </div>
                 <div className="flex items-center gap-3 text-gray-300">
                   <Calendar size={16} className="text-revithalize-green" />
@@ -123,93 +234,207 @@ export default function Profile() {
           </Card>
 
           <div className="lg:col-span-2 space-y-6">
-            {/* Vehicle Information */}
-            <Card className="bg-gray-900 border-gray-800">
-              <CardHeader>
-                <CardTitle className="text-white flex items-center">
-                  <Car className="mr-2 h-5 w-5 text-revithalize-green" />
-                  My Vehicles
-                </CardTitle>
-                <CardDescription className="text-gray-400">
-                  Manage your connected electric vehicles
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="p-4 bg-gray-800 rounded-lg border border-gray-700 hover:border-revithalize-green/50 transition-colors cursor-pointer hover:scale-105 transition-transform">
-                  <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-                    <div className="flex items-center gap-3 mb-3 md:mb-0">
-                      <div className="w-12 h-12 bg-revithalize-dark rounded-lg flex items-center justify-center">
-                        <Battery className="h-6 w-6 text-revithalize-green" />
-                      </div>
-                      <div>
-                        <h3 className="text-white font-medium">Tata Nexon EV</h3>
-                        <p className="text-sm text-gray-400">Added May 15, 2023</p>
-                      </div>
+            {/* Edit Profile Form */}
+            {isEditing ? (
+              <Card className="bg-gray-900 border-gray-800 hover:border-gray-700 transition-all">
+                <CardHeader>
+                  <CardTitle className="text-white">Edit Profile</CardTitle>
+                  <CardDescription className="text-gray-400">
+                    Update your personal information
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="name" className="text-white">Full Name</Label>
+                      <Input
+                        id="name"
+                        name="name"
+                        value={editForm.name}
+                        onChange={handleChange}
+                        className="bg-gray-800 border-gray-700 text-white"
+                      />
                     </div>
-                    <div className="flex items-center gap-2">
-                      <div className="bg-gray-900 px-3 py-1 rounded-full text-xs text-white">
-                        75% Charged
-                      </div>
-                      <div className="bg-revithalize-green/20 text-revithalize-green px-3 py-1 rounded-full text-xs">
-                        Active
-                      </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="email" className="text-white">Email</Label>
+                      <Input
+                        id="email"
+                        name="email"
+                        value={editForm.email}
+                        onChange={handleChange}
+                        className="bg-gray-800 border-gray-700 text-white"
+                        disabled
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="phone" className="text-white">Phone Number</Label>
+                      <Input
+                        id="phone"
+                        name="phone"
+                        value={editForm.phone}
+                        onChange={handleChange}
+                        className="bg-gray-800 border-gray-700 text-white"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="address" className="text-white">Address</Label>
+                      <Input
+                        id="address"
+                        name="address"
+                        value={editForm.address}
+                        onChange={handleChange}
+                        className="bg-gray-800 border-gray-700 text-white"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="city" className="text-white">City</Label>
+                      <Input
+                        id="city"
+                        name="city"
+                        value={editForm.city}
+                        onChange={handleChange}
+                        className="bg-gray-800 border-gray-700 text-white"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="occupation" className="text-white">Occupation</Label>
+                      <Input
+                        id="occupation"
+                        name="occupation"
+                        value={editForm.occupation}
+                        onChange={handleChange}
+                        className="bg-gray-800 border-gray-700 text-white"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="company" className="text-white">Company</Label>
+                      <Input
+                        id="company"
+                        name="company"
+                        value={editForm.company}
+                        onChange={handleChange}
+                        className="bg-gray-800 border-gray-700 text-white"
+                      />
                     </div>
                   </div>
-                </div>
-
-                <div className="mt-4 flex justify-center">
-                  <Button 
-                    variant="outline" 
-                    className="border-dashed border-gray-700 hover:border-revithalize-green hover:bg-gray-800 hover:scale-105 transition-all"
+                </CardContent>
+                <CardFooter className="flex justify-between">
+                  <Button
+                    variant="outline"
+                    onClick={handleCancelEdit}
+                    className="hover:bg-gray-800"
                   >
-                    <span className="mr-2 text-lg">+</span> Add New Vehicle
+                    Cancel
                   </Button>
-                </div>
-              </CardContent>
-            </Card>
+                  <Button
+                    onClick={handleSaveProfile}
+                    className="bg-revithalize-green text-black hover:bg-revithalize-green/90"
+                  >
+                    Save Changes
+                  </Button>
+                </CardFooter>
+              </Card>
+            ) : (
+              <>
+                {/* Vehicle Information */}
+                <Card className="bg-gray-900 border-gray-800 hover:border-gray-700 transition-all">
+                  <CardHeader>
+                    <CardTitle className="text-white flex items-center">
+                      <Car className="mr-2 h-5 w-5 text-revithalize-green" />
+                      My Vehicles
+                    </CardTitle>
+                    <CardDescription className="text-gray-400">
+                      Manage your connected electric vehicles
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="p-4 bg-gray-800 rounded-lg border border-gray-700 hover:border-revithalize-green/50 transition-colors cursor-pointer hover:scale-105 transition-transform">
+                      <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+                        <div className="flex items-center gap-3 mb-3 md:mb-0">
+                          <div className="w-12 h-12 bg-revithalize-dark rounded-lg flex items-center justify-center">
+                            <Battery className="h-6 w-6 text-revithalize-green" />
+                          </div>
+                          <div>
+                            <h3 className="text-white font-medium">Tata Nexon EV</h3>
+                            <p className="text-sm text-gray-400">Added May 15, 2023</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="bg-gray-900 px-3 py-1 rounded-full text-xs text-white">
+                            75% Charged
+                          </div>
+                          <div className="bg-revithalize-green/20 text-revithalize-green px-3 py-1 rounded-full text-xs">
+                            Active
+                          </div>
+                        </div>
+                      </div>
+                    </div>
 
-            {/* Usage Statistics */}
-            <Card className="bg-gray-900 border-gray-800">
-              <CardHeader>
-                <CardTitle className="text-white">Usage Statistics</CardTitle>
-                <CardDescription className="text-gray-400">
-                  Your EV usage over the last 30 days
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700/50 transition-colors">
-                    <p className="text-gray-400 text-sm mb-1">Total Distance</p>
-                    <p className="text-2xl font-bold text-white">437 km</p>
-                    <div className="mt-2 text-xs text-green-400 flex items-center">
-                      <span className="mr-1">↑</span> 12% from last month
+                    <div className="mt-4 flex justify-center">
+                      <Button 
+                        variant="outline" 
+                        className="border-dashed border-gray-700 hover:border-revithalize-green hover:bg-gray-800 hover:scale-105 transition-all"
+                        onClick={() => toast.info('Vehicle addition functionality coming soon!')}
+                      >
+                        <span className="mr-2 text-lg">+</span> Add New Vehicle
+                      </Button>
                     </div>
-                  </div>
-                  
-                  <div className="bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700/50 transition-colors">
-                    <p className="text-gray-400 text-sm mb-1">Energy Used</p>
-                    <p className="text-2xl font-bold text-white">89 kWh</p>
-                    <div className="mt-2 text-xs text-red-400 flex items-center">
-                      <span className="mr-1">↓</span> 5% from last month
+                  </CardContent>
+                </Card>
+
+                {/* Usage Statistics */}
+                <Card className="bg-gray-900 border-gray-800 hover:border-gray-700 transition-all">
+                  <CardHeader>
+                    <CardTitle className="text-white">Usage Statistics</CardTitle>
+                    <CardDescription className="text-gray-400">
+                      Your EV usage over the last 30 days
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700/50 transition-colors">
+                        <p className="text-gray-400 text-sm mb-1">Total Distance</p>
+                        <p className="text-2xl font-bold text-white">437 km</p>
+                        <div className="mt-2 text-xs text-green-400 flex items-center">
+                          <span className="mr-1">↑</span> 12% from last month
+                        </div>
+                      </div>
+                      
+                      <div className="bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700/50 transition-colors">
+                        <p className="text-gray-400 text-sm mb-1">Energy Used</p>
+                        <p className="text-2xl font-bold text-white">89 kWh</p>
+                        <div className="mt-2 text-xs text-red-400 flex items-center">
+                          <span className="mr-1">↓</span> 5% from last month
+                        </div>
+                      </div>
+                      
+                      <div className="bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700/50 transition-colors">
+                        <p className="text-gray-400 text-sm mb-1">Charging Sessions</p>
+                        <p className="text-2xl font-bold text-white">17</p>
+                        <div className="mt-2 text-xs text-green-400 flex items-center">
+                          <span className="mr-1">↑</span> 8% from last month
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  
-                  <div className="bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700/50 transition-colors">
-                    <p className="text-gray-400 text-sm mb-1">Charging Sessions</p>
-                    <p className="text-2xl font-bold text-white">17</p>
-                    <div className="mt-2 text-xs text-green-400 flex items-center">
-                      <span className="mr-1">↑</span> 8% from last month
+                    
+                    <div className="mt-4 text-center">
+                      <Button 
+                        className="bg-revithalize-blue hover:bg-blue-600 text-black hover:scale-105 transition-all"
+                        onClick={() => navigate('/analytics')}
+                      >
+                        View Detailed Analytics
+                      </Button>
                     </div>
-                  </div>
-                </div>
-                
-                <div className="mt-4 text-center">
-                  <Button className="bg-revithalize-blue hover:bg-blue-600 text-black hover:scale-105 transition-all">
-                    View Detailed Analytics
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+                  </CardContent>
+                </Card>
+              </>
+            )}
           </div>
         </div>
       </div>

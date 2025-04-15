@@ -61,7 +61,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   ];
 
   return (
-    <div className="flex min-h-screen bg-black font-poppins">
+    <div className="flex min-h-screen bg-black font-poppins overflow-hidden">
       {/* Mobile sidebar toggle */}
       <button
         className="fixed top-4 left-4 z-50 p-2 bg-revithalize-dark rounded-lg text-white md:hidden"
@@ -85,7 +85,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
             </h1>
           </div>
 
-          <nav className="flex flex-col gap-2 flex-1">
+          <nav className="flex flex-col gap-2 flex-1 mt-2">
             {navItems.map((item) => (
               <NavItem
                 key={item.to}
@@ -98,7 +98,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
           </nav>
 
           <div className="mt-auto pt-6 border-t border-gray-800">
-            <div className="bg-gray-900 rounded-lg p-4 mb-4">
+            <div className="bg-gray-900 rounded-lg p-4 mb-4 hover:bg-gray-800 transition-colors">
               <h3 className="text-sm font-medium text-gray-300 mb-2 font-poppins">Battery Status</h3>
               <div className="flex items-center gap-3">
                 <div className="relative w-full h-2 bg-gray-800 rounded-full overflow-hidden">
@@ -133,15 +133,15 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       <main className={cn(
         "flex-1 transition-all duration-200 ease-in-out",
         "md:ml-64",
-        "px-4 md:px-6" // Added consistent padding
+        "px-4 md:px-8 pb-20 md:pb-8" // Improved padding
       )}>
-        <div className="min-h-screen bg-black py-4 pt-16 md:pt-6">
+        <div className="min-h-screen bg-black py-4 pt-16 md:pt-8">
           <div className="max-w-7xl mx-auto">
             {children}
           </div>
         </div>
         
-        {/* Mobile bottom navigation */}
+        {/* Mobile bottom navigation - with appropriate spacing to prevent overlap */}
         <div className="fixed inset-x-0 bottom-0 bg-revithalize-dark border-t border-gray-800 md:hidden z-30">
           <div className="flex justify-around py-2">
             {navItems.slice(0, 5).map((item) => {
