@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -13,6 +12,7 @@ import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { Progress } from '@/components/ui/progress';
 import { AtSign, Key, User, Loader2, Shield, MapPin } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 // Login form schema
 const loginSchema = z.object({
