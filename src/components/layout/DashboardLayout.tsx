@@ -132,10 +132,13 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       {/* Main content */}
       <main className={cn(
         "flex-1 transition-all duration-200 ease-in-out",
-        "md:ml-64"
+        "md:ml-64",
+        "px-4 md:px-6" // Added consistent padding
       )}>
-        <div className="min-h-screen bg-black py-4 pt-16 md:pt-4">
-          {children}
+        <div className="min-h-screen bg-black py-4 pt-16 md:pt-6">
+          <div className="max-w-7xl mx-auto">
+            {children}
+          </div>
         </div>
         
         {/* Mobile bottom navigation */}

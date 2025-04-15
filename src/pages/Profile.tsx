@@ -1,18 +1,67 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { User, Mail, Phone, MapPin, Calendar, Edit, LogOut, Battery, Car } from 'lucide-react';
 import { toast } from 'sonner';
 
+interface UserData {
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  joinDate: string;
+  initials: string;
+}
+
 export default function Profile() {
+  const [userData, setUserData] = useState<UserData>({
+    name: 'Rajesh Sharma',
+    email: 'rajesh.sharma@example.com',
+    phone: '+91 98765 43210',
+    address: 'Delhi, India',
+    joinDate: 'May 2023',
+    initials: 'RS'
+  });
+
+  useEffect(() => {
+    // Try to get user data from localStorage
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        const initials = parsedUser.name
+          ? parsedUser.name
+              .split(' ')
+              .map((n: string) => n[0])
+              .join('')
+              .toUpperCase()
+          : 'U';
+
+        setUserData({
+          name: parsedUser.name || 'Rajesh Sharma',
+          email: parsedUser.email || 'rajesh.sharma@example.com',
+          phone: parsedUser.phone || '+91 98765 43210',
+          address: parsedUser.address || 'Delhi, India',
+          joinDate: parsedUser.joinDate || 'May 2023',
+          initials: initials
+        });
+      } catch (error) {
+        console.error('Error parsing user data:', error);
+      }
+    }
+  }, []);
+
   const handleEditProfile = () => {
     toast.info('Edit profile functionality coming soon!');
   };
 
   const handleLogout = () => {
-    toast.info('Logout functionality coming soon!');
+    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('user');
+    toast.success('Logged out successfully');
+    window.location.href = '/auth';
   };
 
   return (
@@ -28,43 +77,43 @@ export default function Profile() {
           <Card className="lg:col-span-1 bg-gray-900 border-gray-800">
             <CardHeader className="pb-2 text-center">
               <div className="mx-auto mb-4 relative">
-                <div className="w-24 h-24 bg-gradient-to-br from-revithalize-green to-revithalize-blue rounded-full flex items-center justify-center text-black text-3xl font-bold">
-                  RS
+                <div className="w-24 h-24 bg-gradient-to-br from-revithalize-green to-revithalize-blue rounded-full flex items-center justify-center text-black text-3xl font-bold animate-fade-in">
+                  {userData.initials}
                 </div>
                 <button 
-                  className="absolute bottom-0 right-0 bg-gray-800 p-1.5 rounded-full border border-gray-700 hover:bg-gray-700 transition-colors"
+                  className="absolute bottom-0 right-0 bg-gray-800 p-1.5 rounded-full border border-gray-700 hover:bg-gray-700 transition-colors hover:scale-105"
                   onClick={handleEditProfile}
                 >
                   <Edit size={14} className="text-white" />
                 </button>
               </div>
-              <CardTitle className="text-white text-xl">Rajesh Sharma</CardTitle>
+              <CardTitle className="text-white text-xl">{userData.name}</CardTitle>
               <p className="text-gray-400">EV Enthusiast</p>
             </CardHeader>
             <CardContent className="pt-4">
               <div className="space-y-3">
                 <div className="flex items-center gap-3 text-gray-300">
                   <Mail size={16} className="text-revithalize-green" />
-                  <span>rajesh.sharma@example.com</span>
+                  <span>{userData.email}</span>
                 </div>
                 <div className="flex items-center gap-3 text-gray-300">
                   <Phone size={16} className="text-revithalize-green" />
-                  <span>+91 98765 43210</span>
+                  <span>{userData.phone}</span>
                 </div>
                 <div className="flex items-center gap-3 text-gray-300">
                   <MapPin size={16} className="text-revithalize-green" />
-                  <span>Delhi, India</span>
+                  <span>{userData.address}</span>
                 </div>
                 <div className="flex items-center gap-3 text-gray-300">
                   <Calendar size={16} className="text-revithalize-green" />
-                  <span>Member since May 2023</span>
+                  <span>Member since {userData.joinDate}</span>
                 </div>
               </div>
             </CardContent>
             <CardFooter className="pt-4 flex justify-center">
               <Button 
                 variant="outline" 
-                className="w-full text-red-400 border-red-400/30 hover:bg-red-400/10"
+                className="w-full text-red-400 border-red-400/30 hover:bg-red-400/10 transition-all hover:scale-105"
                 onClick={handleLogout}
               >
                 <LogOut size={16} className="mr-2" />
@@ -86,7 +135,7 @@ export default function Profile() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="p-4 bg-gray-800 rounded-lg border border-gray-700 hover:border-revithalize-green/50 transition-colors cursor-pointer">
+                <div className="p-4 bg-gray-800 rounded-lg border border-gray-700 hover:border-revithalize-green/50 transition-colors cursor-pointer hover:scale-105 transition-transform">
                   <div className="flex flex-col md:flex-row md:items-center md:justify-between">
                     <div className="flex items-center gap-3 mb-3 md:mb-0">
                       <div className="w-12 h-12 bg-revithalize-dark rounded-lg flex items-center justify-center">
@@ -109,7 +158,10 @@ export default function Profile() {
                 </div>
 
                 <div className="mt-4 flex justify-center">
-                  <Button variant="outline" className="border-dashed border-gray-700 hover:border-revithalize-green hover:bg-gray-800">
+                  <Button 
+                    variant="outline" 
+                    className="border-dashed border-gray-700 hover:border-revithalize-green hover:bg-gray-800 hover:scale-105 transition-all"
+                  >
                     <span className="mr-2 text-lg">+</span> Add New Vehicle
                   </Button>
                 </div>
@@ -126,7 +178,7 @@ export default function Profile() {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                  <div className="bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700/50 transition-colors">
                     <p className="text-gray-400 text-sm mb-1">Total Distance</p>
                     <p className="text-2xl font-bold text-white">437 km</p>
                     <div className="mt-2 text-xs text-green-400 flex items-center">
@@ -134,7 +186,7 @@ export default function Profile() {
                     </div>
                   </div>
                   
-                  <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                  <div className="bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700/50 transition-colors">
                     <p className="text-gray-400 text-sm mb-1">Energy Used</p>
                     <p className="text-2xl font-bold text-white">89 kWh</p>
                     <div className="mt-2 text-xs text-red-400 flex items-center">
@@ -142,7 +194,7 @@ export default function Profile() {
                     </div>
                   </div>
                   
-                  <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                  <div className="bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700/50 transition-colors">
                     <p className="text-gray-400 text-sm mb-1">Charging Sessions</p>
                     <p className="text-2xl font-bold text-white">17</p>
                     <div className="mt-2 text-xs text-green-400 flex items-center">
@@ -152,7 +204,7 @@ export default function Profile() {
                 </div>
                 
                 <div className="mt-4 text-center">
-                  <Button className="bg-revithalize-blue hover:bg-blue-600 text-black">
+                  <Button className="bg-revithalize-blue hover:bg-blue-600 text-black hover:scale-105 transition-all">
                     View Detailed Analytics
                   </Button>
                 </div>
