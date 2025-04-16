@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { 
   User, Mail, Phone, MapPin, Calendar, Edit, 
-  LogOut, Battery, Car, Briefcase, Building
+  LogOut, Battery, Bike, Briefcase, Building
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
@@ -342,15 +342,15 @@ export default function Profile() {
               </Card>
             ) : (
               <>
-                {/* Vehicle Information */}
+                {/* Retrofit Vehicles Information */}
                 <Card className="bg-gray-900 border-gray-800 hover:border-gray-700 transition-all">
                   <CardHeader>
                     <CardTitle className="text-white flex items-center">
-                      <Car className="mr-2 h-5 w-5 text-revithalize-green" />
-                      My Vehicles
+                      <Bike className="mr-2 h-5 w-5 text-revithalize-green" />
+                      My Retrofit Vehicles
                     </CardTitle>
                     <CardDescription className="text-gray-400">
-                      Manage your connected electric vehicles
+                      Manage your connected retrofit electric vehicles
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -358,10 +358,10 @@ export default function Profile() {
                       <div className="flex flex-col md:flex-row md:items-center md:justify-between">
                         <div className="flex items-center gap-3 mb-3 md:mb-0">
                           <div className="w-12 h-12 bg-revithalize-dark rounded-lg flex items-center justify-center">
-                            <Battery className="h-6 w-6 text-revithalize-green" />
+                            <Bike className="h-6 w-6 text-revithalize-green" />
                           </div>
                           <div>
-                            <h3 className="text-white font-medium">Tata Nexon EV</h3>
+                            <h3 className="text-white font-medium">Hero Honda Passion</h3>
                             <p className="text-sm text-gray-400">Added May 15, 2023</p>
                           </div>
                         </div>
@@ -380,9 +380,12 @@ export default function Profile() {
                       <Button 
                         variant="outline" 
                         className="border-dashed border-gray-700 hover:border-revithalize-green hover:bg-gray-800 hover:scale-105 transition-all"
-                        onClick={() => toast.info('Vehicle addition functionality coming soon!')}
+                        onClick={() => {
+                          toast.info('Retrofit vehicle addition functionality coming soon!');
+                          navigate('/map');
+                        }}
                       >
-                        <span className="mr-2 text-lg">+</span> Add New Vehicle
+                        <span className="mr-2 text-lg">+</span> Add New Retrofit Vehicle
                       </Button>
                     </div>
                   </CardContent>
@@ -391,9 +394,9 @@ export default function Profile() {
                 {/* Usage Statistics */}
                 <Card className="bg-gray-900 border-gray-800 hover:border-gray-700 transition-all">
                   <CardHeader>
-                    <CardTitle className="text-white">Usage Statistics</CardTitle>
+                    <CardTitle className="text-white">Retrofit Usage Statistics</CardTitle>
                     <CardDescription className="text-gray-400">
-                      Your EV usage over the last 30 days
+                      Your retrofit EV usage over the last 30 days
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -423,12 +426,19 @@ export default function Profile() {
                       </div>
                     </div>
                     
-                    <div className="mt-4 text-center">
+                    <div className="mt-4 flex justify-between">
                       <Button 
                         className="bg-revithalize-blue hover:bg-blue-600 text-black hover:scale-105 transition-all"
                         onClick={() => navigate('/analytics')}
                       >
                         View Detailed Analytics
+                      </Button>
+                      
+                      <Button 
+                        className="bg-revithalize-green hover:bg-green-600 text-black hover:scale-105 transition-all"
+                        onClick={() => navigate('/map')}
+                      >
+                        View Charging Map
                       </Button>
                     </div>
                   </CardContent>
