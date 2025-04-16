@@ -133,17 +133,17 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       <main className={cn(
         "flex-1 transition-all duration-200 ease-in-out",
         "md:ml-64",
-        "px-4 md:px-8 pb-20 md:pb-8" // Improved padding
+        "p-4 md:p-8 pb-24 md:pb-8 pt-16 md:pt-8" // Improved padding for mobile
       )}>
-        <div className="min-h-screen bg-black py-4 pt-16 md:pt-8">
+        <div className="min-h-screen bg-black">
           <div className="max-w-7xl mx-auto">
             {children}
           </div>
         </div>
         
-        {/* Mobile bottom navigation - with appropriate spacing to prevent overlap */}
+        {/* Mobile bottom navigation - with improved spacing to prevent overlap */}
         <div className="fixed inset-x-0 bottom-0 bg-revithalize-dark border-t border-gray-800 md:hidden z-30">
-          <div className="flex justify-around py-2">
+          <div className="flex justify-around py-3">
             {navItems.slice(0, 5).map((item) => {
               const Icon = item.icon;
               const active = location.pathname === item.to;

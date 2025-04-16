@@ -14,6 +14,7 @@ import * as z from 'zod';
 import { Progress } from '@/components/ui/progress';
 import { AtSign, Key, User, Loader2, Shield, MapPin, Phone, Briefcase, Building } from 'lucide-react';
 import { cn } from "@/lib/utils";
+import { useIsMobile } from '@/hooks/use-mobile';
 
 // Login form schema
 const loginSchema = z.object({
@@ -43,6 +44,7 @@ export default function Auth() {
   const [isLoading, setIsLoading] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [activeTab, setActiveTab] = useState('login');
+  const isMobile = useIsMobile();
   
   // Login form
   const loginForm = useForm<z.infer<typeof loginSchema>>({
@@ -128,6 +130,8 @@ export default function Auth() {
         email: values.email,
         password: values.password, // In a real app, this would be hashed
         name: `${values.firstName} ${values.lastName}`,
+        firstName: values.firstName,
+        lastName: values.lastName,
         phone: values.phone,
         address: values.address,
         city: values.city,
@@ -206,7 +210,7 @@ export default function Auth() {
                             <div className="relative">
                               <Input 
                                 {...field}
-                                placeholder="name@example.com" 
+                                placeholder="Enter your email" 
                                 className="bg-gray-800 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-green"
                               />
                               <AtSign className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
@@ -231,6 +235,7 @@ export default function Auth() {
                               <Input 
                                 {...field}
                                 type="password" 
+                                placeholder="Enter your password"
                                 className="bg-gray-800 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-green"
                               />
                               <Key className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
@@ -259,7 +264,7 @@ export default function Auth() {
                       disabled={isLoading}
                     >
                       {isLoading ? (
-                        <div className="flex items-center">
+                        <div className="flex items-center justify-center w-full">
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                           Logging in...
                         </div>
@@ -286,8 +291,8 @@ export default function Auth() {
                     </CardDescription>
                   </CardHeader>
                   
-                  <CardContent className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
+                  <CardContent className={cn("space-y-4", isMobile ? "px-3" : "")}>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <FormField
                         control={registerForm.control}
                         name="firstName"
@@ -300,7 +305,7 @@ export default function Auth() {
                             <FormControl>
                               <Input 
                                 {...field}
-                                placeholder="Rajesh"
+                                placeholder="First name"
                                 className="bg-gray-800 border-gray-700 text-white transition-all focus:border-revithalize-blue"
                               />
                             </FormControl>
@@ -321,7 +326,7 @@ export default function Auth() {
                             <FormControl>
                               <Input 
                                 {...field}
-                                placeholder="Sharma"
+                                placeholder="Last name"
                                 className="bg-gray-800 border-gray-700 text-white transition-all focus:border-revithalize-blue"
                               />
                             </FormControl>
@@ -345,7 +350,7 @@ export default function Auth() {
                               <Input 
                                 {...field}
                                 type="email" 
-                                placeholder="rajesh.sharma@example.com"
+                                placeholder="Your email address"
                                 className="bg-gray-800 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-blue"
                               />
                               <AtSign className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
@@ -369,7 +374,7 @@ export default function Auth() {
                             <div className="relative">
                               <Input 
                                 {...field}
-                                placeholder="+91 98765 43210" 
+                                placeholder="10-digit mobile number" 
                                 className="bg-gray-800 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-blue"
                               />
                               <Phone className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
@@ -393,7 +398,7 @@ export default function Auth() {
                             <div className="relative">
                               <Input 
                                 {...field}
-                                placeholder="123, Green Park, Sector-15" 
+                                placeholder="Your full address" 
                                 className="bg-gray-800 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-blue"
                               />
                               <MapPin className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
@@ -417,7 +422,7 @@ export default function Auth() {
                             <div className="relative">
                               <Input 
                                 {...field}
-                                placeholder="Delhi, Mumbai, Bangalore, etc." 
+                                placeholder="Your city" 
                                 className="bg-gray-800 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-blue"
                               />
                               <Building className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
@@ -428,7 +433,7 @@ export default function Auth() {
                       )}
                     />
                     
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <FormField
                         control={registerForm.control}
                         name="occupation"
@@ -441,7 +446,7 @@ export default function Auth() {
                             <FormControl>
                               <Input 
                                 {...field}
-                                placeholder="Engineer, Doctor, etc."
+                                placeholder="Your occupation"
                                 className="bg-gray-800 border-gray-700 text-white transition-all focus:border-revithalize-blue"
                               />
                             </FormControl>
@@ -486,6 +491,7 @@ export default function Auth() {
                               <Input 
                                 {...field}
                                 type="password"
+                                placeholder="Create a password"
                                 className="bg-gray-800 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-blue"
                               />
                               <Shield className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
@@ -536,6 +542,7 @@ export default function Auth() {
                               <Input 
                                 {...field}
                                 type="password"
+                                placeholder="Confirm your password"
                                 className="bg-gray-800 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-blue"
                               />
                               <Shield className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
@@ -547,14 +554,14 @@ export default function Auth() {
                     />
                   </CardContent>
                   
-                  <CardFooter>
+                  <CardFooter className={cn(isMobile ? "px-3 pb-6" : "")}>
                     <Button 
                       type="submit" 
                       className="w-full bg-gradient-to-r from-revithalize-blue to-revithalize-blue/80 hover:to-revithalize-blue text-black font-medium font-poppins h-11 transition-all duration-300"
                       disabled={isLoading}
                     >
                       {isLoading ? (
-                        <div className="flex items-center">
+                        <div className="flex items-center justify-center w-full">
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                           Creating account...
                         </div>
