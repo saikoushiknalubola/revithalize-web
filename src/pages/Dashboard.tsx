@@ -1,5 +1,4 @@
-
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Battery, Bolt, Gauge, ThermometerSnowflake, Clock, Zap, MapPin, Bell } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,12 +9,20 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const [userName, setUserName] = useState('User');
   
-  // Check for authentication
+  // Check for authentication and get user data
   useEffect(() => {
     const isAuthenticated = localStorage.getItem('isAuthenticated');
     if (!isAuthenticated) {
       navigate('/auth');
+    } else {
+      // Get user data from localStorage
+      const userData = localStorage.getItem('user');
+      if (userData) {
+        const user = JSON.parse(userData);
+        setUserName(user.fullName || user.name || 'User');
+      }
     }
   }, [navigate]);
 
@@ -23,7 +30,7 @@ export default function Dashboard() {
     <DashboardLayout>
       <div className="space-y-6 px-4 pb-16 md:pb-4">
         <header>
-          <h1 className="text-3xl font-heading font-bold text-white">Welcome back, Alex</h1>
+          <h1 className="text-3xl font-heading font-bold text-white">Welcome back, {userName}</h1>
           <p className="text-gray-400 mt-1">Here's the current status of your EV</p>
         </header>
 
@@ -43,7 +50,7 @@ export default function Dashboard() {
                 </div>
                 <span className="text-2xl font-bold text-white">75%</span>
               </div>
-              <p className="text-sm text-gray-400 mt-2">Estimated Range: 120 km</p>
+              <p className="text-sm text-gray-400 mt-2">Estimated Range: 110 km</p>
             </CardContent>
           </Card>
 
@@ -55,8 +62,8 @@ export default function Dashboard() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-white">5.2 kW</p>
-              <p className="text-sm text-gray-400 mt-2">Current Consumption</p>
+              <p className="text-2xl font-bold text-white">51.2 V</p>
+              <p className="text-sm text-gray-400 mt-2">45 Ah Battery</p>
             </CardContent>
           </Card>
 

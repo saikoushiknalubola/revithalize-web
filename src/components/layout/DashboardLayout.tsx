@@ -36,6 +36,16 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const isMobile = useIsMobile();
+  const [userName, setUserName] = useState('');
+
+  // Get user data on mount
+  useEffect(() => {
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      const user = JSON.parse(userData);
+      setUserName(user.fullName || user.name || '');
+    }
+  }, []);
 
   // Close sidebar when route changes on mobile
   useEffect(() => {
@@ -99,15 +109,23 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
 
           <div className="mt-auto pt-6 border-t border-gray-800">
             <div className="bg-gray-900 rounded-lg p-4 mb-4 hover:bg-gray-800 transition-colors">
-              <h3 className="text-sm font-medium text-gray-300 mb-2 font-poppins">Battery Status</h3>
+              <h3 className="text-sm font-medium text-gray-300 mb-2 font-poppins">Hero Honda Passion</h3>
               <div className="flex items-center gap-3">
                 <div className="relative w-full h-2 bg-gray-800 rounded-full overflow-hidden">
                   <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-revithalize-green to-revithalize-blue rounded-full" style={{ width: '75%' }} />
                 </div>
                 <span className="text-white font-medium font-poppins">75%</span>
               </div>
-              <p className="text-xs text-gray-400 mt-2 font-poppins">Estimated Range: 120 km</p>
+              <p className="text-xs text-gray-400 mt-2 font-poppins">Estimated Range: 110 km</p>
+              <p className="text-xs text-gray-400 mt-1 font-poppins">51.2V 45Ah Battery</p>
             </div>
+            
+            {userName && (
+              <div className="bg-gray-900 rounded-lg p-3 mb-4">
+                <p className="text-sm text-gray-300">Logged in as</p>
+                <p className="text-white font-medium truncate">{userName}</p>
+              </div>
+            )}
             
             <button 
               onClick={handleLogout}

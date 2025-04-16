@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Battery, Gauge, Zap, ThermometerSnowflake, Clock, Calendar, AlertTriangle, Settings, BatteryCharging } from 'lucide-react';
@@ -10,7 +9,7 @@ export default function VehicleDetails() {
       <div className="space-y-6">
         <header>
           <h1 className="text-3xl font-heading font-bold text-white">Vehicle Details</h1>
-          <p className="text-gray-400 mt-1">Comprehensive information about your EV</p>
+          <p className="text-gray-400 mt-1">Hero Honda Passion AP02SK2409</p>
         </header>
 
         {/* Vehicle status cards */}
@@ -32,7 +31,7 @@ export default function VehicleDetails() {
               <div className="mt-4 grid grid-cols-2 gap-2 text-sm">
                 <div>
                   <p className="text-gray-400">Range</p>
-                  <p className="font-medium text-white">120 km</p>
+                  <p className="font-medium text-white">110 km</p>
                 </div>
                 <div>
                   <p className="text-gray-400">Efficiency</p>
@@ -54,11 +53,11 @@ export default function VehicleDetails() {
               <div className="mt-4 grid grid-cols-2 gap-2 text-sm">
                 <div>
                   <p className="text-gray-400">Power</p>
-                  <p className="font-medium text-white">5.2 kW</p>
+                  <p className="font-medium text-white">51.2 V</p>
                 </div>
                 <div>
-                  <p className="text-gray-400">Speed</p>
-                  <p className="font-medium text-white">0 km/h</p>
+                  <p className="text-gray-400">Capacity</p>
+                  <p className="font-medium text-white">45 Ah</p>
                 </div>
               </div>
             </CardContent>
@@ -113,7 +112,7 @@ export default function VehicleDetails() {
         <Card className="bg-gray-900 border-gray-800">
           <CardHeader>
             <CardTitle className="text-white">Battery Health Analysis</CardTitle>
-            <CardDescription className="text-gray-400">Detailed report of your battery performance</CardDescription>
+            <CardDescription className="text-gray-400">Retrofit Kit: Hero Honda Passion AP02SK2409</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-6">

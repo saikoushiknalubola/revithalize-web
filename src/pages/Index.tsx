@@ -1,6 +1,7 @@
 
 import React from 'react';
-import { Battery, MapPin, Zap, Wrench } from 'lucide-react';
+import { Battery, MapPin, Zap, Wrench, MotorbikeIcon } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Index = () => {
   return (
@@ -14,14 +15,17 @@ const Index = () => {
           <p className="text-xl text-gray-300 max-w-2xl mx-auto">
             Your comprehensive electric vehicle management system for Telangana
           </p>
+          <p className="text-md text-gray-400 mt-3">
+            Featuring Hero Honda Passion AP02SK2409 with 51.2V 45Ah battery
+          </p>
         </header>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
             { 
               icon: Battery, 
-              title: 'Vehicle Status', 
-              description: 'Real-time battery and vehicle health monitoring' 
+              title: 'Battery Status', 
+              description: '51.2V 45Ah battery with 110km range' 
             },
             { 
               icon: MapPin, 
@@ -56,6 +60,15 @@ const Index = () => {
               </p>
             </div>
           ))}
+        </div>
+
+        <div className="mt-12 text-center">
+          <Link 
+            to="/auth" 
+            className="bg-revithalize-green hover:bg-green-600 text-black font-bold py-3 px-8 rounded-full transition-colors inline-block"
+          >
+            Get Started
+          </Link>
         </div>
       </div>
     </div>
