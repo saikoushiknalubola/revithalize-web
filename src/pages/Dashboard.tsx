@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { Battery, Bolt, Gauge, ThermometerSnowflake, Clock, Zap, MapPin, Bell, Motorcycle } from 'lucide-react';
+import { Battery, Bolt, Gauge, ThermometerSnowflake, Clock, Zap, MapPin, Bell, Bike } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { BatteryMetrics } from '@/components/features/BatteryMetrics';
 import { ChargingScheduler } from '@/components/features/ChargingScheduler';
@@ -99,7 +99,7 @@ export default function Dashboard() {
         <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-800 shadow-lg animate-fade-in" style={{ animationDelay: '300ms' }}>
           <CardHeader>
             <CardTitle className="text-white flex items-center">
-              <Motorcycle className="mr-3 h-5 w-5 text-revithalize-green" />
+              <Bike className="mr-3 h-5 w-5 text-revithalize-green" />
               Hero Honda Passion AP02SK2409
             </CardTitle>
           </CardHeader>

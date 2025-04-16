@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Battery, MapPin, Zap, Wrench, Motorcycle } from 'lucide-react';
+import { Battery, MapPin, Zap, Wrench, Bike } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Index = () => {
@@ -23,7 +23,7 @@ const Index = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {[
             { 
-              icon: Motorcycle, 
+              icon: Bike, 
               title: 'Hero Honda Passion', 
               description: 'AP02SK2409 - Smart EV Technology'
             },

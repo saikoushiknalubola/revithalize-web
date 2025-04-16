@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, Battery, MapPin, BarChart2, User, Settings, Menu, X, LogOut, Motorcycle } from 'lucide-react';
+import { Home, Battery, MapPin, BarChart2, User, Settings, Menu, X, LogOut, Bike } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useState, useEffect } from 'react';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -66,7 +66,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
 
   const navItems = [
     { icon: Home, label: "Dashboard", to: "/dashboard" },
-    { icon: Motorcycle, label: "Vehicle", to: "/vehicle" },
+    { icon: Bike, label: "Vehicle", to: "/vehicle" },
     { icon: MapPin, label: "Map", to: "/map" },
     { icon: BarChart2, label: "Analytics", to: "/analytics" },
     { icon: User, label: "Profile", to: "/profile" },
@@ -118,7 +118,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
           <div className="mt-auto pt-6 border-t border-gray-800 animate-fade-in" style={{ animationDelay: '300ms' }}>
             <div className="bg-gradient-to-br from-gray-900 to-revithalize-dark rounded-lg p-4 mb-4 transition-all duration-300 hover:shadow-lg hover:from-gray-800">
               <h3 className="text-sm font-medium text-gray-300 mb-2 font-poppins flex items-center">
-                <Motorcycle className="h-4 w-4 mr-2 text-revithalize-green" />
+                <Bike className="h-4 w-4 mr-2 text-revithalize-green" />
                 Hero Honda Passion
               </h3>
               <div className="flex items-center gap-3">
