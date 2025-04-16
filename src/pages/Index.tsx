@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Battery, MapPin, Zap, Wrench, MotorbikeIcon } from 'lucide-react';
+import { Battery, MapPin, Zap, Wrench } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Index = () => {
