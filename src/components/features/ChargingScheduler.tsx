@@ -27,7 +27,7 @@ export function ChargingScheduler() {
   };
 
   return (
-    <Card className="bg-gray-900 border-gray-800">
+    <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-800 shadow-lg">
       <CardHeader>
         <CardTitle className="text-white flex items-center font-poppins">
           <AlarmClock className="mr-2 h-5 w-5 text-revithalize-blue" />
@@ -35,7 +35,7 @@ export function ChargingScheduler() {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between animate-fade-in">
           <div className="space-y-0.5">
             <div className="text-white font-poppins">Scheduled Charging</div>
             <div className="text-gray-400 text-sm font-poppins">Enable automatic charging schedule</div>
@@ -43,13 +43,13 @@ export function ChargingScheduler() {
           <Switch 
             checked={scheduledCharging}
             onCheckedChange={handleScheduledChargingChange}
-            className="data-[state=checked]:bg-revithalize-green"
+            className="data-[state=checked]:bg-gradient-to-r data-[state=checked]:from-revithalize-green data-[state=checked]:to-revithalize-blue"
           />
         </div>
 
         {scheduledCharging && (
           <>
-            <div className="space-y-4">
+            <div className="space-y-4 animate-fade-in" style={{ animationDelay: '100ms' }}>
               <div>
                 <Label className="text-white mb-2 block font-poppins">Target Battery Level: {targetBatteryLevel}%</Label>
                 <div className="flex items-center gap-3">
@@ -65,7 +65,7 @@ export function ChargingScheduler() {
                 </div>
               </div>
               
-              <div className="flex items-center justify-between pt-2">
+              <div className="flex items-center justify-between pt-2 animate-fade-in" style={{ animationDelay: '150ms' }}>
                 <div className="space-y-0.5">
                   <div className="text-white font-poppins">Off-Peak Hours Only</div>
                   <div className="text-gray-400 text-sm font-poppins">Charge during cheaper electricity hours</div>
@@ -73,13 +73,13 @@ export function ChargingScheduler() {
                 <Switch 
                   checked={offPeakOnly}
                   onCheckedChange={handleOffPeakChange}
-                  className="data-[state=checked]:bg-revithalize-green"
+                  className="data-[state=checked]:bg-gradient-to-r data-[state=checked]:from-revithalize-green data-[state=checked]:to-revithalize-blue"
                 />
               </div>
             </div>
             
-            <div className="grid grid-cols-2 gap-2 mt-4">
-              <div className="bg-gray-800 p-3 rounded-lg">
+            <div className="grid grid-cols-2 gap-2 mt-4 animate-fade-in" style={{ animationDelay: '200ms' }}>
+              <div className="bg-gray-800/70 p-3 rounded-lg shadow-md transition-all duration-300 hover:shadow-lg hover:bg-gray-800">
                 <div className="flex items-center gap-2 mb-2">
                   <Clock className="h-4 w-4 text-revithalize-blue" />
                   <span className="text-white text-sm font-poppins">Start Time</span>
@@ -87,7 +87,7 @@ export function ChargingScheduler() {
                 <p className="text-lg font-semibold text-white font-poppins">11:00 PM</p>
               </div>
               
-              <div className="bg-gray-800 p-3 rounded-lg">
+              <div className="bg-gray-800/70 p-3 rounded-lg shadow-md transition-all duration-300 hover:shadow-lg hover:bg-gray-800">
                 <div className="flex items-center gap-2 mb-2">
                   <Zap className="h-4 w-4 text-revithalize-green" />
                   <span className="text-white text-sm font-poppins">Est. Completion</span>

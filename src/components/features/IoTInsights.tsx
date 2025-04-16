@@ -2,11 +2,11 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { Cpu, ThermometerSnowflake, AlertTriangle, Gauge, Activity } from 'lucide-react';
+import { Cpu, ThermometerSnowflake, AlertTriangle, Gauge, Activity, Zap } from 'lucide-react';
 
 export function IoTInsights() {
   return (
-    <Card className="bg-gray-900 border-gray-800">
+    <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-800 shadow-lg">
       <CardHeader>
         <CardTitle className="text-white flex items-center font-poppins">
           <Cpu className="mr-2 h-5 w-5 text-revithalize-blue" />
@@ -14,7 +14,7 @@ export function IoTInsights() {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="space-y-3">
+        <div className="space-y-3 animate-fade-in">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
               <ThermometerSnowflake className="h-4 w-4 text-revithalize-green" />
@@ -23,11 +23,11 @@ export function IoTInsights() {
             <span className="text-sm font-semibold text-white font-poppins">92%</span>
           </div>
           <div className="relative h-2 bg-gray-800 rounded-full overflow-hidden">
-            <Progress value={92} className="absolute inset-0 bg-gradient-to-r from-revithalize-green to-revithalize-blue" />
+            <Progress value={92} className="absolute inset-0 bg-gradient-to-r from-revithalize-green to-revithalize-blue transition-all duration-1000" />
           </div>
         </div>
         
-        <div className="space-y-3">
+        <div className="space-y-3 animate-fade-in" style={{ animationDelay: '100ms' }}>
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
               <Gauge className="h-4 w-4 text-revithalize-blue" />
@@ -36,11 +36,11 @@ export function IoTInsights() {
             <span className="text-sm font-semibold text-white font-poppins">85%</span>
           </div>
           <div className="relative h-2 bg-gray-800 rounded-full overflow-hidden">
-            <Progress value={85} className="absolute inset-0 bg-gradient-to-r from-revithalize-blue to-revithalize-green" />
+            <Progress value={85} className="absolute inset-0 bg-gradient-to-r from-revithalize-blue to-revithalize-green transition-all duration-1000" />
           </div>
         </div>
         
-        <div className="space-y-3">
+        <div className="space-y-3 animate-fade-in" style={{ animationDelay: '200ms' }}>
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
               <Activity className="h-4 w-4 text-yellow-400" />
@@ -49,12 +49,12 @@ export function IoTInsights() {
             <span className="text-sm font-semibold text-white font-poppins">78%</span>
           </div>
           <div className="relative h-2 bg-gray-800 rounded-full overflow-hidden">
-            <Progress value={78} className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-revithalize-green" />
+            <Progress value={78} className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-revithalize-green transition-all duration-1000" />
           </div>
         </div>
         
-        <div className="mt-6 space-y-4">
-          <div className="bg-gray-800 rounded-lg p-4 border-l-4 border-yellow-500">
+        <div className="mt-6 space-y-4 animate-fade-in" style={{ animationDelay: '300ms' }}>
+          <div className="bg-gray-800/70 rounded-lg p-4 border-l-4 border-yellow-500 shadow-md transition-all duration-300 hover:shadow-lg hover:bg-gray-800">
             <div className="flex items-start gap-3">
               <AlertTriangle className="h-5 w-5 text-yellow-400 mt-0.5" />
               <div>
@@ -64,9 +64,9 @@ export function IoTInsights() {
             </div>
           </div>
           
-          <div className="bg-gray-800 rounded-lg p-4 border-l-4 border-revithalize-green">
+          <div className="bg-gray-800/70 rounded-lg p-4 border-l-4 border-revithalize-green shadow-md transition-all duration-300 hover:shadow-lg hover:bg-gray-800 animate-fade-in" style={{ animationDelay: '400ms' }}>
             <div className="flex items-start gap-3">
-              <Cpu className="h-5 w-5 text-revithalize-green mt-0.5" />
+              <Zap className="h-5 w-5 text-revithalize-green mt-0.5" />
               <div>
                 <h4 className="text-white font-medium font-poppins">System Update</h4>
                 <p className="text-gray-400 text-sm mt-1 font-poppins">Software update v2.4 available for your vehicle</p>
