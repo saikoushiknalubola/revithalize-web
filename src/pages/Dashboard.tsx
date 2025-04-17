@@ -8,6 +8,7 @@ import { ChargingScheduler } from '@/components/features/ChargingScheduler';
 import { IoTInsights } from '@/components/features/IoTInsights';
 import { useNavigate } from 'react-router-dom';
 import { useScreenSize } from '@/hooks/use-mobile';
+import { toast } from 'sonner';
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -28,6 +29,24 @@ export default function Dashboard() {
       }
     }
   }, [navigate]);
+
+  // Function handlers for quick actions
+  const handleFindChargingStations = () => {
+    toast.info('Finding nearby charging stations');
+    navigate('/map');
+  };
+
+  const handleRemoteCharging = () => {
+    toast.success('Remote charging initiated', {
+      description: 'Your vehicle will begin charging shortly'
+    });
+  };
+
+  const handleSetChargeAlert = () => {
+    toast.success('Charge alert set', {
+      description: 'You will be notified when the battery is fully charged'
+    });
+  };
 
   return (
     <DashboardLayout>
@@ -146,7 +165,10 @@ export default function Dashboard() {
                 <CardTitle className="text-white text-lg sm:text-xl">Quick Actions</CardTitle>
               </CardHeader>
               <CardContent className="space-y-2 sm:space-y-3 px-3 pb-3 sm:px-4 sm:pb-4">
-                <button className="w-full bg-gray-800 hover:bg-gray-700 text-white font-medium py-2 sm:py-3 px-3 sm:px-4 rounded-lg flex items-center justify-between group transition-all duration-300 shadow-md hover:shadow-lg text-sm sm:text-base">
+                <button 
+                  onClick={handleFindChargingStations}
+                  className="w-full bg-gray-800 hover:bg-gray-700 text-white font-medium py-2 sm:py-3 px-3 sm:px-4 rounded-lg flex items-center justify-between group transition-all duration-300 shadow-md hover:shadow-lg text-sm sm:text-base"
+                >
                   <span className="flex items-center">
                     <MapPin className="mr-2 h-4 w-4 sm:h-5 sm:w-5 text-revithalize-green" />
                     Find Charging Stations
@@ -154,7 +176,10 @@ export default function Dashboard() {
                   <span className="text-revithalize-green group-hover:translate-x-1 transition-transform">→</span>
                 </button>
                 
-                <button className="w-full bg-gray-800 hover:bg-gray-700 text-white font-medium py-2 sm:py-3 px-3 sm:px-4 rounded-lg flex items-center justify-between group transition-all duration-300 shadow-md hover:shadow-lg text-sm sm:text-base">
+                <button 
+                  onClick={handleRemoteCharging}
+                  className="w-full bg-gray-800 hover:bg-gray-700 text-white font-medium py-2 sm:py-3 px-3 sm:px-4 rounded-lg flex items-center justify-between group transition-all duration-300 shadow-md hover:shadow-lg text-sm sm:text-base"
+                >
                   <span className="flex items-center">
                     <Bolt className="mr-2 h-4 w-4 sm:h-5 sm:w-5 text-revithalize-blue" />
                     Start Remote Charging
@@ -162,7 +187,10 @@ export default function Dashboard() {
                   <span className="text-revithalize-blue group-hover:translate-x-1 transition-transform">→</span>
                 </button>
                 
-                <button className="w-full bg-gray-800 hover:bg-gray-700 text-white font-medium py-2 sm:py-3 px-3 sm:px-4 rounded-lg flex items-center justify-between group transition-all duration-300 shadow-md hover:shadow-lg text-sm sm:text-base">
+                <button 
+                  onClick={handleSetChargeAlert}
+                  className="w-full bg-gray-800 hover:bg-gray-700 text-white font-medium py-2 sm:py-3 px-3 sm:px-4 rounded-lg flex items-center justify-between group transition-all duration-300 shadow-md hover:shadow-lg text-sm sm:text-base"
+                >
                   <span className="flex items-center">
                     <Bell className="mr-2 h-4 w-4 sm:h-5 sm:w-5 text-yellow-400" />
                     Set Charge Alert

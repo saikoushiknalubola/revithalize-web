@@ -1,9 +1,19 @@
 
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { LoadingAnimation } from '@/components/animations/LoadingAnimation';
 
 const Index = () => {
+  const navigate = useNavigate();
+  
+  // Check if user is already authenticated
+  useEffect(() => {
+    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+    if (isAuthenticated) {
+      navigate('/dashboard');
+    }
+  }, [navigate]);
+
   return (
     <div className="min-h-screen bg-black text-white font-body p-3 sm:p-4 md:p-6">
       <LoadingAnimation />
