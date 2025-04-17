@@ -1,147 +1,148 @@
 
 import React from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { Zap, Users, Globe, Award, BarChart3 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { useScreenSize } from '@/hooks/use-mobile';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Award, Zap, Users, Building, Leaf, LightBulb } from 'lucide-react';
 
 export default function About() {
-  const { isMobile } = useScreenSize();
-  
   return (
     <DashboardLayout>
       <div className="space-y-6">
         <header>
-          <h1 className="text-2xl md:text-3xl font-heading font-bold text-white">About Revithalize</h1>
-          <p className="text-gray-400 mt-1">Pioneering EV retrofitting solutions in Telangana</p>
+          <h1 className="text-2xl md:text-3xl font-heading font-bold text-white">About ReVithalize</h1>
+          <p className="text-gray-400 mt-1">Our vision, mission and journey</p>
         </header>
 
-        <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-800 overflow-hidden">
-          <div className="md:flex">
-            <div className="md:w-1/2 p-6">
-              <h2 className="text-xl md:text-2xl font-bold text-white mb-4">Our Mission</h2>
-              <p className="text-gray-300 mb-4">
-                At Revithalize, we're committed to accelerating the transition to sustainable transportation 
-                by making electric mobility accessible through innovative retrofitting solutions.
-              </p>
-              <p className="text-gray-300">
-                We transform conventional vehicles into electric ones, extending their lifespan while 
-                reducing carbon emissions and operating costs. Our mission is to revitalize existing vehicles 
-                with clean technology, making sustainable transportation affordable for all.
-              </p>
-              
-              <div className="mt-6 space-y-4">
-                <div className="flex items-center">
-                  <div className="bg-revithalize-green/20 p-2 rounded-full mr-3">
-                    <Zap className="h-5 w-5 text-revithalize-green" />
-                  </div>
-                  <div>
-                    <h3 className="text-white font-medium">Electrify Existing Vehicles</h3>
-                    <p className="text-gray-400 text-sm">Convert conventional vehicles to zero-emission electric</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-center">
-                  <div className="bg-revithalize-blue/20 p-2 rounded-full mr-3">
-                    <Globe className="h-5 w-5 text-revithalize-blue" />
-                  </div>
-                  <div>
-                    <h3 className="text-white font-medium">Reduce Carbon Footprint</h3>
-                    <p className="text-gray-400 text-sm">Minimize environmental impact of transportation</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="md:w-1/2 bg-gray-800 flex items-center justify-center p-6">
-              <div className="max-w-md">
-                <div className="flex justify-center mb-6">
-                  <img 
-                    src="/lovable-uploads/afdb710c-ae2c-425d-9f31-d6f96fab82eb.png" 
-                    alt="Revithalize Logo" 
-                    className="w-60 h-auto"
-                  />
-                </div>
-                <div className="space-y-4">
-                  <div className="bg-gray-900/50 p-4 rounded-lg">
-                    <h3 className="text-lg font-medium text-white mb-2">Founded in 2022</h3>
-                    <p className="text-gray-400 text-sm">Started with a vision to revolutionize transportation in Telangana</p>
-                  </div>
-                  <div className="bg-gray-900/50 p-4 rounded-lg">
-                    <h3 className="text-lg font-medium text-white mb-2">500+ Vehicles Retrofitted</h3>
-                    <p className="text-gray-400 text-sm">Successfully converted over 500 vehicles to electric power</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-800">
+          <CardHeader>
+            <CardTitle className="text-white flex items-center">
+              <LightBulb className="mr-2 h-5 w-5 text-revithalize-green" />
+              Our Story
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4 text-gray-300">
+            <p>
+              ReVithalize was born from a simple yet powerful idea in early 2024 — "What if we could bring old fuel-powered bikes back to life, sustainably?" Inspired by a conversation with family, Founder Nalubola Saikoushik decided to take on India's two-wheeler pollution challenge through innovation, passion, and purpose.
+            </p>
+            <p>
+              ReVithalize is an EV retrofitting startup that transforms internal combustion engine (ICE) two-wheelers into affordable, smart electric vehicles, using modular AI-powered conversion kits. Our solution enables common users to shift to electric mobility without having to buy a new vehicle — saving costs, reducing e-waste, and cutting down carbon emissions.
+            </p>
+          </CardContent>
         </Card>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-800">
             <CardHeader>
-              <CardTitle className="flex items-center text-white">
-                <Users className="mr-2 h-5 w-5 text-revithalize-green" />
-                Our Team
+              <CardTitle className="text-white flex items-center">
+                <Zap className="mr-2 h-5 w-5 text-revithalize-green" />
+                Our Mission
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-gray-300 mb-4">
-                Our diverse team of engineers, designers, and sustainability experts is dedicated to pushing the boundaries of EV retrofitting technology.
+            <CardContent className="text-gray-300">
+              <p>
+                At ReVithalize, our mission is to revive, reimagine, and revolutionize mobility for a cleaner tomorrow. We aim to decentralize electrification by partnering with local mechanics, training EV technicians, and building a network of certified retrofit centers across India.
               </p>
-              <p className="text-gray-400 text-sm">
-                With combined experience of over 50 years in automotive and electrical engineering, we bring expertise and passion to every project.
-              </p>
+              <div className="mt-4 space-y-3">
+                <div className="flex items-start">
+                  <div className="bg-revithalize-green/20 p-2 rounded-full mr-3">
+                    <Leaf className="h-5 w-5 text-revithalize-green" />
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-white">Sustainable Transportation</h3>
+                    <p className="text-sm text-gray-400">Accelerating India's transition to net-zero transportation</p>
+                  </div>
+                </div>
+                <div className="flex items-start">
+                  <div className="bg-revithalize-green/20 p-2 rounded-full mr-3">
+                    <Users className="h-5 w-5 text-revithalize-green" />
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-white">Community Empowerment</h3>
+                    <p className="text-sm text-gray-400">Creating green jobs and empowering local communities</p>
+                  </div>
+                </div>
+              </div>
             </CardContent>
           </Card>
-          
+
           <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-800">
             <CardHeader>
-              <CardTitle className="flex items-center text-white">
+              <CardTitle className="text-white flex items-center">
                 <Award className="mr-2 h-5 w-5 text-revithalize-green" />
-                Recognition
+                Recognition & Support
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-gray-300 mb-4">
-                Recognized as a leader in sustainable transportation solutions in Telangana.
+                We're backed by prestigious organizations that support our vision for sustainable mobility:
               </p>
-              <ul className="text-gray-400 text-sm space-y-2">
-                <li>• Telangana Clean Tech Award 2023</li>
-                <li>• Sustainability Innovation Prize 2022</li>
-                <li>• EV Transformation Excellence Award</li>
-              </ul>
-            </CardContent>
-          </Card>
-          
-          <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-800">
-            <CardHeader>
-              <CardTitle className="flex items-center text-white">
-                <BarChart3 className="mr-2 h-5 w-5 text-revithalize-green" />
-                Impact
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-300 mb-4">
-                Our retrofitting solutions have made a significant environmental impact.
-              </p>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-gray-400">CO₂ Reduction</span>
-                  <span className="text-revithalize-green">750+ tons</span>
+              <div className="space-y-3">
+                <div className="bg-gray-800/70 p-3 rounded-lg">
+                  <div className="flex items-center">
+                    <Building className="h-5 w-5 text-revithalize-green mr-2" />
+                    <h3 className="font-medium text-white">T-Hub & Mercedes-Benz R&D India (MBRDI)</h3>
+                  </div>
+                  <p className="text-sm text-gray-400 mt-1">Support through their Climate Tech Incubator program</p>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Fuel Saved</span>
-                  <span className="text-revithalize-green">300,000+ liters</span>
+                <div className="bg-gray-800/70 p-3 rounded-lg">
+                  <div className="flex items-center">
+                    <Building className="h-5 w-5 text-revithalize-green mr-2" />
+                    <h3 className="font-medium text-white">IIT Bombay</h3>
+                  </div>
+                  <p className="text-sm text-gray-400 mt-1">Technical innovation recognition</p>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Clean KM Driven</span>
-                  <span className="text-revithalize-green">2+ million</span>
+                <div className="bg-gray-800/70 p-3 rounded-lg">
+                  <div className="flex items-center">
+                    <Building className="h-5 w-5 text-revithalize-green mr-2" />
+                    <h3 className="font-medium text-white">IIIT Tirupati iHub Navavishkar</h3>
+                  </div>
+                  <p className="text-sm text-gray-400 mt-1">Research and development partnership</p>
+                </div>
+                <div className="bg-gray-800/70 p-3 rounded-lg">
+                  <div className="flex items-center">
+                    <Building className="h-5 w-5 text-revithalize-green mr-2" />
+                    <h3 className="font-medium text-white">IIT Madras Research Park</h3>
+                  </div>
+                  <p className="text-sm text-gray-400 mt-1">Technology validation and testing</p>
                 </div>
               </div>
             </CardContent>
           </Card>
         </div>
+
+        <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-800">
+          <CardHeader>
+            <CardTitle className="text-white">Our Vision</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-300">
+              We envision a future where every petrol bike has the potential to become electric — empowering communities, creating green jobs, and accelerating India's transition to net-zero transportation. Our modular retrofit kits make electric mobility accessible to all, creating a sustainable ecosystem for the future of transportation in India.
+            </p>
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+              <div className="bg-gray-800/50 p-4 rounded-lg">
+                <div className="bg-revithalize-green/20 h-16 w-16 flex items-center justify-center rounded-full mx-auto mb-3">
+                  <Zap className="h-8 w-8 text-revithalize-green" />
+                </div>
+                <h3 className="font-medium text-white mb-1">45,000+</h3>
+                <p className="text-sm text-gray-400">Retrofitted vehicles by 2025</p>
+              </div>
+              <div className="bg-gray-800/50 p-4 rounded-lg">
+                <div className="bg-revithalize-green/20 h-16 w-16 flex items-center justify-center rounded-full mx-auto mb-3">
+                  <Users className="h-8 w-8 text-revithalize-green" />
+                </div>
+                <h3 className="font-medium text-white mb-1">500+</h3>
+                <p className="text-sm text-gray-400">Certified technicians</p>
+              </div>
+              <div className="bg-gray-800/50 p-4 rounded-lg">
+                <div className="bg-revithalize-green/20 h-16 w-16 flex items-center justify-center rounded-full mx-auto mb-3">
+                  <Leaf className="h-8 w-8 text-revithalize-green" />
+                </div>
+                <h3 className="font-medium text-white mb-1">30,000+</h3>
+                <p className="text-sm text-gray-400">Tons of CO₂ reduction</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </DashboardLayout>
   );

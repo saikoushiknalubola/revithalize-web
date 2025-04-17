@@ -18,7 +18,7 @@ export default function Dashboard() {
   // Check for authentication and get user data
   useEffect(() => {
     const isAuthenticated = localStorage.getItem('isAuthenticated');
-    if (!isAuthenticated) {
+    if (!isAuthenticated || isAuthenticated !== 'true') {
       navigate('/auth');
     } else {
       // Get user data from localStorage
