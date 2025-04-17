@@ -1,25 +1,27 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Battery, MapPin, Zap, Bike } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useScreenSize } from '@/hooks/use-mobile';
+import { LoadingAnimation } from '@/components/animations/LoadingAnimation';
 
 const Index = () => {
   const { isMobile } = useScreenSize();
   
   return (
     <div className="min-h-screen bg-black text-white font-body p-3 sm:p-4 md:p-6">
+      <LoadingAnimation />
+      
       <div className="container mx-auto">
         <header className="text-center mb-6 md:mb-12 animate-fade-in">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-revithalize-green mb-3 md:mb-4">
             Revithalize
-            <span className="text-white ml-2">EV</span>
           </h1>
           <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
-            Your comprehensive electric vehicle management system for Telangana
+            Your comprehensive EV retrofitting solution for Telangana
           </p>
           <p className="text-xs sm:text-sm md:text-md text-gray-400 mt-2 md:mt-3 px-4">
-            Featuring Hero Honda Passion AP02SK2409 with 51.2V 45Ah battery
+            Transform conventional vehicles into clean, efficient electric vehicles
           </p>
         </header>
 
@@ -27,23 +29,23 @@ const Index = () => {
           {[
             { 
               icon: Bike, 
-              title: 'Hero Honda Passion', 
-              description: 'AP02SK2409 - Smart EV Technology'
+              title: 'EV Retrofitting', 
+              description: 'Convert your existing vehicle to electric power'
             },
             { 
               icon: Battery, 
-              title: 'Battery Status', 
-              description: '51.2V 45Ah battery with 110km range' 
+              title: 'Battery Systems', 
+              description: 'Custom batteries with smart monitoring' 
             },
             { 
               icon: MapPin, 
-              title: 'Route Optimization', 
-              description: 'Smart charging and route planning' 
+              title: 'Charging Network', 
+              description: 'Access our growing charging infrastructure' 
             },
             { 
               icon: Zap, 
-              title: 'Battery Analytics', 
-              description: 'Detailed performance and efficiency' 
+              title: 'Performance Analytics', 
+              description: 'Track efficiency and optimize range' 
             },
           ].map(({ icon: Icon, title, description }, index) => (
             <div 

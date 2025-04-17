@@ -1,16 +1,20 @@
 
 import React from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { MapPin, Battery, Navigation, Search, Filter } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
+import { MapPin, Battery, Navigation, Search, Filter, Zap, Info } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import InteractiveMap from '@/components/map/InteractiveMap';
+import { useScreenSize } from '@/hooks/use-mobile';
 
 export default function MapView() {
+  const { isMobile } = useScreenSize();
+  
   return (
     <DashboardLayout>
       <div className="space-y-6">
         <header>
-          <h1 className="text-3xl font-heading font-bold text-white">Map View</h1>
-          <p className="text-gray-400 mt-1">Find charging stations and plan your route</p>
+          <h1 className="text-3xl font-heading font-bold text-white">Charging Map</h1>
+          <p className="text-gray-400 mt-1">Find retrofitting stations and charging points</p>
         </header>
 
         <div className="relative">
@@ -21,7 +25,7 @@ export default function MapView() {
               <input
                 type="text"
                 placeholder="Search for charging stations..."
-                className="bg-transparent border-none text-white w-full focus:outline-none"
+                className="bg-transparent border-none text-white w-full focus:outline-none text-sm"
               />
             </div>
             <button className="bg-gray-900 border border-gray-800 rounded-lg p-2">
@@ -29,30 +33,22 @@ export default function MapView() {
             </button>
           </div>
 
-          {/* Map container (placeholder) */}
-          <div className="h-[500px] bg-gray-900 border border-gray-800 rounded-lg flex items-center justify-center">
-            <div className="text-center p-8">
-              <Navigation className="h-12 w-12 text-revithalize-green mx-auto mb-4" />
-              <h3 className="text-xl font-medium text-white mb-2">Interactive Map</h3>
-              <p className="text-gray-400">
-                This would be an interactive map showing charging stations around Telangana.
-                <br />In a real implementation, this would integrate with a maps API.
-              </p>
-            </div>
-          </div>
+          {/* Interactive Map */}
+          <InteractiveMap height={isMobile ? "300px" : "500px"} />
 
           {/* Nearby charging stations */}
           <div className="mt-6">
-            <h2 className="text-xl font-medium text-white mb-4">Nearby Charging Stations</h2>
+            <h2 className="text-xl font-medium text-white mb-4">Nearby Retrofitting & Charging Stations</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {[
                 { 
-                  name: "Hitec City Charging Hub", 
+                  name: "Hitec City Retrofit Hub", 
                   distance: "1.2 km", 
                   available: 3, 
                   total: 5, 
                   power: "25 kW",
-                  status: "Available"
+                  status: "Available",
+                  services: ["Retrofitting", "Charging", "Battery Swap"]
                 },
                 { 
                   name: "Banjara Hills Station", 
@@ -60,15 +56,17 @@ export default function MapView() {
                   available: 1, 
                   total: 2, 
                   power: "50 kW",
-                  status: "Available"
+                  status: "Available",
+                  services: ["Charging", "Quick Repairs"]
                 },
                 { 
-                  name: "Madhapur Quick Charge", 
+                  name: "Madhapur Service Center", 
                   distance: "4.1 km", 
                   available: 0, 
                   total: 3, 
                   power: "100 kW",
-                  status: "Busy"
+                  status: "Busy",
+                  services: ["Full Retrofitting", "Diagnostics", "Charging"]
                 },
               ].map((station, index) => (
                 <Card key={index} className="bg-gray-900 border-gray-800 hover:border-gray-700 transition-colors cursor-pointer">
@@ -77,8 +75,8 @@ export default function MapView() {
                       <div className={`p-2 rounded-lg ${station.available > 0 ? 'bg-green-900/30' : 'bg-red-900/30'}`}>
                         <MapPin className={`h-5 w-5 ${station.available > 0 ? 'text-green-500' : 'text-red-500'}`} />
                       </div>
-                      <div>
-                        <h3 className="font-medium text-white">{station.name}</h3>
+                      <div className="flex-1">
+                        <h3 className="font-medium text-white mb-1">{station.name}</h3>
                         <p className="text-sm text-gray-400">{station.distance} away</p>
                         
                         <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
@@ -89,10 +87,21 @@ export default function MapView() {
                             </p>
                           </div>
                           <div>
-                            <p className="text-gray-400">Chargers</p>
+                            <p className="text-gray-400">Bays</p>
                             <p className="font-medium text-white">
                               {station.available}/{station.total} available
                             </p>
+                          </div>
+                        </div>
+                        
+                        <div className="mt-3">
+                          <p className="text-xs text-gray-400 mb-2">Services:</p>
+                          <div className="flex flex-wrap gap-1">
+                            {station.services.map((service, i) => (
+                              <span key={i} className="text-xs bg-gray-800 text-white px-2 py-1 rounded-full">
+                                {service}
+                              </span>
+                            ))}
                           </div>
                         </div>
                         

@@ -1,10 +1,10 @@
 
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, Battery, MapPin, BarChart2, User, Settings, Menu, X, LogOut, Bike } from 'lucide-react';
+import { Home, Battery, MapPin, BarChart2, User, Settings, Menu, X, LogOut, Bike, HelpCircle, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useState, useEffect } from 'react';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { useScreenSize } from '@/hooks/use-mobile';
 import { toast } from 'sonner';
 
 interface NavItemProps {
@@ -38,7 +38,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const isMobile = useIsMobile();
+  const { isMobile } = useScreenSize();
   const [userName, setUserName] = useState('');
 
   // Get user data on mount
@@ -64,13 +64,24 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
     navigate('/auth');
   };
 
-  const navItems = [
+  const mainNavItems = [
     { icon: Home, label: "Dashboard", to: "/dashboard" },
     { icon: Bike, label: "Vehicle", to: "/vehicle" },
     { icon: MapPin, label: "Map", to: "/map" },
     { icon: BarChart2, label: "Analytics", to: "/analytics" },
+  ];
+
+  const secondaryNavItems = [
     { icon: User, label: "Profile", to: "/profile" },
+    { icon: HelpCircle, label: "Support", to: "/support" },
+    { icon: Info, label: "About", to: "/about" },
     { icon: Settings, label: "Settings", to: "/settings" },
+  ];
+
+  // Combined nav items for mobile bottom navigation (limit to 5)
+  const mobileNavItems = [
+    ...mainNavItems,
+    secondaryNavItems[0], // Just include Profile from secondary items
   ];
 
   return (
@@ -93,17 +104,43 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       >
         <div className="flex flex-col h-full p-4">
           <div className="flex items-center mb-8 mt-4 animate-fade-in">
+            <img
+              src="/lovable-uploads/afdb710c-ae2c-425d-9f31-d6f96fab82eb.png"
+              alt="Revithalize Logo"
+              className="h-10 w-auto mr-2"
+            />
             <h1 className="text-3xl font-poppins font-bold text-revithalize-green">
-              Revithalize<span className="text-white ml-1">EV</span>
+              Revithalize
             </h1>
           </div>
 
           <nav className="flex flex-col gap-2 flex-1 mt-2">
-            {navItems.map((item, index) => (
+            <div className="mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              Main
+            </div>
+            {mainNavItems.map((item, index) => (
               <div 
                 key={item.to}
                 className="animate-fade-in"
                 style={{ animationDelay: `${index * 50}ms` }}
+              >
+                <NavItem
+                  icon={item.icon}
+                  label={item.label}
+                  to={item.to}
+                  active={location.pathname === item.to}
+                />
+              </div>
+            ))}
+            
+            <div className="mt-6 mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              Account
+            </div>
+            {secondaryNavItems.map((item, index) => (
+              <div 
+                key={item.to}
+                className="animate-fade-in"
+                style={{ animationDelay: `${(index + mainNavItems.length) * 50}ms` }}
               >
                 <NavItem
                   icon={item.icon}
@@ -173,7 +210,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
         {/* Mobile bottom navigation - with improved spacing to prevent overlap */}
         <div className="fixed inset-x-0 bottom-0 bg-black border-t border-gray-800 md:hidden z-30 shadow-lg">
           <div className="flex justify-around items-center py-2">
-            {navItems.slice(0, 5).map((item, index) => {
+            {mobileNavItems.map((item, index) => {
               const Icon = item.icon;
               const active = location.pathname === item.to;
               return (
