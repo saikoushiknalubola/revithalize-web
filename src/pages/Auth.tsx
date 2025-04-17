@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -14,7 +13,7 @@ import * as z from 'zod';
 import { Progress } from '@/components/ui/progress';
 import { AtSign, Key, User, Loader2, Shield, MapPin, Phone, Briefcase, Building } from 'lucide-react';
 import { cn } from "@/lib/utils";
-import { useIsMobile } from '@/hooks/use-mobile';
+import { useScreenSize } from '@/hooks/use-mobile';
 
 // Login form schema
 const loginSchema = z.object({
@@ -44,7 +43,7 @@ export default function Auth() {
   const [isLoading, setIsLoading] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [activeTab, setActiveTab] = useState('login');
-  const isMobile = useIsMobile();
+  const isMobile = useScreenSize();
   
   // Login form
   const loginForm = useForm<z.infer<typeof loginSchema>>({
@@ -71,6 +70,29 @@ export default function Auth() {
       confirmPassword: '',
     },
   });
+
+  // Set up default user in localStorage if it doesn't exist
+  useEffect(() => {
+    const defaultUser = {
+      email: 'saikoushiknalubola@gmail.com',
+      password: 'Saikoushik@456',
+      name: 'Saikoushik Nalubola',
+      firstName: 'Saikoushik',
+      lastName: 'Nalubola',
+      phone: '9876543210',
+      address: 'Hyderabad',
+      city: 'Hyderabad',
+      occupation: 'CEO',
+      company: 'ReVithalize',
+      joinDate: new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long' })
+    };
+    
+    const existingUsers = JSON.parse(localStorage.getItem('users') || '[]');
+    if (!existingUsers.some((user: any) => user.email === defaultUser.email)) {
+      existingUsers.push(defaultUser);
+      localStorage.setItem('users', JSON.stringify(existingUsers));
+    }
+  }, []);
 
   // Calculate password strength
   useEffect(() => {
@@ -110,7 +132,7 @@ export default function Auth() {
         toast.success('Successfully logged in!', {
           description: 'Welcome back'
         });
-        navigate('/');
+        navigate('/dashboard');
       } else {
         toast.error('Login failed', {
           description: 'Invalid email or password'
@@ -128,7 +150,7 @@ export default function Auth() {
     setTimeout(() => {
       const newUser = { 
         email: values.email,
-        password: values.password, // In a real app, this would be hashed
+        password: values.password, 
         name: `${values.firstName} ${values.lastName}`,
         firstName: values.firstName,
         lastName: values.lastName,
@@ -152,7 +174,7 @@ export default function Auth() {
       toast.success('Account created successfully!', {
         description: 'Welcome, ' + values.firstName
       });
-      navigate('/');
+      navigate('/dashboard');
       setIsLoading(false);
     }, 1500);
   };
@@ -162,9 +184,9 @@ export default function Auth() {
       <div className="w-full max-w-md space-y-6 animate-fade-in">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-poppins font-bold text-revithalize-green mb-2 animate-scale-in">
-            Revithalize<span className="text-white">EV</span>
+            ReVithalize
           </h1>
-          <p className="text-gray-400 animate-fade-in">India's Smart EV Management Platform</p>
+          <p className="text-gray-400 animate-fade-in">Smart Retrofitting Solutions for India</p>
         </div>
         
         <Tabs defaultValue="login" value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -577,7 +599,7 @@ export default function Auth() {
         </Tabs>
         
         <div className="text-center text-sm text-gray-500 animate-fade-in">
-          <p>© 2025 RevithalizeEV • Made in India 🇮🇳</p>
+          <p>© 2024 ReVithalize • Made in India 🇮🇳</p>
         </div>
       </div>
     </div>

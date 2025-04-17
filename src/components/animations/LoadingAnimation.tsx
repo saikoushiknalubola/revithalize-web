@@ -32,11 +32,14 @@ export function LoadingAnimation() {
           className="mb-4"
         >
           <div className="relative">
-            <motion.img 
-              src="/lovable-uploads/afdb710c-ae2c-425d-9f31-d6f96fab82eb.png" 
-              alt="Revithalize Logo" 
-              className="w-64 h-auto"
-            />
+            <motion.div
+              className="text-6xl font-bold text-revithalize-green"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3, duration: 0.8 }}
+            >
+              ReVithalize
+            </motion.div>
             <motion.div 
               className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-revithalize-green/20 to-transparent"
               initial={{ x: -200, opacity: 0 }}
@@ -66,6 +69,14 @@ export function LoadingAnimation() {
             }}
           />
         </motion.div>
+        <motion.p
+          className="text-gray-400 mt-4 text-sm"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.5 }}
+        >
+          Revolutionizing Mobility for a Cleaner Tomorrow
+        </motion.p>
       </div>
     </motion.div>
   );

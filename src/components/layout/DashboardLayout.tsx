@@ -104,13 +104,8 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       >
         <div className="flex flex-col h-full p-4">
           <div className="flex items-center mb-8 mt-4 animate-fade-in">
-            <img
-              src="/lovable-uploads/afdb710c-ae2c-425d-9f31-d6f96fab82eb.png"
-              alt="Revithalize Logo"
-              className="h-10 w-auto mr-2"
-            />
             <h1 className="text-3xl font-poppins font-bold text-revithalize-green">
-              Revithalize
+              ReVithalize
             </h1>
           </div>
 
