@@ -86,19 +86,19 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen bg-black font-poppins overflow-hidden">
-      {/* Mobile sidebar toggle */}
+      {/* Mobile sidebar toggle - Updated z-index and positioning */}
       <button
-        className="fixed top-4 left-4 z-50 p-2 bg-gradient-to-r from-revithalize-dark to-gray-800 rounded-lg text-white md:hidden shadow-lg"
+        className="fixed top-4 left-4 z-[60] p-2 bg-gradient-to-r from-revithalize-dark to-gray-800 rounded-lg text-white md:hidden shadow-lg"
         onClick={() => setSidebarOpen(!sidebarOpen)}
         aria-label="Toggle sidebar"
       >
         {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
       </button>
 
-      {/* Sidebar */}
+      {/* Sidebar - Updated z-index */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-40 bg-black/95 backdrop-blur-sm border-r border-gray-800 w-64 transform transition-all duration-300 ease-in-out md:translate-x-0 shadow-xl",
+          "fixed inset-y-0 left-0 z-[50] bg-black/95 backdrop-blur-sm border-r border-gray-800 w-64 transform transition-all duration-300 ease-in-out md:translate-x-0 shadow-xl",
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
@@ -181,10 +181,10 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
         </div>
       </aside>
 
-      {/* Overlay to close sidebar on mobile */}
+      {/* Overlay - Updated z-index */}
       {sidebarOpen && isMobile && (
         <div 
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-30 md:hidden animate-fade-in" 
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[40] md:hidden animate-fade-in" 
           onClick={() => setSidebarOpen(false)}
           aria-hidden="true"
         />
@@ -194,7 +194,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       <main className={cn(
         "flex-1 transition-all duration-300 ease-in-out",
         "md:ml-64",
-        "p-4 md:p-8 pb-24 md:pb-8 pt-16 md:pt-8" // Improved padding for mobile
+        "p-4 md:p-8 pb-24 md:pb-8 pt-16 md:pt-8"
       )}>
         <div className="min-h-screen bg-black">
           <div className="max-w-7xl mx-auto">

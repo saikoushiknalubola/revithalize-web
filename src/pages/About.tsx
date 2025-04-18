@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -94,11 +93,11 @@ export default function About() {
           <CardHeader>
             <CardTitle className="text-white flex items-center">
               <Award className="mr-2 h-5 w-5 text-revithalize-green" />
-              Features
+              Core Features
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               <div className="bg-black/20 p-6 rounded-lg border border-gray-800 hover:border-revithalize-green/50 transition-all duration-300">
                 <div className="bg-revithalize-green/20 h-12 w-12 flex items-center justify-center rounded-full mb-4">
                   <Battery className="h-6 w-6 text-revithalize-green" />
@@ -112,6 +111,13 @@ export default function About() {
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Expert Installation</h3>
                 <p className="text-gray-400">Professional retrofitting services through our network of certified mechanics and technicians.</p>
+              </div>
+              <div className="bg-black/20 p-6 rounded-lg border border-gray-800 hover:border-revithalize-green/50 transition-all duration-300">
+                <div className="bg-revithalize-green/20 h-12 w-12 flex items-center justify-center rounded-full mb-4">
+                  <Activity className="h-6 w-6 text-revithalize-green" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2">Real-time Monitoring</h3>
+                <p className="text-gray-400">Advanced IoT-based monitoring system for vehicle performance and battery health tracking.</p>
               </div>
             </div>
           </CardContent>
