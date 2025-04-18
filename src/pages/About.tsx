@@ -78,7 +78,7 @@ export default function About() {
           <CardHeader>
             <CardTitle className="text-white flex items-center">
               <Award className="mr-2 h-5 w-5 text-revithalize-green" />
-              What We Deliver
+              Features
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -87,15 +87,15 @@ export default function About() {
                 <div className="bg-revithalize-green/20 h-12 w-12 flex items-center justify-center rounded-full mb-4">
                   <Code className="h-6 w-6 text-revithalize-green" />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2">Purpose-Driven Applications</h3>
-                <p className="text-gray-400">Custom EV conversion solutions that transform existing vehicles into smart, sustainable transportation options.</p>
+                <h3 className="text-xl font-bold text-white mb-2">Custom Applications</h3>
+                <p className="text-gray-400">Websites that leave a lasting impression, tailored to meet your unique needs and vision.</p>
               </div>
               <div className="bg-black/20 p-6 rounded-lg border border-gray-800 hover:border-revithalize-green/50 transition-all duration-300">
                 <div className="bg-revithalize-green/20 h-12 w-12 flex items-center justify-center rounded-full mb-4">
                   <Globe className="h-6 w-6 text-revithalize-green" />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2">Impactful Solutions</h3>
-                <p className="text-gray-400">Revolutionary IoT-enabled monitoring systems that provide real-time insights and optimize vehicle performance.</p>
+                <h3 className="text-xl font-bold text-white mb-2">Seamless Experiences</h3>
+                <p className="text-gray-400">Creating intuitive and engaging user experiences that transform how people interact with technology.</p>
               </div>
             </div>
           </CardContent>
@@ -111,15 +111,15 @@ export default function About() {
                 <div className="bg-revithalize-green/20 h-16 w-16 flex items-center justify-center rounded-full mx-auto mb-4">
                   <Zap className="h-8 w-8 text-revithalize-green" />
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-2">1st Achievement</h3>
-                <p className="text-gray-400">Successfully launched our first AI-powered EV conversion kit, currently implemented in pilot vehicles</p>
+                <h3 className="text-2xl font-bold text-white mb-2">Project Success</h3>
+                <p className="text-gray-400">Successfully delivered multiple custom web applications with seamless user experiences</p>
               </div>
               <div className="bg-black/20 p-6 rounded-lg border border-gray-800 text-center opacity-70">
                 <div className="bg-revithalize-green/20 h-16 w-16 flex items-center justify-center rounded-full mx-auto mb-4">
                   <Activity className="h-8 w-8 text-revithalize-green" />
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-2">2nd Milestone</h3>
-                <p className="text-gray-400">Development in progress: Enhanced monitoring system with predictive maintenance capabilities</p>
+                <h3 className="text-2xl font-bold text-white mb-2">Future Innovation</h3>
+                <p className="text-gray-400">Development in progress: Advanced web solutions with cutting-edge technologies</p>
                 <span className="inline-block mt-2 text-sm text-revithalize-green">Coming Soon</span>
               </div>
             </div>
