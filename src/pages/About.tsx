@@ -1,9 +1,25 @@
+
 import React from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Award, Zap, Users, Building, Leaf, Lightbulb, Activity, ChevronRight, Code, Globe } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Award, Zap, Users, Building, Leaf, Lightbulb, Activity, ChevronRight, Wrench, Battery, MessageSquare, ExternalLink, Mail, Phone, Globe, MapPin } from 'lucide-react';
+import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 
 export default function About() {
+  const navigate = useNavigate();
+
+  const handleSubmitTicket = () => {
+    toast.success('Support ticket submitted', {
+      description: 'We will get back to you within 24 hours'
+    });
+    navigate('/support');
+  };
+
+  const handleVisitWebsite = () => {
+    window.open('https://revithalize.odoo.com/', '_blank');
+  };
+
   return (
     <DashboardLayout>
       <div className="space-y-6 pb-8">
@@ -85,17 +101,17 @@ export default function About() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
               <div className="bg-black/20 p-6 rounded-lg border border-gray-800 hover:border-revithalize-green/50 transition-all duration-300">
                 <div className="bg-revithalize-green/20 h-12 w-12 flex items-center justify-center rounded-full mb-4">
-                  <Code className="h-6 w-6 text-revithalize-green" />
+                  <Battery className="h-6 w-6 text-revithalize-green" />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2">Custom Applications</h3>
-                <p className="text-gray-400">Websites that leave a lasting impression, tailored to meet your unique needs and vision.</p>
+                <h3 className="text-xl font-bold text-white mb-2">Smart EV Conversion</h3>
+                <p className="text-gray-400">AI-powered retrofit kits transforming conventional two-wheelers into smart electric vehicles.</p>
               </div>
               <div className="bg-black/20 p-6 rounded-lg border border-gray-800 hover:border-revithalize-green/50 transition-all duration-300">
                 <div className="bg-revithalize-green/20 h-12 w-12 flex items-center justify-center rounded-full mb-4">
-                  <Globe className="h-6 w-6 text-revithalize-green" />
+                  <Wrench className="h-6 w-6 text-revithalize-green" />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2">Seamless Experiences</h3>
-                <p className="text-gray-400">Creating intuitive and engaging user experiences that transform how people interact with technology.</p>
+                <h3 className="text-xl font-bold text-white mb-2">Expert Installation</h3>
+                <p className="text-gray-400">Professional retrofitting services through our network of certified mechanics and technicians.</p>
               </div>
             </div>
           </CardContent>
@@ -111,16 +127,82 @@ export default function About() {
                 <div className="bg-revithalize-green/20 h-16 w-16 flex items-center justify-center rounded-full mx-auto mb-4">
                   <Zap className="h-8 w-8 text-revithalize-green" />
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-2">Project Success</h3>
-                <p className="text-gray-400">Successfully delivered multiple custom web applications with seamless user experiences</p>
+                <h3 className="text-2xl font-bold text-white mb-2">First Achievement</h3>
+                <p className="text-gray-400">Successfully launched our first AI-powered EV conversion kit, implemented in pilot vehicles</p>
               </div>
               <div className="bg-black/20 p-6 rounded-lg border border-gray-800 text-center opacity-70">
                 <div className="bg-revithalize-green/20 h-16 w-16 flex items-center justify-center rounded-full mx-auto mb-4">
                   <Activity className="h-8 w-8 text-revithalize-green" />
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-2">Future Innovation</h3>
-                <p className="text-gray-400">Development in progress: Advanced web solutions with cutting-edge technologies</p>
+                <h3 className="text-2xl font-bold text-white mb-2">Next Milestone</h3>
+                <p className="text-gray-400">Development in progress: Enhanced monitoring system with predictive maintenance</p>
                 <span className="inline-block mt-2 text-sm text-revithalize-green">Coming Soon</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-800 hover:shadow-lg transition-all duration-300">
+          <CardHeader>
+            <CardTitle className="text-white flex items-center">
+              <Building className="mr-2 h-5 w-5 text-revithalize-green" />
+              Contact Information
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="bg-black/20 p-4 rounded-lg border border-gray-800">
+                <div className="flex items-start">
+                  <MapPin className="mr-3 h-5 w-5 text-revithalize-green flex-shrink-0" />
+                  <div>
+                    <p className="text-white font-medium">Corporate Headquarters</p>
+                    <p className="text-gray-400">ReVithalize Innovations</p>
+                    <p className="text-gray-400">Warangal, Telangana 506001</p>
+                    <p className="text-gray-400">Bharat (India)</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="bg-black/20 p-4 rounded-lg border border-gray-800">
+                  <div className="flex items-center">
+                    <Phone className="mr-3 h-5 w-5 text-revithalize-green" />
+                    <div>
+                      <p className="text-white font-medium">Phone</p>
+                      <p className="text-gray-400">+91 7032165635</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-black/20 p-4 rounded-lg border border-gray-800">
+                  <div className="flex items-center">
+                    <Mail className="mr-3 h-5 w-5 text-revithalize-green" />
+                    <div>
+                      <p className="text-white font-medium">Email</p>
+                      <p className="text-gray-400">revithalize@gmail.com</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-4 mt-6">
+                <button 
+                  onClick={handleSubmitTicket}
+                  className="flex-1 bg-gray-800 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-all group"
+                >
+                  <MessageSquare className="h-5 w-5 text-revithalize-green" />
+                  <span>Submit Ticket</span>
+                  <ChevronRight className="h-4 w-4 text-revithalize-green group-hover:translate-x-1 transition-transform" />
+                </button>
+                
+                <button 
+                  onClick={handleVisitWebsite}
+                  className="flex-1 bg-gray-800 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-all group"
+                >
+                  <Globe className="h-5 w-5 text-revithalize-green" />
+                  <span>Visit Website</span>
+                  <ExternalLink className="h-4 w-4 text-revithalize-green group-hover:translate-x-1 transition-transform" />
+                </button>
               </div>
             </div>
           </CardContent>
