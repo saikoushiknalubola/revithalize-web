@@ -1,8 +1,7 @@
-
 import React from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Award, Zap, Users, Building, Leaf, Lightbulb, Activity, ChevronRight } from 'lucide-react';
+import { Award, Zap, Users, Building, Leaf, Lightbulb, Activity, ChevronRight, Code, Globe } from 'lucide-react';
 
 export default function About() {
   return (
@@ -79,38 +78,25 @@ export default function About() {
           <CardHeader>
             <CardTitle className="text-white flex items-center">
               <Award className="mr-2 h-5 w-5 text-revithalize-green" />
-              Recognition & Partnerships
+              What We Deliver
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {[
-                {
-                  title: "T-Hub & MBRDI",
-                  desc: "Climate Tech Incubator Program Support"
-                },
-                {
-                  title: "IIT Bombay",
-                  desc: "Technical Innovation Recognition"
-                },
-                {
-                  title: "IIIT Tirupati",
-                  desc: "Research Partnership"
-                },
-                {
-                  title: "IIT Madras",
-                  desc: "Technology Validation"
-                }
-              ].map((item, index) => (
-                <div key={index} className="group bg-black/20 p-4 rounded-lg border border-gray-800 hover:border-revithalize-green/50 transition-all duration-300">
-                  <div className="flex items-center justify-between">
-                    <Building className="h-5 w-5 text-revithalize-green" />
-                    <ChevronRight className="h-4 w-4 text-gray-500 group-hover:text-revithalize-green transition-colors" />
-                  </div>
-                  <h3 className="mt-3 font-medium text-white">{item.title}</h3>
-                  <p className="text-sm text-gray-400 mt-1">{item.desc}</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
+              <div className="bg-black/20 p-6 rounded-lg border border-gray-800 hover:border-revithalize-green/50 transition-all duration-300">
+                <div className="bg-revithalize-green/20 h-12 w-12 flex items-center justify-center rounded-full mb-4">
+                  <Code className="h-6 w-6 text-revithalize-green" />
                 </div>
-              ))}
+                <h3 className="text-xl font-bold text-white mb-2">Purpose-Driven Applications</h3>
+                <p className="text-gray-400">Custom EV conversion solutions that transform existing vehicles into smart, sustainable transportation options.</p>
+              </div>
+              <div className="bg-black/20 p-6 rounded-lg border border-gray-800 hover:border-revithalize-green/50 transition-all duration-300">
+                <div className="bg-revithalize-green/20 h-12 w-12 flex items-center justify-center rounded-full mb-4">
+                  <Globe className="h-6 w-6 text-revithalize-green" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2">Impactful Solutions</h3>
+                <p className="text-gray-400">Revolutionary IoT-enabled monitoring systems that provide real-time insights and optimize vehicle performance.</p>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -120,27 +106,21 @@ export default function About() {
             <CardTitle className="text-white">Impact Goals 2025</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="bg-black/20 p-6 rounded-lg border border-gray-800 text-center">
                 <div className="bg-revithalize-green/20 h-16 w-16 flex items-center justify-center rounded-full mx-auto mb-4">
                   <Zap className="h-8 w-8 text-revithalize-green" />
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-2">45,000+</h3>
-                <p className="text-gray-400">EV Conversions</p>
+                <h3 className="text-2xl font-bold text-white mb-2">1st Achievement</h3>
+                <p className="text-gray-400">Successfully launched our first AI-powered EV conversion kit, currently implemented in pilot vehicles</p>
               </div>
-              <div className="bg-black/20 p-6 rounded-lg border border-gray-800 text-center">
+              <div className="bg-black/20 p-6 rounded-lg border border-gray-800 text-center opacity-70">
                 <div className="bg-revithalize-green/20 h-16 w-16 flex items-center justify-center rounded-full mx-auto mb-4">
-                  <Users className="h-8 w-8 text-revithalize-green" />
+                  <Activity className="h-8 w-8 text-revithalize-green" />
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-2">500+</h3>
-                <p className="text-gray-400">Certified Technicians</p>
-              </div>
-              <div className="bg-black/20 p-6 rounded-lg border border-gray-800 text-center">
-                <div className="bg-revithalize-green/20 h-16 w-16 flex items-center justify-center rounded-full mx-auto mb-4">
-                  <Leaf className="h-8 w-8 text-revithalize-green" />
-                </div>
-                <h3 className="text-2xl font-bold text-white mb-2">30,000+</h3>
-                <p className="text-gray-400">Tons CO₂ Reduction</p>
+                <h3 className="text-2xl font-bold text-white mb-2">2nd Milestone</h3>
+                <p className="text-gray-400">Development in progress: Enhanced monitoring system with predictive maintenance capabilities</p>
+                <span className="inline-block mt-2 text-sm text-revithalize-green">Coming Soon</span>
               </div>
             </div>
           </CardContent>
