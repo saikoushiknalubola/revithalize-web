@@ -86,7 +86,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen bg-black font-poppins overflow-hidden">
-      {/* Mobile sidebar toggle - Fixed z-index and positioning */}
+      {/* Mobile sidebar toggle - Fixed positioning with higher z-index */}
       <button
         className="fixed top-4 left-4 z-[70] p-2 bg-gradient-to-r from-revithalize-dark to-gray-800 rounded-lg text-white md:hidden shadow-lg"
         onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -95,32 +95,32 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
         {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
       </button>
 
-      {/* Sidebar - Updated z-index and made scrollable */}
+      {/* Sidebar - Updated for better mobile experience with improved scrollability */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-[50] bg-black/95 backdrop-blur-sm border-r border-gray-800 w-64 transform transition-all duration-300 ease-in-out md:translate-x-0 shadow-xl overflow-hidden",
+          "fixed inset-y-0 left-0 z-[60] bg-black/95 backdrop-blur-sm border-r border-gray-800 w-64 transform transition-all duration-300 ease-in-out md:translate-x-0 shadow-xl flex flex-col",
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
-        <div className="flex flex-col h-full p-4">
-          <div className="flex items-center justify-between mb-8 mt-4 animate-fade-in">
-            <h1 className="text-3xl font-poppins font-bold text-revithalize-green">
-              ReVithalize
-            </h1>
-            {/* Close button for mobile - visible only when sidebar is open */}
-            {isMobile && sidebarOpen && (
-              <button 
-                onClick={() => setSidebarOpen(false)}
-                className="p-1 rounded-md text-gray-400 hover:bg-gray-800 hover:text-white transition-colors"
-                aria-label="Close sidebar"
-              >
-                <X size={20} />
-              </button>
-            )}
-          </div>
+        <div className="flex-shrink-0 flex items-center justify-between p-4 border-b border-gray-800/50">
+          <h1 className="text-3xl font-poppins font-bold text-transparent bg-clip-text bg-gradient-to-r from-revithalize-green to-revithalize-blue">
+            ReVithalize
+          </h1>
+          {/* Close button for mobile - improved positioning */}
+          {isMobile && sidebarOpen && (
+            <button 
+              onClick={() => setSidebarOpen(false)}
+              className="p-1.5 rounded-md text-gray-400 hover:bg-gray-800 hover:text-white transition-colors"
+              aria-label="Close sidebar"
+            >
+              <X size={20} />
+            </button>
+          )}
+        </div>
 
-          {/* Made sidebar content scrollable */}
-          <nav className="flex flex-col gap-2 flex-1 mt-2 overflow-y-auto">
+        {/* Made sidebar content scrollable with flex-1 and overflow-y-auto */}
+        <div className="flex-1 overflow-y-auto py-4 px-4">
+          <nav className="flex flex-col gap-2">
             <div className="mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
               Main
             </div>
@@ -157,45 +157,45 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
               </div>
             ))}
           </nav>
+        </div>
 
-          <div className="mt-auto pt-6 border-t border-gray-800 animate-fade-in" style={{ animationDelay: '300ms' }}>
-            <div className="bg-gradient-to-br from-gray-900 to-revithalize-dark rounded-lg p-4 mb-4 transition-all duration-300 hover:shadow-lg hover:from-gray-800">
-              <h3 className="text-sm font-medium text-gray-300 mb-2 font-poppins flex items-center">
-                <Bike className="h-4 w-4 mr-2 text-revithalize-green" />
-                Hero Honda Passion
-              </h3>
-              <div className="flex items-center gap-3">
-                <div className="relative w-full h-2 bg-gray-800 rounded-full overflow-hidden">
-                  <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-revithalize-green to-revithalize-blue rounded-full transition-all duration-1000" style={{ width: '75%' }} />
-                </div>
-                <span className="text-white font-medium font-poppins">75%</span>
+        <div className="flex-shrink-0 p-4 border-t border-gray-800/50">
+          <div className="bg-gradient-to-br from-gray-900 to-revithalize-dark rounded-lg p-4 mb-4 transition-all duration-300 hover:shadow-lg hover:from-gray-800">
+            <h3 className="text-sm font-medium text-gray-300 mb-2 font-poppins flex items-center">
+              <Bike className="h-4 w-4 mr-2 text-revithalize-green" />
+              Hero Honda Passion
+            </h3>
+            <div className="flex items-center gap-3">
+              <div className="relative w-full h-2 bg-gray-800 rounded-full overflow-hidden">
+                <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-revithalize-green to-revithalize-blue rounded-full transition-all duration-1000" style={{ width: '75%' }} />
               </div>
-              <p className="text-xs text-gray-400 mt-2 font-poppins">Estimated Range: 110 km</p>
-              <p className="text-xs text-gray-400 mt-1 font-poppins">51.2V 45Ah Battery</p>
+              <span className="text-white font-medium font-poppins">75%</span>
             </div>
-            
-            {userName && (
-              <div className="bg-gray-900 rounded-lg p-3 mb-4 animate-fade-in">
-                <p className="text-sm text-gray-300">Logged in as</p>
-                <p className="text-white font-medium truncate">{userName}</p>
-              </div>
-            )}
-            
-            <button 
-              onClick={handleLogout}
-              className="w-full flex items-center gap-2 px-3 py-2 text-red-400 hover:bg-gray-800 rounded-lg transition-all duration-200 hover:shadow-md"
-            >
-              <LogOut size={18} />
-              <span className="font-poppins">Logout</span>
-            </button>
+            <p className="text-xs text-gray-400 mt-2 font-poppins">Estimated Range: 110 km</p>
+            <p className="text-xs text-gray-400 mt-1 font-poppins">51.2V 45Ah Battery</p>
           </div>
+          
+          {userName && (
+            <div className="bg-gray-900 rounded-lg p-3 mb-4 animate-fade-in">
+              <p className="text-sm text-gray-300">Logged in as</p>
+              <p className="text-white font-medium truncate">{userName}</p>
+            </div>
+          )}
+          
+          <button 
+            onClick={handleLogout}
+            className="w-full flex items-center gap-2 px-3 py-2 text-red-400 hover:bg-gray-800 rounded-lg transition-all duration-200 hover:shadow-md"
+          >
+            <LogOut size={18} />
+            <span className="font-poppins">Logout</span>
+          </button>
         </div>
       </aside>
 
-      {/* Overlay - Updated z-index */}
+      {/* Overlay - Higher z-index to ensure it's above the content but below the menu button */}
       {sidebarOpen && isMobile && (
         <div 
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[45] md:hidden animate-fade-in" 
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[55] md:hidden animate-fade-in" 
           onClick={() => setSidebarOpen(false)}
           aria-hidden="true"
         />
@@ -213,8 +213,8 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
           </div>
         </div>
         
-        {/* Mobile bottom navigation - with improved spacing to prevent overlap */}
-        <div className="fixed inset-x-0 bottom-0 bg-black border-t border-gray-800 md:hidden z-30 shadow-lg">
+        {/* Improved Mobile bottom navigation */}
+        <div className="fixed inset-x-0 bottom-0 bg-black/90 backdrop-blur-md border-t border-gray-800 md:hidden z-30 shadow-lg">
           <div className="flex justify-around items-center py-2">
             {mobileNavItems.map((item, index) => {
               const Icon = item.icon;
@@ -226,13 +226,18 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
                   className={cn(
                     "flex flex-col items-center p-2 transition-all duration-200",
                     active 
-                      ? "text-revithalize-green animate-pulse" 
+                      ? "text-revithalize-green" 
                       : "text-gray-400 hover:text-gray-200"
                   )}
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <Icon size={20} />
-                  <span className="text-xs mt-1 font-poppins">{item.label}</span>
+                  <div className={cn(
+                    "flex items-center justify-center h-8 w-8 rounded-full mb-1",
+                    active && "bg-revithalize-green/10"
+                  )}>
+                    <Icon size={20} className={active ? "animate-pulse" : ""} />
+                  </div>
+                  <span className="text-xs font-poppins">{item.label}</span>
                 </Link>
               );
             })}
