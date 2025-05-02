@@ -7,7 +7,7 @@ import { Switch } from '@/components/ui/switch';
 import { 
   Bell, Lock, Eye, BellOff, Zap, Battery, 
   Moon, Sun, Smartphone, Shield, CloudRain, Wallet, 
-  CreditCard, AlarmClock, Bluetooth
+  CreditCard, AlarmClock, Bluetooth, Settings as SettingsIcon
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -71,49 +71,53 @@ export default function Settings() {
     toast.success(`Battery mode changed to ${value}`);
   };
 
-  console.log("Rendering Settings Page");
-
   return (
     <DashboardLayout>
       <div className="container mx-auto space-y-6 p-4 md:p-6">
         <header className="mb-6">
-          <h1 className="text-3xl font-bold text-white font-poppins">Settings</h1>
+          <h1 className="text-3xl font-bold text-white font-poppins flex items-center gap-2">
+            <SettingsIcon className="h-7 w-7 text-revithalize-green" />
+            Settings
+          </h1>
           <p className="text-gray-400 mt-1 font-poppins">Manage your application preferences</p>
         </header>
 
         <Tabs defaultValue="general" className="space-y-6">
-          <TabsList className="w-full bg-gray-900 p-1 overflow-x-auto flex md:flex-wrap">
-            <TabsTrigger 
-              value="general"
-              className="flex-1 min-w-[100px] font-poppins data-[state=active]:bg-revithalize-green data-[state=active]:text-black"
-            >
-              General
-            </TabsTrigger>
-            <TabsTrigger 
-              value="notifications" 
-              className="flex-1 min-w-[100px] font-poppins data-[state=active]:bg-revithalize-green data-[state=active]:text-black"
-            >
-              Notifications
-            </TabsTrigger>
-            <TabsTrigger 
-              value="privacy" 
-              className="flex-1 min-w-[100px] font-poppins data-[state=active]:bg-revithalize-green data-[state=active]:text-black"
-            >
-              Privacy
-            </TabsTrigger>
-            <TabsTrigger 
-              value="display" 
-              className="flex-1 min-w-[100px] font-poppins data-[state=active]:bg-revithalize-green data-[state=active]:text-black"
-            >
-              Display
-            </TabsTrigger>
-            <TabsTrigger 
-              value="advanced" 
-              className="flex-1 min-w-[100px] font-poppins data-[state=active]:bg-revithalize-green data-[state=active]:text-black"
-            >
-              Advanced
-            </TabsTrigger>
-          </TabsList>
+          {/* Improved responsive TabsList */}
+          <div className="overflow-x-auto pb-2 -mb-2">
+            <TabsList className="bg-gray-900 p-1 inline-flex min-w-full md:w-full">
+              <TabsTrigger 
+                value="general"
+                className="flex-1 min-w-[100px] font-poppins data-[state=active]:bg-revithalize-green data-[state=active]:text-black"
+              >
+                General
+              </TabsTrigger>
+              <TabsTrigger 
+                value="notifications" 
+                className="flex-1 min-w-[100px] font-poppins data-[state=active]:bg-revithalize-green data-[state=active]:text-black"
+              >
+                Notifications
+              </TabsTrigger>
+              <TabsTrigger 
+                value="privacy" 
+                className="flex-1 min-w-[100px] font-poppins data-[state=active]:bg-revithalize-green data-[state=active]:text-black"
+              >
+                Privacy
+              </TabsTrigger>
+              <TabsTrigger 
+                value="display" 
+                className="flex-1 min-w-[100px] font-poppins data-[state=active]:bg-revithalize-green data-[state=active]:text-black"
+              >
+                Display
+              </TabsTrigger>
+              <TabsTrigger 
+                value="advanced" 
+                className="flex-1 min-w-[100px] font-poppins data-[state=active]:bg-revithalize-green data-[state=active]:text-black"
+              >
+                Advanced
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="general" className="space-y-4">
             <Card className="bg-gray-900 border-gray-800">

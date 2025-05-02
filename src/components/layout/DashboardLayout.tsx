@@ -86,30 +86,41 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen bg-black font-poppins overflow-hidden">
-      {/* Mobile sidebar toggle - Updated z-index and positioning */}
+      {/* Mobile sidebar toggle - Fixed z-index and positioning */}
       <button
-        className="fixed top-4 left-4 z-[60] p-2 bg-gradient-to-r from-revithalize-dark to-gray-800 rounded-lg text-white md:hidden shadow-lg"
+        className="fixed top-4 left-4 z-[70] p-2 bg-gradient-to-r from-revithalize-dark to-gray-800 rounded-lg text-white md:hidden shadow-lg"
         onClick={() => setSidebarOpen(!sidebarOpen)}
         aria-label="Toggle sidebar"
       >
         {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
       </button>
 
-      {/* Sidebar - Updated z-index */}
+      {/* Sidebar - Updated z-index and made scrollable */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-[50] bg-black/95 backdrop-blur-sm border-r border-gray-800 w-64 transform transition-all duration-300 ease-in-out md:translate-x-0 shadow-xl",
+          "fixed inset-y-0 left-0 z-[50] bg-black/95 backdrop-blur-sm border-r border-gray-800 w-64 transform transition-all duration-300 ease-in-out md:translate-x-0 shadow-xl overflow-hidden",
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
         <div className="flex flex-col h-full p-4">
-          <div className="flex items-center mb-8 mt-4 animate-fade-in">
+          <div className="flex items-center justify-between mb-8 mt-4 animate-fade-in">
             <h1 className="text-3xl font-poppins font-bold text-revithalize-green">
               ReVithalize
             </h1>
+            {/* Close button for mobile - visible only when sidebar is open */}
+            {isMobile && sidebarOpen && (
+              <button 
+                onClick={() => setSidebarOpen(false)}
+                className="p-1 rounded-md text-gray-400 hover:bg-gray-800 hover:text-white transition-colors"
+                aria-label="Close sidebar"
+              >
+                <X size={20} />
+              </button>
+            )}
           </div>
 
-          <nav className="flex flex-col gap-2 flex-1 mt-2">
+          {/* Made sidebar content scrollable */}
+          <nav className="flex flex-col gap-2 flex-1 mt-2 overflow-y-auto">
             <div className="mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
               Main
             </div>
@@ -184,7 +195,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       {/* Overlay - Updated z-index */}
       {sidebarOpen && isMobile && (
         <div 
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[40] md:hidden animate-fade-in" 
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[45] md:hidden animate-fade-in" 
           onClick={() => setSidebarOpen(false)}
           aria-hidden="true"
         />

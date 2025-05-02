@@ -12,7 +12,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { Progress } from '@/components/ui/progress';
-import { AtSign, Key, User, Loader2, Shield, MapPin, Phone, Briefcase, Building } from 'lucide-react';
+import { 
+  AtSign, Key, User, Loader2, Shield, MapPin, Phone, 
+  Briefcase, Building, Lock, Fingerprint, UserCheck, 
+  Mail, Home, Bike
+} from 'lucide-react';
 import { cn } from "@/lib/utils";
 import { useScreenSize } from '@/hooks/use-mobile';
 
@@ -45,7 +49,7 @@ export default function Auth() {
   const [isLoading, setIsLoading] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [activeTab, setActiveTab] = useState('login');
-  const isMobile = useScreenSize();
+  const { isMobile, width } = useScreenSize();
   
   // Login form
   const loginForm = useForm<z.infer<typeof loginSchema>>({
@@ -190,39 +194,55 @@ export default function Auth() {
   };
 
   return (
-    <div className="flex min-h-screen bg-black items-center justify-center p-4">
-      <div className="w-full max-w-md space-y-6 animate-fade-in">
+    <div className="flex min-h-screen bg-black items-center justify-center p-4 bg-gradient-to-b from-black to-gray-900">
+      <div className="absolute inset-0 bg-grid-white/[0.03] bg-[size:20px_20px] pointer-events-none"></div>
+      <div className="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none">
+        <div className="w-[40rem] h-[40rem] rounded-full bg-revithalize-green/5 blur-3xl absolute"></div>
+        <div className="w-[30rem] h-[30rem] rounded-full bg-revithalize-blue/5 blur-3xl absolute -translate-y-32 translate-x-32"></div>
+      </div>
+      
+      <div className="w-full max-w-md space-y-6 animate-fade-in z-10">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-poppins font-bold text-revithalize-green mb-2 animate-scale-in">
+          <div className="flex justify-center mb-3">
+            <div className="p-2 rounded-full bg-gradient-to-br from-revithalize-dark to-black border border-revithalize-green/20 shadow-lg">
+              <Bike className="h-10 w-10 text-revithalize-green animate-pulse" />
+            </div>
+          </div>
+          <h1 className="text-4xl font-poppins font-bold text-transparent bg-clip-text bg-gradient-to-r from-revithalize-green to-revithalize-blue mb-2 animate-scale-in">
             ReVithalize
           </h1>
           <p className="text-gray-400 animate-fade-in">Smart Retrofitting Solutions for India</p>
         </div>
         
         <Tabs defaultValue="login" value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 bg-gray-900 rounded-xl p-1">
+          <TabsList className="grid w-full grid-cols-2 bg-gray-900/80 backdrop-blur-sm rounded-xl p-1 shadow-xl border border-gray-800">
             <TabsTrigger 
               value="login" 
-              className="font-poppins data-[state=active]:bg-revithalize-green data-[state=active]:text-black rounded-lg transition-all duration-300"
+              className="font-poppins data-[state=active]:bg-gradient-to-r data-[state=active]:from-revithalize-green data-[state=active]:to-revithalize-green/90 data-[state=active]:text-black rounded-lg transition-all duration-300"
             >
+              <UserCheck className="h-4 w-4 mr-2" />
               Login
             </TabsTrigger>
             <TabsTrigger 
               value="register" 
-              className="font-poppins data-[state=active]:bg-revithalize-blue data-[state=active]:text-black rounded-lg transition-all duration-300"
+              className="font-poppins data-[state=active]:bg-gradient-to-r data-[state=active]:from-revithalize-blue data-[state=active]:to-revithalize-blue/90 data-[state=active]:text-black rounded-lg transition-all duration-300"
             >
+              <Fingerprint className="h-4 w-4 mr-2" />
               Register
             </TabsTrigger>
           </TabsList>
           
           <TabsContent value="login" className="animate-fade-in">
-            <Card className="bg-gray-900 border-gray-800 overflow-hidden relative">
+            <Card className="bg-gray-900/80 backdrop-blur-sm border-gray-800 overflow-hidden relative shadow-xl">
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-revithalize-green to-transparent"></div>
               
               <Form {...loginForm}>
                 <form onSubmit={loginForm.handleSubmit(handleLogin)}>
                   <CardHeader>
-                    <CardTitle className="text-white font-poppins">Welcome back</CardTitle>
+                    <CardTitle className="text-white font-poppins flex items-center gap-2">
+                      <Lock className="h-5 w-5 text-revithalize-green" />
+                      Welcome back
+                    </CardTitle>
                     <CardDescription className="text-gray-400 font-poppins">
                       Enter your credentials to access your account
                     </CardDescription>
@@ -235,7 +255,7 @@ export default function Auth() {
                       render={({ field }) => (
                         <FormItem className="space-y-2">
                           <FormLabel className="text-white font-poppins flex items-center">
-                            <AtSign className="h-4 w-4 mr-2 text-revithalize-green" />
+                            <Mail className="h-4 w-4 mr-2 text-revithalize-green" />
                             Email
                           </FormLabel>
                           <FormControl>
@@ -243,9 +263,9 @@ export default function Auth() {
                               <Input 
                                 {...field}
                                 placeholder="Enter your email" 
-                                className="bg-gray-800 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-green"
+                                className="bg-gray-800/70 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-green"
                               />
-                              <AtSign className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
+                              <Mail className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
                             </div>
                           </FormControl>
                           <FormMessage className="text-red-400" />
@@ -268,9 +288,9 @@ export default function Auth() {
                                 {...field}
                                 type="password" 
                                 placeholder="Enter your password"
-                                className="bg-gray-800 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-green"
+                                className="bg-gray-800/70 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-green"
                               />
-                              <Key className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
+                              <Lock className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
                             </div>
                           </FormControl>
                           <FormMessage className="text-red-400" />
@@ -292,7 +312,7 @@ export default function Auth() {
                   <CardFooter>
                     <Button 
                       type="submit" 
-                      className="w-full bg-gradient-to-r from-revithalize-green to-revithalize-green/80 hover:to-revithalize-green text-black font-medium font-poppins h-11 transition-all duration-300"
+                      className="w-full bg-gradient-to-r from-revithalize-green to-revithalize-green/80 hover:to-revithalize-green text-black font-medium font-poppins h-11 transition-all duration-300 shadow-lg"
                       disabled={isLoading}
                     >
                       {isLoading ? (
@@ -301,7 +321,10 @@ export default function Auth() {
                           Logging in...
                         </div>
                       ) : (
-                        "Login"
+                        <div className="flex items-center justify-center">
+                          <UserCheck className="mr-2 h-4 w-4" />
+                          Login
+                        </div>
                       )}
                     </Button>
                   </CardFooter>
@@ -311,15 +334,18 @@ export default function Auth() {
           </TabsContent>
           
           <TabsContent value="register" className="animate-fade-in">
-            <Card className="bg-gray-900 border-gray-800 overflow-hidden relative">
+            <Card className="bg-gray-900/80 backdrop-blur-sm border-gray-800 overflow-hidden relative shadow-xl">
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-revithalize-blue to-transparent"></div>
               
               <Form {...registerForm}>
                 <form onSubmit={registerForm.handleSubmit(handleRegister)}>
                   <CardHeader>
-                    <CardTitle className="text-white font-poppins">Create an account</CardTitle>
+                    <CardTitle className="text-white font-poppins flex items-center gap-2">
+                      <Fingerprint className="h-5 w-5 text-revithalize-blue" />
+                      Create an account
+                    </CardTitle>
                     <CardDescription className="text-gray-400 font-poppins">
-                      Enter your details to create your account
+                      Enter your details to create your ReVithalize account
                     </CardDescription>
                   </CardHeader>
                   
@@ -338,7 +364,7 @@ export default function Auth() {
                               <Input 
                                 {...field}
                                 placeholder="First name"
-                                className="bg-gray-800 border-gray-700 text-white transition-all focus:border-revithalize-blue"
+                                className="bg-gray-800/70 border-gray-700 text-white transition-all focus:border-revithalize-blue"
                               />
                             </FormControl>
                             <FormMessage className="text-red-400" />
@@ -359,7 +385,7 @@ export default function Auth() {
                               <Input 
                                 {...field}
                                 placeholder="Last name"
-                                className="bg-gray-800 border-gray-700 text-white transition-all focus:border-revithalize-blue"
+                                className="bg-gray-800/70 border-gray-700 text-white transition-all focus:border-revithalize-blue"
                               />
                             </FormControl>
                             <FormMessage className="text-red-400" />
@@ -374,7 +400,7 @@ export default function Auth() {
                       render={({ field }) => (
                         <FormItem className="space-y-2">
                           <FormLabel className="text-white font-poppins flex items-center">
-                            <AtSign className="h-4 w-4 mr-2 text-revithalize-blue" />
+                            <Mail className="h-4 w-4 mr-2 text-revithalize-blue" />
                             Email
                           </FormLabel>
                           <FormControl>
@@ -383,9 +409,9 @@ export default function Auth() {
                                 {...field}
                                 type="email" 
                                 placeholder="Your email address"
-                                className="bg-gray-800 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-blue"
+                                className="bg-gray-800/70 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-blue"
                               />
-                              <AtSign className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
+                              <Mail className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
                             </div>
                           </FormControl>
                           <FormMessage className="text-red-400" />
@@ -407,7 +433,7 @@ export default function Auth() {
                               <Input 
                                 {...field}
                                 placeholder="10-digit mobile number" 
-                                className="bg-gray-800 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-blue"
+                                className="bg-gray-800/70 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-blue"
                               />
                               <Phone className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
                             </div>
@@ -423,7 +449,7 @@ export default function Auth() {
                       render={({ field }) => (
                         <FormItem className="space-y-2">
                           <FormLabel className="text-white font-poppins flex items-center">
-                            <MapPin className="h-4 w-4 mr-2 text-revithalize-blue" />
+                            <Home className="h-4 w-4 mr-2 text-revithalize-blue" />
                             Address
                           </FormLabel>
                           <FormControl>
@@ -431,9 +457,9 @@ export default function Auth() {
                               <Input 
                                 {...field}
                                 placeholder="Your full address" 
-                                className="bg-gray-800 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-blue"
+                                className="bg-gray-800/70 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-blue"
                               />
-                              <MapPin className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
+                              <Home className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
                             </div>
                           </FormControl>
                           <FormMessage className="text-red-400" />
@@ -455,7 +481,7 @@ export default function Auth() {
                               <Input 
                                 {...field}
                                 placeholder="Your city" 
-                                className="bg-gray-800 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-blue"
+                                className="bg-gray-800/70 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-blue"
                               />
                               <Building className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
                             </div>
@@ -479,7 +505,7 @@ export default function Auth() {
                               <Input 
                                 {...field}
                                 placeholder="Your occupation"
-                                className="bg-gray-800 border-gray-700 text-white transition-all focus:border-revithalize-blue"
+                                className="bg-gray-800/70 border-gray-700 text-white transition-all focus:border-revithalize-blue"
                               />
                             </FormControl>
                             <FormMessage className="text-red-400" />
@@ -500,7 +526,7 @@ export default function Auth() {
                               <Input 
                                 {...field}
                                 placeholder="Optional"
-                                className="bg-gray-800 border-gray-700 text-white transition-all focus:border-revithalize-blue"
+                                className="bg-gray-800/70 border-gray-700 text-white transition-all focus:border-revithalize-blue"
                               />
                             </FormControl>
                             <FormMessage className="text-red-400" />
@@ -515,7 +541,7 @@ export default function Auth() {
                       render={({ field }) => (
                         <FormItem className="space-y-2">
                           <FormLabel className="text-white font-poppins flex items-center">
-                            <Shield className="h-4 w-4 mr-2 text-revithalize-blue" />
+                            <Lock className="h-4 w-4 mr-2 text-revithalize-blue" />
                             Password
                           </FormLabel>
                           <FormControl>
@@ -524,9 +550,9 @@ export default function Auth() {
                                 {...field}
                                 type="password"
                                 placeholder="Create a password"
-                                className="bg-gray-800 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-blue"
+                                className="bg-gray-800/70 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-blue"
                               />
-                              <Shield className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
+                              <Lock className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
                             </div>
                           </FormControl>
                           <div className="mt-2 space-y-1">
@@ -575,7 +601,7 @@ export default function Auth() {
                                 {...field}
                                 type="password"
                                 placeholder="Confirm your password"
-                                className="bg-gray-800 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-blue"
+                                className="bg-gray-800/70 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-blue"
                               />
                               <Shield className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
                             </div>
@@ -589,7 +615,7 @@ export default function Auth() {
                   <CardFooter className={cn(isMobile ? "px-3 pb-6" : "")}>
                     <Button 
                       type="submit" 
-                      className="w-full bg-gradient-to-r from-revithalize-blue to-revithalize-blue/80 hover:to-revithalize-blue text-black font-medium font-poppins h-11 transition-all duration-300"
+                      className="w-full bg-gradient-to-r from-revithalize-blue to-revithalize-blue/80 hover:to-revithalize-blue text-black font-medium font-poppins h-11 transition-all duration-300 shadow-lg"
                       disabled={isLoading}
                     >
                       {isLoading ? (
@@ -598,7 +624,10 @@ export default function Auth() {
                           Creating account...
                         </div>
                       ) : (
-                        "Create account"
+                        <div className="flex items-center justify-center">
+                          <Fingerprint className="mr-2 h-4 w-4" />
+                          Create account
+                        </div>
                       )}
                     </Button>
                   </CardFooter>
@@ -609,7 +638,7 @@ export default function Auth() {
         </Tabs>
         
         <div className="text-center text-sm text-gray-500 animate-fade-in">
-          <p>© 2024 ReVithalize • Made in India 🇮🇳</p>
+          <p>© 2025 ReVithalize • Made in India 🇮🇳</p>
         </div>
       </div>
     </div>
