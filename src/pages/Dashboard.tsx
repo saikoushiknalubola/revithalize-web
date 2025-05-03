@@ -6,9 +6,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { BatteryMetrics } from '@/components/features/BatteryMetrics';
 import { ChargingScheduler } from '@/components/features/ChargingScheduler';
 import { IoTInsights } from '@/components/features/IoTInsights';
+import { EcoScore } from '@/components/features/EcoScore';
 import { useNavigate } from 'react-router-dom';
 import { useScreenSize } from '@/hooks/use-mobile';
 import { toast } from 'sonner';
+import { motion } from 'framer-motion';
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -48,18 +50,53 @@ export default function Dashboard() {
     });
   };
 
+  // Animation variants for staggered animations
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring",
+        stiffness: 100
+      }
+    }
+  };
+
   return (
     <DashboardLayout>
-      <div className="space-y-4 sm:space-y-6 px-2 sm:px-4 pb-16 md:pb-4">
-        <header className="animate-fade-in">
+      <motion.div 
+        className="space-y-4 sm:space-y-6 px-2 sm:px-4 pb-16 md:pb-4"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <motion.header variants={itemVariants} className="animate-fade-in">
           <h1 className="text-xl sm:text-2xl md:text-3xl font-heading font-bold text-white">Welcome back, {userName}</h1>
           <p className="text-gray-400 mt-1 text-sm sm:text-base">Here's the current status of your EV</p>
-        </header>
+        </motion.header>
 
         {/* Vehicle status overview */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4">
+        <motion.div 
+          className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4"
+          variants={itemVariants}
+        >
           {/* Vehicle status cards */}
-          <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-800 shadow-md animate-fade-in" style={{ animationDelay: '100ms' }}>
+          <motion.div
+            variants={itemVariants}
+            whileHover={{ scale: 1.02, boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)' }}
+            className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-800 shadow-md rounded-lg overflow-hidden transition-all duration-300"
+          >
             <CardHeader className="pb-1 px-2 sm:px-3 pt-2 sm:pt-3">
               <CardDescription className="text-gray-400 flex items-center text-xs sm:text-sm">
                 <Battery className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4 text-revithalize-green" />
@@ -75,9 +112,13 @@ export default function Dashboard() {
               </div>
               <p className="text-xs sm:text-sm text-gray-400 mt-1 sm:mt-2">Estimated Range: 110 km</p>
             </CardContent>
-          </Card>
+          </motion.div>
 
-          <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-800 shadow-md animate-fade-in" style={{ animationDelay: '150ms' }}>
+          <motion.div
+            variants={itemVariants}
+            whileHover={{ scale: 1.02, boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)' }}
+            className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-800 shadow-md rounded-lg overflow-hidden transition-all duration-300"
+          >
             <CardHeader className="pb-1 px-2 sm:px-3 pt-2 sm:pt-3">
               <CardDescription className="text-gray-400 flex items-center text-xs sm:text-sm">
                 <Bolt className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4 text-revithalize-blue" />
@@ -88,9 +129,13 @@ export default function Dashboard() {
               <p className="text-lg sm:text-2xl font-bold text-white">51.2 V</p>
               <p className="text-xs sm:text-sm text-gray-400 mt-1 sm:mt-2">45 Ah Battery</p>
             </CardContent>
-          </Card>
+          </motion.div>
 
-          <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-800 shadow-md animate-fade-in" style={{ animationDelay: '200ms' }}>
+          <motion.div
+            variants={itemVariants}
+            whileHover={{ scale: 1.02, boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)' }}
+            className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-800 shadow-md rounded-lg overflow-hidden transition-all duration-300"
+          >
             <CardHeader className="pb-1 px-2 sm:px-3 pt-2 sm:pt-3">
               <CardDescription className="text-gray-400 flex items-center text-xs sm:text-sm">
                 <ThermometerSnowflake className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4 text-blue-400" />
@@ -101,9 +146,13 @@ export default function Dashboard() {
               <p className="text-lg sm:text-2xl font-bold text-white">32°C</p>
               <p className="text-xs sm:text-sm text-gray-400 mt-1 sm:mt-2">Battery Temperature</p>
             </CardContent>
-          </Card>
+          </motion.div>
 
-          <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-800 shadow-md animate-fade-in" style={{ animationDelay: '250ms' }}>
+          <motion.div
+            variants={itemVariants}
+            whileHover={{ scale: 1.02, boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)' }}
+            className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-800 shadow-md rounded-lg overflow-hidden transition-all duration-300"
+          >
             <CardHeader className="pb-1 px-2 sm:px-3 pt-2 sm:pt-3">
               <CardDescription className="text-gray-400 flex items-center text-xs sm:text-sm">
                 <Gauge className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4 text-yellow-400" />
@@ -114,47 +163,60 @@ export default function Dashboard() {
               <p className="text-lg sm:text-2xl font-bold text-white">98%</p>
               <p className="text-xs sm:text-sm text-gray-400 mt-1 sm:mt-2">System Optimal</p>
             </CardContent>
-          </Card>
-        </div>
+          </motion.div>
+        </motion.div>
 
         {/* Vehicle Information */}
-        <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-800 shadow-lg animate-fade-in" style={{ animationDelay: '300ms' }}>
-          <CardHeader className="pb-3 pt-3 px-3 sm:pb-4 sm:pt-4 sm:px-4">
-            <CardTitle className="text-white flex items-center text-lg sm:text-xl">
-              <Bike className="mr-2 h-4 w-4 sm:h-5 sm:w-5 text-revithalize-green" />
-              Hero Honda Passion AP02SK2409
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="px-3 pb-3 sm:px-4 sm:pb-4">
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4">
-              <div className="bg-gray-800/60 p-2 sm:p-3 rounded-lg">
-                <p className="text-gray-400 text-xs sm:text-sm">Battery Type</p>
-                <p className="text-white font-medium mt-1 text-sm sm:text-base truncate">51.2V 45Ah Lithium-Ion</p>
+        <motion.div variants={itemVariants}>
+          <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-800 shadow-lg">
+            <CardHeader className="pb-3 pt-3 px-3 sm:pb-4 sm:pt-4 sm:px-4">
+              <CardTitle className="text-white flex items-center text-lg sm:text-xl">
+                <Bike className="mr-2 h-4 w-4 sm:h-5 sm:w-5 text-revithalize-green" />
+                Hero Honda Passion AP02SK2409
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="px-3 pb-3 sm:px-4 sm:pb-4">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4">
+                <div className="bg-gray-800/60 p-2 sm:p-3 rounded-lg backdrop-blur-md hover:bg-gray-800/80 transition-colors">
+                  <p className="text-gray-400 text-xs sm:text-sm">Battery Type</p>
+                  <p className="text-white font-medium mt-1 text-sm sm:text-base truncate">51.2V 45Ah Lithium-Ion</p>
+                </div>
+                <div className="bg-gray-800/60 p-2 sm:p-3 rounded-lg backdrop-blur-md hover:bg-gray-800/80 transition-colors">
+                  <p className="text-gray-400 text-xs sm:text-sm">Range</p>
+                  <p className="text-white font-medium mt-1 text-sm sm:text-base">Up to 110 km</p>
+                </div>
+                <div className="bg-gray-800/60 p-2 sm:p-3 rounded-lg backdrop-blur-md hover:bg-gray-800/80 transition-colors">
+                  <p className="text-gray-400 text-xs sm:text-sm">Charging Time</p>
+                  <p className="text-white font-medium mt-1 text-sm sm:text-base">3-4 Hours</p>
+                </div>
+                <div className="bg-gray-800/60 p-2 sm:p-3 rounded-lg backdrop-blur-md hover:bg-gray-800/80 transition-colors">
+                  <p className="text-gray-400 text-xs sm:text-sm">Max Speed</p>
+                  <p className="text-white font-medium mt-1 text-sm sm:text-base">55 km/h</p>
+                </div>
               </div>
-              <div className="bg-gray-800/60 p-2 sm:p-3 rounded-lg">
-                <p className="text-gray-400 text-xs sm:text-sm">Range</p>
-                <p className="text-white font-medium mt-1 text-sm sm:text-base">Up to 110 km</p>
-              </div>
-              <div className="bg-gray-800/60 p-2 sm:p-3 rounded-lg">
-                <p className="text-gray-400 text-xs sm:text-sm">Charging Time</p>
-                <p className="text-white font-medium mt-1 text-sm sm:text-base">3-4 Hours</p>
-              </div>
-              <div className="bg-gray-800/60 p-2 sm:p-3 rounded-lg">
-                <p className="text-gray-400 text-xs sm:text-sm">Max Speed</p>
-                <p className="text-white font-medium mt-1 text-sm sm:text-base">55 km/h</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </motion.div>
 
         {/* Analytics Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-6 animate-fade-in" style={{ animationDelay: '350ms' }}>
+        <motion.div 
+          className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-6" 
+          variants={itemVariants}
+        >
           <BatteryMetrics />
           <ChargingScheduler />
-        </div>
+        </motion.div>
+
+        {/* EcoScore Component */}
+        <motion.div variants={itemVariants}>
+          <EcoScore />
+        </motion.div>
 
         {/* Additional Analytics */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-6 animate-fade-in" style={{ animationDelay: '400ms' }}>
+        <motion.div 
+          className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-6" 
+          variants={itemVariants}
+        >
           <div className="lg:col-span-2">
             <IoTInsights />
           </div>
@@ -165,43 +227,49 @@ export default function Dashboard() {
                 <CardTitle className="text-white text-lg sm:text-xl">Quick Actions</CardTitle>
               </CardHeader>
               <CardContent className="space-y-2 sm:space-y-3 px-3 pb-3 sm:px-4 sm:pb-4">
-                <button 
+                <motion.button 
                   onClick={handleFindChargingStations}
                   className="w-full bg-gray-800 hover:bg-gray-700 text-white font-medium py-2 sm:py-3 px-3 sm:px-4 rounded-lg flex items-center justify-between group transition-all duration-300 shadow-md hover:shadow-lg text-sm sm:text-base"
+                  whileHover={{ scale: 1.02, x: 5 }}
+                  whileTap={{ scale: 0.98 }}
                 >
                   <span className="flex items-center">
                     <MapPin className="mr-2 h-4 w-4 sm:h-5 sm:w-5 text-revithalize-green" />
                     Find Charging Stations
                   </span>
                   <span className="text-revithalize-green group-hover:translate-x-1 transition-transform">→</span>
-                </button>
+                </motion.button>
                 
-                <button 
+                <motion.button 
                   onClick={handleRemoteCharging}
                   className="w-full bg-gray-800 hover:bg-gray-700 text-white font-medium py-2 sm:py-3 px-3 sm:px-4 rounded-lg flex items-center justify-between group transition-all duration-300 shadow-md hover:shadow-lg text-sm sm:text-base"
+                  whileHover={{ scale: 1.02, x: 5 }}
+                  whileTap={{ scale: 0.98 }}
                 >
                   <span className="flex items-center">
                     <Bolt className="mr-2 h-4 w-4 sm:h-5 sm:w-5 text-revithalize-blue" />
                     Start Remote Charging
                   </span>
                   <span className="text-revithalize-blue group-hover:translate-x-1 transition-transform">→</span>
-                </button>
+                </motion.button>
                 
-                <button 
+                <motion.button 
                   onClick={handleSetChargeAlert}
                   className="w-full bg-gray-800 hover:bg-gray-700 text-white font-medium py-2 sm:py-3 px-3 sm:px-4 rounded-lg flex items-center justify-between group transition-all duration-300 shadow-md hover:shadow-lg text-sm sm:text-base"
+                  whileHover={{ scale: 1.02, x: 5 }}
+                  whileTap={{ scale: 0.98 }}
                 >
                   <span className="flex items-center">
                     <Bell className="mr-2 h-4 w-4 sm:h-5 sm:w-5 text-yellow-400" />
                     Set Charge Alert
                   </span>
                   <span className="text-yellow-400 group-hover:translate-x-1 transition-transform">→</span>
-                </button>
+                </motion.button>
               </CardContent>
             </Card>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </DashboardLayout>
   );
 }
