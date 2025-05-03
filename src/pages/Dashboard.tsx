@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Battery, Bolt, Gauge, ThermometerSnowflake, Clock, Zap, MapPin, Bell, Bike } from 'lucide-react';
@@ -209,7 +208,7 @@ export default function Dashboard() {
 
         {/* EcoScore Component */}
         <motion.div variants={itemVariants}>
-          <EcoScore />
+          <EcoScore score={87} scoreChange={3} />
         </motion.div>
 
         {/* Additional Analytics */}
