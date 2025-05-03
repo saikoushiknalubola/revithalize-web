@@ -103,7 +103,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
         )}
       >
         <div className="flex-shrink-0 flex items-center justify-between p-4 border-b border-gray-800/50">
-          <h1 className="text-3xl font-poppins font-bold text-transparent bg-clip-text bg-gradient-to-r from-revithalize-green to-revithalize-blue">
+          <h1 className="text-2xl font-poppins font-bold text-transparent bg-clip-text bg-gradient-to-r from-revithalize-green to-revithalize-blue pl-8 md:pl-0">
             ReVithalize
           </h1>
           {/* Close button for mobile - improved positioning */}

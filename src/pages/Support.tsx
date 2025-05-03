@@ -1,35 +1,83 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { HelpCircle, MessageSquare, Phone, Mail, FileText, ExternalLink } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { HelpCircle, MessageSquare, Phone, Mail, ExternalLink, FileText, ArrowRight } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useScreenSize } from '@/hooks/use-mobile';
 import { toast } from 'sonner';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ServiceTicketForm } from '@/components/features/ServiceTicketForm';
+import { ServiceTicketList } from '@/components/features/ServiceTicketList';
+import { motion } from 'framer-motion';
 
 export default function Support() {
   const { isMobile } = useScreenSize();
+  const [activeTab, setActiveTab] = useState('create-ticket');
   
-  const handleSubmitTicket = () => {
-    toast.success('Support ticket submitted', {
-      description: 'We will get back to you within 24 hours'
-    });
-  };
-
   const handleViewFaqs = () => {
     toast.info('Loading complete FAQ section', {
       description: 'Our knowledge base has been updated'
     });
   };
+
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring",
+        stiffness: 100
+      }
+    }
+  };
   
   return (
     <DashboardLayout>
-      <div className="space-y-6">
-        <header>
+      <motion.div 
+        className="space-y-6 pb-16 md:pb-0"
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
+      >
+        <motion.header variants={itemVariants}>
           <h1 className="text-2xl md:text-3xl font-heading font-bold text-white">Support Center</h1>
           <p className="text-gray-400 mt-1">Get help with your EV retrofitting questions</p>
-        </header>
+        </motion.header>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <motion.div variants={itemVariants}>
+          <Tabs defaultValue={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="grid grid-cols-2 max-w-[400px] bg-gray-800/50 mb-6">
+              <TabsTrigger value="create-ticket" className="data-[state=active]:bg-revithalize-green data-[state=active]:text-black">
+                Create Ticket
+              </TabsTrigger>
+              <TabsTrigger value="my-tickets" className="data-[state=active]:bg-revithalize-green data-[state=active]:text-black">
+                My Tickets
+              </TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="create-ticket" className="space-y-6">
+              <ServiceTicketForm />
+            </TabsContent>
+            
+            <TabsContent value="my-tickets" className="space-y-6">
+              <ServiceTicketList />
+            </TabsContent>
+          </Tabs>
+        </motion.div>
+
+        <motion.div className="grid grid-cols-1 md:grid-cols-2 gap-6" variants={itemVariants}>
           <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-800 hover:border-gray-700 transition-colors">
             <CardHeader>
               <CardTitle className="flex items-center text-white">
@@ -98,55 +146,67 @@ export default function Support() {
                 </div>
               </div>
               
-              <button 
-                className="w-full mt-2 bg-gray-800 hover:bg-gray-700 text-white font-medium py-2 px-3 rounded-lg flex items-center justify-between group transition-all"
-                onClick={handleSubmitTicket}
-              >
-                <span>Submit a Ticket</span>
-                <span className="text-revithalize-green group-hover:translate-x-1 transition-transform">→</span>
-              </button>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+                <button 
+                  className="bg-gray-800 hover:bg-gray-700 text-white font-medium py-2 px-3 rounded-lg flex items-center justify-between group transition-all"
+                  onClick={() => window.open('mailto:support@revithalize.com')}
+                >
+                  <span>Send Email</span>
+                  <ArrowRight className="h-4 w-4 text-revithalize-green group-hover:translate-x-1 transition-transform" />
+                </button>
+                
+                <button 
+                  className="bg-gray-800 hover:bg-gray-700 text-white font-medium py-2 px-3 rounded-lg flex items-center justify-between group transition-all"
+                  onClick={() => window.open('tel:+914045678901')}
+                >
+                  <span>Call Support</span>
+                  <ArrowRight className="h-4 w-4 text-revithalize-green group-hover:translate-x-1 transition-transform" />
+                </button>
+              </div>
             </CardContent>
           </Card>
-        </div>
+        </motion.div>
 
-        <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-800">
-          <CardHeader>
-            <CardTitle className="text-white">Service Centers</CardTitle>
-            <CardDescription>Find the nearest retrofitting center</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {[
-                {
-                  name: "Hitec City Center",
-                  address: "Plot 123, Hitec City Main Road, Hyderabad, 500081",
-                  phone: "+91-40-45678901",
-                  hours: "9 AM - 6 PM, Mon-Sat"
-                },
-                {
-                  name: "Banjara Hills Hub",
-                  address: "Road No. 12, Banjara Hills, Hyderabad, 500034",
-                  phone: "+91-40-87654321",
-                  hours: "9 AM - 6 PM, Mon-Sat"
-                },
-                {
-                  name: "Madhapur Workshop",
-                  address: "1-2-3, Ayyappa Society, Madhapur, Hyderabad, 500081",
-                  phone: "+91-40-23456789",
-                  hours: "9 AM - 6 PM, Mon-Sat"
-                }
-              ].map((center, i) => (
-                <div key={i} className="bg-gray-800/50 p-3 rounded-lg hover:bg-gray-800 transition-colors cursor-pointer">
-                  <h3 className="font-medium text-white mb-1">{center.name}</h3>
-                  <p className="text-gray-400 text-sm mb-2">{center.address}</p>
-                  <p className="text-gray-400 text-sm">{center.phone}</p>
-                  <p className="text-gray-500 text-xs">{center.hours}</p>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+        <motion.div variants={itemVariants}>
+          <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-800">
+            <CardHeader>
+              <CardTitle className="text-white">Service Centers</CardTitle>
+              <CardDescription>Find the nearest retrofitting center</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {[
+                  {
+                    name: "Hitec City Center",
+                    address: "Plot 123, Hitec City Main Road, Hyderabad, 500081",
+                    phone: "+91-40-45678901",
+                    hours: "9 AM - 6 PM, Mon-Sat"
+                  },
+                  {
+                    name: "Banjara Hills Hub",
+                    address: "Road No. 12, Banjara Hills, Hyderabad, 500034",
+                    phone: "+91-40-87654321",
+                    hours: "9 AM - 6 PM, Mon-Sat"
+                  },
+                  {
+                    name: "Madhapur Workshop",
+                    address: "1-2-3, Ayyappa Society, Madhapur, Hyderabad, 500081",
+                    phone: "+91-40-23456789",
+                    hours: "9 AM - 6 PM, Mon-Sat"
+                  }
+                ].map((center, i) => (
+                  <div key={i} className="bg-gray-800/50 p-3 rounded-lg hover:bg-gray-800 transition-colors cursor-pointer">
+                    <h3 className="font-medium text-white mb-1">{center.name}</h3>
+                    <p className="text-gray-400 text-sm mb-2">{center.address}</p>
+                    <p className="text-gray-400 text-sm">{center.phone}</p>
+                    <p className="text-gray-500 text-xs">{center.hours}</p>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </motion.div>
     </DashboardLayout>
   );
 }
