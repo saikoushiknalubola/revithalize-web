@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { FileText, ArrowRight, FileDown, Clock } from 'lucide-react';
+import { FileText, ArrowRight, FileDown, Clock, Tag, AlertTriangle } from 'lucide-react';
 import { ServiceTicket } from '@/types/ServiceTicket';
 import { generateTicketPDF } from '@/utils/pdfGenerator';
 import { toast } from 'sonner';
@@ -63,6 +63,21 @@ export function ServiceTicketList() {
     return statusColors[status as keyof typeof statusColors] || 'bg-gray-400';
   };
 
+  const getPriorityIcon = (priority: string) => {
+    switch(priority) {
+      case 'urgent':
+        return <AlertTriangle className="h-3 w-3 text-red-400" />;
+      case 'high':
+        return <AlertTriangle className="h-3 w-3 text-orange-400" />;
+      case 'medium':
+        return <Tag className="h-3 w-3 text-yellow-400" />;
+      case 'low':
+        return <Tag className="h-3 w-3 text-green-400" />;
+      default:
+        return <Tag className="h-3 w-3 text-gray-400" />;
+    }
+  };
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -88,13 +103,13 @@ export function ServiceTicketList() {
             <p className="text-gray-400 mt-4">Loading your tickets...</p>
           </div>
         ) : tickets.length === 0 ? (
-          <div className="text-center py-8 border border-dashed border-gray-700 rounded-lg">
+          <div className="text-center py-8 border border-dashed border-gray-700 rounded-lg bg-gray-900/50">
             <FileText className="mx-auto h-10 w-10 text-gray-500 mb-3" />
             <h3 className="text-gray-300 font-medium mb-1">No tickets found</h3>
             <p className="text-gray-500 text-sm mb-4">You haven't created any service tickets yet.</p>
             <Button 
               variant="outline" 
-              className="border-gray-700 text-white hover:bg-gray-700"
+              className="border-gray-700 bg-gray-800 text-white hover:bg-gray-700"
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             >
               Create Your First Ticket
@@ -105,7 +120,7 @@ export function ServiceTicketList() {
             {tickets.map((ticket) => (
               <div 
                 key={ticket.id} 
-                className="border border-gray-800 rounded-lg p-4 hover:bg-gray-800/50 transition-colors"
+                className="border border-gray-800 rounded-lg p-4 bg-gray-900/50 hover:bg-gray-800/70 transition-colors"
               >
                 <div className="flex justify-between items-start mb-3">
                   <div>
@@ -115,6 +130,9 @@ export function ServiceTicketList() {
                       <span className="mx-2">•</span>
                       <Clock className="h-3 w-3 mr-1" />
                       <span>{formatDate(ticket.createdAt)}</span>
+                      <span className="mx-2">•</span>
+                      {getPriorityIcon(ticket.priority)}
+                      <span className="ml-1 capitalize">{ticket.priority}</span>
                     </div>
                   </div>
                   <div className="flex items-center">
@@ -131,7 +149,7 @@ export function ServiceTicketList() {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="border-gray-700 hover:bg-gray-700 text-xs"
+                    className="border-gray-700 bg-gray-800 hover:bg-gray-700 text-xs text-white"
                     onClick={() => handleDownloadPDF(ticket)}
                   >
                     <FileDown className="h-3 w-3 mr-1" />

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { BatteryMetrics } from '@/components/features/BatteryMetrics';
@@ -107,7 +106,7 @@ export default function BatteryAnalytics() {
                       <Button 
                         size="sm" 
                         variant="outline" 
-                        className="border-gray-700 text-white hover:bg-gray-700"
+                        className="border-gray-700 bg-gray-700 text-white hover:bg-gray-600"
                       >
                         <FileText className="h-3 w-3 mr-1" />
                         View

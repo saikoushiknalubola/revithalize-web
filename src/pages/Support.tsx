@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { HelpCircle, MessageSquare, Phone, Mail, ExternalLink, FileText, ArrowRight } from 'lucide-react';
+import { HelpCircle, MessageSquare, Phone, Mail, ExternalLink, FileText, ArrowRight, MapPin } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useScreenSize } from '@/hooks/use-mobile';
 import { toast } from 'sonner';
@@ -170,12 +170,21 @@ export default function Support() {
         <motion.div variants={itemVariants}>
           <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-800">
             <CardHeader>
-              <CardTitle className="text-white">Service Centers</CardTitle>
+              <CardTitle className="text-white flex items-center">
+                <MapPin className="mr-2 h-5 w-5 text-revithalize-green" />
+                Service Centers
+              </CardTitle>
               <CardDescription>Find the nearest retrofitting center</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {[
+                  {
+                    name: "Warangal Main Center",
+                    address: "Plot no 54/5-6 Nakkalagutta, Hanamakonda, Telangana 506001",
+                    phone: "+91-76-71030069",
+                    hours: "9 AM - 6 PM, Mon-Sat"
+                  },
                   {
                     name: "Hitec City Center",
                     address: "Plot 123, Hitec City Main Road, Hyderabad, 500081",
