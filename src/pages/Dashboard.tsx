@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { Battery, Bolt, Gauge, ThermometerSnowflake, Clock, Zap, MapPin, Bell, Bike } from 'lucide-react';
+import { Battery, Bolt, Gauge, ThermometerSnowflake, Clock, Zap, MapPin, Bell, Bike, Sparkles, Shield, Calendar, Leaf, Cpu } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { BatteryMetrics } from '@/components/features/BatteryMetrics';
 import { ChargingScheduler } from '@/components/features/ChargingScheduler';
@@ -47,6 +47,13 @@ export default function Dashboard() {
   const handleSetChargeAlert = () => {
     toast.success('Charge alert set', {
       description: 'You will be notified when the battery is fully charged'
+    });
+  };
+
+  // Smart features handlers
+  const handleSmartFeature = (feature: string) => {
+    toast.info(`${feature} activated`, {
+      description: 'This feature will be available in the next update'
     });
   };
 
@@ -267,6 +274,91 @@ export default function Dashboard() {
                 </motion.button>
               </CardContent>
             </Card>
+          </div>
+        </motion.div>
+
+        {/* Smart Features Section - NEW */}
+        <motion.div 
+          className="mt-6"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+        >
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold text-white flex items-center">
+              <Sparkles className="mr-2 h-5 w-5 text-revithalize-green" />
+              Smart Features
+            </h2>
+            <button className="text-sm text-revithalize-green hover:underline">View All</button>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              {
+                title: "Battery Health Monitor",
+                description: "Advanced battery cell monitoring with predictive analysis",
+                icon: Shield,
+                color: "bg-gradient-to-br from-blue-900/40 to-blue-800/20",
+                iconColor: "text-blue-400",
+                borderColor: "border-blue-600/20"
+              },
+              {
+                title: "Maintenance Reminders",
+                description: "Intelligent service scheduling based on usage patterns",
+                icon: Calendar,
+                color: "bg-gradient-to-br from-purple-900/40 to-purple-800/20",
+                iconColor: "text-purple-400",
+                borderColor: "border-purple-600/20"
+              },
+              {
+                title: "Eco-Driving Coach",
+                description: "Real-time guidance to maximize range and efficiency",
+                icon: Leaf,
+                color: "bg-gradient-to-br from-green-900/40 to-green-800/20",
+                iconColor: "text-green-400", 
+                borderColor: "border-green-600/20"
+              },
+              {
+                title: "Performance Tuning",
+                description: "Customize your EV's response and power delivery",
+                icon: Cpu,
+                color: "bg-gradient-to-br from-red-900/40 to-red-800/20",
+                iconColor: "text-red-400",
+                borderColor: "border-red-600/20"
+              }
+            ].map((feature, index) => {
+              const Icon = feature.icon;
+              return (
+                <motion.div
+                  key={index}
+                  whileHover={{ scale: 1.03, y: -5 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ 
+                    duration: 0.3, 
+                    delay: 0.2 + (index * 0.1),
+                    type: "spring",
+                    stiffness: 200
+                  }}
+                  onClick={() => handleSmartFeature(feature.title)}
+                  className={`${feature.color} border ${feature.borderColor} rounded-lg p-5 cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300`}
+                >
+                  <div className="flex items-start">
+                    <div className="bg-black/30 p-3 rounded-lg mr-4">
+                      <Icon className={`h-6 w-6 ${feature.iconColor}`} />
+                    </div>
+                    <div>
+                      <h3 className="text-white font-medium mb-1">{feature.title}</h3>
+                      <p className="text-gray-400 text-sm">{feature.description}</p>
+                    </div>
+                  </div>
+                  <div className="mt-4 ml-16 flex justify-between items-center">
+                    <span className="text-xs text-gray-500">New</span>
+                    <span className="text-xs bg-black/30 px-2 py-1 rounded-full text-white">BETA</span>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </motion.div>
       </motion.div>

@@ -5,13 +5,26 @@ import { MapPin, Battery, Navigation, Search, Filter, Zap, Info } from 'lucide-r
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import InteractiveMap from '@/components/map/InteractiveMap';
 import { useScreenSize } from '@/hooks/use-mobile';
+import { toast } from 'sonner';
+import { motion } from 'framer-motion';
 
 export default function MapView() {
   const { isMobile } = useScreenSize();
   
+  const handleNavigate = (location: string) => {
+    const encodedLocation = encodeURIComponent(location);
+    window.open(`https://www.google.com/maps/search/?api=1&query=${encodedLocation}`, '_blank');
+    toast.success('Opening Google Maps navigation');
+  };
+  
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <motion.div 
+        className="space-y-6"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
         <header>
           <h1 className="text-3xl font-heading font-bold text-white">Charging Map</h1>
           <p className="text-gray-400 mt-1">Find retrofitting stations and charging points</p>
@@ -42,84 +55,108 @@ export default function MapView() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {[
                 { 
-                  name: "Hitec City Retrofit Hub", 
+                  name: "Warangal Retrofit Hub", 
+                  address: "Plot no 54/5-6 Nakkalagutta, Hanamakonda, Telangana 506001",
                   distance: "1.2 km", 
                   available: 3, 
                   total: 5, 
                   power: "25 kW",
                   status: "Available",
-                  services: ["Retrofitting", "Charging", "Battery Swap"]
+                  services: ["Retrofitting", "Charging", "Battery Swap"],
+                  isHeadquarters: true
                 },
                 { 
-                  name: "Banjara Hills Station", 
+                  name: "Hitec City Station", 
+                  address: "Plot 123, Hitec City Main Road, Hyderabad, 500081",
                   distance: "3.5 km", 
                   available: 1, 
                   total: 2, 
                   power: "50 kW",
                   status: "Available",
-                  services: ["Charging", "Quick Repairs"]
+                  services: ["Charging", "Quick Repairs"],
+                  isHeadquarters: false
                 },
                 { 
                   name: "Madhapur Service Center", 
+                  address: "1-2-3, Ayyappa Society, Madhapur, Hyderabad, 500081",
                   distance: "4.1 km", 
                   available: 0, 
                   total: 3, 
                   power: "100 kW",
                   status: "Busy",
-                  services: ["Full Retrofitting", "Diagnostics", "Charging"]
+                  services: ["Full Retrofitting", "Diagnostics", "Charging"],
+                  isHeadquarters: false
                 },
               ].map((station, index) => (
-                <Card key={index} className="bg-gray-900 border-gray-800 hover:border-gray-700 transition-colors cursor-pointer">
-                  <CardContent className="p-4">
-                    <div className="flex items-start gap-3">
-                      <div className={`p-2 rounded-lg ${station.available > 0 ? 'bg-green-900/30' : 'bg-red-900/30'}`}>
-                        <MapPin className={`h-5 w-5 ${station.available > 0 ? 'text-green-500' : 'text-red-500'}`} />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="font-medium text-white mb-1">{station.name}</h3>
-                        <p className="text-sm text-gray-400">{station.distance} away</p>
-                        
-                        <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
-                          <div>
-                            <p className="text-gray-400">Status</p>
-                            <p className={`font-medium ${station.available > 0 ? 'text-green-500' : 'text-red-500'}`}>
-                              {station.status}
-                            </p>
-                          </div>
-                          <div>
-                            <p className="text-gray-400">Bays</p>
-                            <p className="font-medium text-white">
-                              {station.available}/{station.total} available
-                            </p>
-                          </div>
+                <motion.div 
+                  key={index} 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                >
+                  <Card className={`${station.isHeadquarters ? 'bg-gradient-to-br from-gray-900 to-gray-800 border-revithalize-green/30' : 'bg-gradient-to-br from-gray-900 to-gray-800 border-gray-800'} hover:border-gray-700 transition-colors`}>
+                    <CardContent className="p-4">
+                      <div className="flex items-start gap-3">
+                        <div className={`p-2 rounded-lg ${station.available > 0 ? 'bg-green-900/30' : 'bg-red-900/30'}`}>
+                          <MapPin className={`h-5 w-5 ${station.available > 0 ? 'text-green-500' : 'text-red-500'}`} />
                         </div>
-                        
-                        <div className="mt-3">
-                          <p className="text-xs text-gray-400 mb-2">Services:</p>
-                          <div className="flex flex-wrap gap-1">
-                            {station.services.map((service, i) => (
-                              <span key={i} className="text-xs bg-gray-800 text-white px-2 py-1 rounded-full">
-                                {service}
+                        <div className="flex-1">
+                          <h3 className="font-medium text-white mb-1 flex items-center">
+                            {station.name}
+                            {station.isHeadquarters && (
+                              <span className="ml-2 text-xs bg-revithalize-green/20 text-revithalize-green px-2 py-0.5 rounded-full">
+                                HQ
                               </span>
-                            ))}
+                            )}
+                          </h3>
+                          <p className="text-sm text-gray-400">{station.distance} away</p>
+                          
+                          <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
+                            <div>
+                              <p className="text-gray-400">Status</p>
+                              <p className={`font-medium ${station.available > 0 ? 'text-green-500' : 'text-red-500'}`}>
+                                {station.status}
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-gray-400">Bays</p>
+                              <p className="font-medium text-white">
+                                {station.available}/{station.total} available
+                              </p>
+                            </div>
+                          </div>
+                          
+                          <div className="mt-3">
+                            <p className="text-xs text-gray-400 mb-2">Services:</p>
+                            <div className="flex flex-wrap gap-1">
+                              {station.services.map((service, i) => (
+                                <span key={i} className="text-xs bg-gray-800 text-white px-2 py-1 rounded-full">
+                                  {service}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                          
+                          <div className="mt-3 flex items-center justify-between">
+                            <p className="text-sm font-medium text-revithalize-green">{station.power} DC Fast Charging</p>
+                            <button 
+                              className="text-xs bg-revithalize-dark hover:bg-gray-800 text-white px-3 py-1.5 rounded transition-colors flex items-center"
+                              onClick={() => handleNavigate(station.address)}
+                            >
+                              <Navigation className="h-3 w-3 mr-1" />
+                              Navigate
+                            </button>
                           </div>
                         </div>
-                        
-                        <div className="mt-3 flex items-center justify-between">
-                          <p className="text-sm font-medium text-revithalize-green">{station.power} DC Fast Charging</p>
-                          <button className="text-xs bg-revithalize-dark hover:bg-gray-800 text-white px-3 py-1 rounded transition-colors">
-                            Navigate
-                          </button>
-                        </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                    </CardContent>
+                  </Card>
+                </motion.div>
               ))}
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </DashboardLayout>
   );
 }

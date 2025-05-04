@@ -2,14 +2,18 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { FileText, ArrowRight, FileDown, Clock, Tag, AlertTriangle } from 'lucide-react';
+import { FileText, ArrowRight, FileDown, Clock, Tag, AlertTriangle, Eye } from 'lucide-react';
 import { ServiceTicket } from '@/types/ServiceTicket';
 import { generateTicketPDF } from '@/utils/pdfGenerator';
 import { toast } from 'sonner';
+import { ServiceTicketDetails } from './ServiceTicketDetails';
+import { motion } from 'framer-motion';
 
 export function ServiceTicketList() {
   const [tickets, setTickets] = useState<ServiceTicket[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedTicket, setSelectedTicket] = useState<ServiceTicket | null>(null);
+  const [detailsOpen, setDetailsOpen] = useState(false);
 
   useEffect(() => {
     // Simulate loading tickets from an API
@@ -53,6 +57,11 @@ export function ServiceTicketList() {
     toast.success('PDF downloaded successfully');
   };
 
+  const handleViewDetails = (ticket: ServiceTicket) => {
+    setSelectedTicket(ticket);
+    setDetailsOpen(true);
+  };
+
   const getStatusColor = (status: string) => {
     const statusColors = {
       'open': 'bg-yellow-400',
@@ -87,89 +96,102 @@ export function ServiceTicketList() {
   };
 
   return (
-    <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-800 shadow-lg">
-      <CardHeader>
-        <CardTitle className="text-white flex items-center">
-          <FileText className="mr-2 h-5 w-5 text-revithalize-green" />
-          My Service Tickets
-        </CardTitle>
-        <CardDescription>View and manage your existing service tickets</CardDescription>
-      </CardHeader>
-      
-      <CardContent>
-        {isLoading ? (
-          <div className="flex flex-col items-center justify-center py-8">
-            <div className="h-8 w-8 rounded-full border-2 border-t-revithalize-green border-r-transparent animate-spin"></div>
-            <p className="text-gray-400 mt-4">Loading your tickets...</p>
-          </div>
-        ) : tickets.length === 0 ? (
-          <div className="text-center py-8 border border-dashed border-gray-700 rounded-lg bg-gray-900/50">
-            <FileText className="mx-auto h-10 w-10 text-gray-500 mb-3" />
-            <h3 className="text-gray-300 font-medium mb-1">No tickets found</h3>
-            <p className="text-gray-500 text-sm mb-4">You haven't created any service tickets yet.</p>
-            <Button 
-              variant="outline" 
-              className="border-gray-700 bg-gray-800 text-white hover:bg-gray-700"
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            >
-              Create Your First Ticket
-            </Button>
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {tickets.map((ticket) => (
-              <div 
-                key={ticket.id} 
-                className="border border-gray-800 rounded-lg p-4 bg-gray-900/50 hover:bg-gray-800/70 transition-colors"
+    <>
+      <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-800 shadow-lg">
+        <CardHeader>
+          <CardTitle className="text-white flex items-center">
+            <FileText className="mr-2 h-5 w-5 text-revithalize-green" />
+            My Service Tickets
+          </CardTitle>
+          <CardDescription>View and manage your existing service tickets</CardDescription>
+        </CardHeader>
+        
+        <CardContent>
+          {isLoading ? (
+            <div className="flex flex-col items-center justify-center py-8">
+              <div className="h-8 w-8 rounded-full border-2 border-t-revithalize-green border-r-transparent animate-spin"></div>
+              <p className="text-gray-400 mt-4">Loading your tickets...</p>
+            </div>
+          ) : tickets.length === 0 ? (
+            <div className="text-center py-8 border border-dashed border-gray-700 rounded-lg bg-gray-900/50">
+              <FileText className="mx-auto h-10 w-10 text-gray-500 mb-3" />
+              <h3 className="text-gray-300 font-medium mb-1">No tickets found</h3>
+              <p className="text-gray-500 text-sm mb-4">You haven't created any service tickets yet.</p>
+              <Button 
+                variant="outline" 
+                className="border-gray-700 bg-gray-800 text-white hover:bg-gray-700"
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               >
-                <div className="flex justify-between items-start mb-3">
-                  <div>
-                    <h3 className="text-white font-medium mb-1">{ticket.title}</h3>
-                    <div className="flex items-center text-xs text-gray-400">
-                      <span className="font-mono">{ticket.id}</span>
-                      <span className="mx-2">•</span>
-                      <Clock className="h-3 w-3 mr-1" />
-                      <span>{formatDate(ticket.createdAt)}</span>
-                      <span className="mx-2">•</span>
-                      {getPriorityIcon(ticket.priority)}
-                      <span className="ml-1 capitalize">{ticket.priority}</span>
+                Create Your First Ticket
+              </Button>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {tickets.map((ticket) => (
+                <motion.div 
+                  key={ticket.id} 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="border border-gray-800 rounded-lg p-4 bg-gray-900/50 hover:bg-gray-800/70 transition-colors"
+                >
+                  <div className="flex justify-between items-start mb-3">
+                    <div>
+                      <h3 className="text-white font-medium mb-1">{ticket.title}</h3>
+                      <div className="flex items-center text-xs text-gray-400">
+                        <span className="font-mono">{ticket.id}</span>
+                        <span className="mx-2">•</span>
+                        <Clock className="h-3 w-3 mr-1" />
+                        <span>{formatDate(ticket.createdAt)}</span>
+                        <span className="mx-2">•</span>
+                        {getPriorityIcon(ticket.priority)}
+                        <span className="ml-1 capitalize">{ticket.priority}</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center">
+                      <div className={`w-2 h-2 rounded-full ${getStatusColor(ticket.status)} mr-2`}></div>
+                      <span className="text-sm text-gray-300 capitalize">
+                        {ticket.status.replace('_', ' ')}
+                      </span>
                     </div>
                   </div>
-                  <div className="flex items-center">
-                    <div className={`w-2 h-2 rounded-full ${getStatusColor(ticket.status)} mr-2`}></div>
-                    <span className="text-sm text-gray-300 capitalize">
-                      {ticket.status.replace('_', ' ')}
-                    </span>
-                  </div>
-                </div>
-                
-                <p className="text-gray-400 text-sm line-clamp-2 mb-3">{ticket.description}</p>
-                
-                <div className="flex flex-wrap gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="border-gray-700 bg-gray-800 hover:bg-gray-700 text-xs text-white"
-                    onClick={() => handleDownloadPDF(ticket)}
-                  >
-                    <FileDown className="h-3 w-3 mr-1" />
-                    Download PDF
-                  </Button>
                   
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-revithalize-green hover:text-revithalize-green hover:bg-revithalize-green/10 text-xs"
-                  >
-                    View Details
-                    <ArrowRight className="h-3 w-3 ml-1" />
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </CardContent>
-    </Card>
+                  <p className="text-gray-400 text-sm line-clamp-2 mb-3">{ticket.description}</p>
+                  
+                  <div className="flex flex-wrap gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="border-gray-700 bg-gray-800 hover:bg-gray-700 text-xs text-white"
+                      onClick={() => handleDownloadPDF(ticket)}
+                    >
+                      <FileDown className="h-3 w-3 mr-1" />
+                      Download PDF
+                    </Button>
+                    
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-revithalize-green hover:text-revithalize-green hover:bg-revithalize-green/10 text-xs"
+                      onClick={() => handleViewDetails(ticket)}
+                    >
+                      <Eye className="h-3 w-3 mr-1" />
+                      View Details
+                      <ArrowRight className="h-3 w-3 ml-1" />
+                    </Button>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+      
+      <ServiceTicketDetails 
+        ticket={selectedTicket}
+        open={detailsOpen}
+        onOpenChange={setDetailsOpen}
+      />
+    </>
   );
 }
