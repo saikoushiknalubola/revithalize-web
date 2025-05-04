@@ -1,15 +1,80 @@
 import React from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { Battery, Gauge, Zap, ThermometerSnowflake, Clock, Calendar, AlertTriangle, Settings, BatteryCharging } from 'lucide-react';
+import { Battery, Gauge, Zap, ThermometerSnowflake, Clock, Calendar, AlertTriangle, Settings, BatteryCharging, FileDown } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { generateBatteryReportPDF } from '@/utils/pdfGenerator';
+import { toast } from 'sonner';
 
 export default function VehicleDetails() {
+  // Mock data for the battery report PDF
+  const handleDownloadBatteryReport = () => {
+    // Get user data from localStorage
+    const userData = JSON.parse(localStorage.getItem('user') || '{}');
+    const userName = userData.fullName || userData.name || 'Customer';
+    
+    // Battery data - would typically come from state or API
+    const batteryData = {
+      currentHealth: 97,
+      projectedHealth: 90,
+      cellBalance: 95,
+      chargingCycles: 124,
+      capacityRetention: 97,
+      range: 110,
+      efficiency: 91,
+      averageTemp: 32,
+      lastCharge: 'Today, 08:30 AM',
+      nextService: 'In 3 months',
+    };
+    
+    // Vehicle data
+    const vehicleData = {
+      model: 'Hero Honda Passion AP02SK2409',
+      batteryType: '51.2V 45Ah Lithium-Ion',
+      range: 'Up to 110 km',
+      power: '2.2 kW',
+      capacity: '45 Ah',
+      registrationNumber: 'AP02SK2409',
+    };
+    
+    // Usage data
+    const usageData = {
+      weeklyDistance: 83,
+      monthlyDistance: 321,
+      totalDistance: 1275,
+      avgEfficiency: 91,
+      avgTemp: 32,
+    };
+    
+    // Generate PDF blob
+    const pdfBlob = generateBatteryReportPDF(batteryData, vehicleData, usageData, userName);
+    
+    // Create download link
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(pdfBlob);
+    link.download = `battery-report-${new Date().toISOString().split('T')[0]}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    toast.success('Battery report downloaded successfully');
+  };
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        <header>
-          <h1 className="text-3xl font-heading font-bold text-white">Vehicle Details</h1>
-          <p className="text-gray-400 mt-1">Hero Honda Passion AP02SK2409</p>
+        <header className="flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-heading font-bold text-white">Vehicle Details</h1>
+            <p className="text-gray-400 mt-1">Hero Honda Passion AP02SK2409</p>
+          </div>
+          <Button 
+            onClick={handleDownloadBatteryReport}
+            className="bg-revithalize-green hover:bg-green-600 text-white"
+          >
+            <FileDown className="mr-2 h-4 w-4" />
+            Download Battery Report
+          </Button>
         </header>
 
         {/* Vehicle status cards */}
