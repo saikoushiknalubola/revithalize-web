@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { BatteryMetrics } from '@/components/features/BatteryMetrics';
 import { BatteryPrediction } from '@/components/features/BatteryPrediction';
@@ -9,8 +9,110 @@ import { FileDown, FileText, BarChart3, Eye, Calendar } from 'lucide-react';
 import { generateBatteryReportPDF } from '@/utils/pdfGenerator';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+
+interface HistoricalReport {
+  date: string;
+  title: string;
+  content?: string;
+}
 
 export default function BatteryAnalytics() {
+  const [selectedReport, setSelectedReport] = useState<HistoricalReport | null>(null);
+  const [reportDialogOpen, setReportDialogOpen] = useState(false);
+  
+  // Historical reports data
+  const historicalReports: HistoricalReport[] = [
+    { 
+      date: '2024-04-01', 
+      title: 'Monthly Battery Report - April 2024',
+      content: `# Battery Health Report - April 2024
+
+**Vehicle**: Hero Honda Passion AP02SK2409
+**Report Date**: April 1, 2024
+**Battery Type**: 51.2V 45Ah Lithium-Ion
+
+## Health Metrics
+- Current Health: 97%
+- Projected Health (3 months): 95%
+- Cell Balance: 96%
+- Charging Cycles: 115
+- Capacity Retention: 97%
+
+## Usage Statistics
+- Average Daily Distance: 28km
+- Total Distance: 1,215km
+- Average Efficiency: 92%
+- Average Temperature: 31°C
+
+## Recommendations
+- Continue optimal charging practices
+- Schedule battery balancing in 2 months
+- Monitor temperature during summer rides`
+    },
+    { 
+      date: '2024-03-01', 
+      title: 'Monthly Battery Report - March 2024',
+      content: `# Battery Health Report - March 2024
+
+**Vehicle**: Hero Honda Passion AP02SK2409
+**Report Date**: March 1, 2024
+**Battery Type**: 51.2V 45Ah Lithium-Ion
+
+## Health Metrics
+- Current Health: 98%
+- Projected Health (3 months): 96%
+- Cell Balance: 97%
+- Charging Cycles: 92
+- Capacity Retention: 98%
+
+## Usage Statistics
+- Average Daily Distance: 25km
+- Total Distance: 950km
+- Average Efficiency: 93%
+- Average Temperature: 29°C
+
+## Recommendations
+- Continue optimal charging practices
+- No maintenance needed at this time
+- Consider battery check before summer season`
+    },
+    { 
+      date: '2024-02-01', 
+      title: 'Monthly Battery Report - February 2024',
+      content: `# Battery Health Report - February 2024
+
+**Vehicle**: Hero Honda Passion AP02SK2409
+**Report Date**: February 1, 2024
+**Battery Type**: 51.2V 45Ah Lithium-Ion
+
+## Health Metrics
+- Current Health: 99%
+- Projected Health (3 months): 97%
+- Cell Balance: 98%
+- Charging Cycles: 68
+- Capacity Retention: 99%
+
+## Usage Statistics
+- Average Daily Distance: 22km
+- Total Distance: 680km
+- Average Efficiency: 94%
+- Average Temperature: 27°C
+
+## Recommendations
+- Continue optimal charging practices
+- No maintenance needed at this time
+- Battery performing at near-optimal levels`
+    },
+  ];
+  
   // Mock data for the battery report PDF
   const handleDownloadBatteryReport = () => {
     // Get user data from localStorage
@@ -64,6 +166,11 @@ export default function BatteryAnalytics() {
     toast.success('Battery report downloaded successfully');
   };
 
+  const handleViewReport = (report: HistoricalReport) => {
+    setSelectedReport(report);
+    setReportDialogOpen(true);
+  };
+
   return (
     <DashboardLayout>
       <motion.div 
@@ -100,11 +207,7 @@ export default function BatteryAnalytics() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {[
-                    { date: '2024-04-01', title: 'Monthly Battery Report - April 2024' },
-                    { date: '2024-03-01', title: 'Monthly Battery Report - March 2024' },
-                    { date: '2024-02-01', title: 'Monthly Battery Report - February 2024' },
-                  ].map((report, index) => (
+                  {historicalReports.map((report, index) => (
                     <motion.div 
                       key={index} 
                       initial={{ opacity: 0, y: 10 }}
@@ -123,6 +226,7 @@ export default function BatteryAnalytics() {
                         size="sm" 
                         variant="outline" 
                         className="border-gray-700 bg-gray-700 text-white hover:bg-gray-600"
+                        onClick={() => handleViewReport(report)}
                       >
                         <Eye className="h-3 w-3 mr-1" />
                         View
@@ -137,6 +241,46 @@ export default function BatteryAnalytics() {
           <BatteryPrediction className="h-full" />
         </div>
       </motion.div>
+
+      {/* Report Viewing Dialog */}
+      <Dialog open={reportDialogOpen} onOpenChange={setReportDialogOpen}>
+        <DialogContent className="bg-gray-900 border-gray-800 text-white max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-white text-xl">{selectedReport?.title}</DialogTitle>
+            <DialogDescription className="text-gray-400">
+              Generated on {selectedReport?.date}
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="mt-4 prose prose-invert max-w-none">
+            {selectedReport?.content && (
+              <div className="whitespace-pre-line font-mono bg-gray-800 p-4 rounded-lg text-sm">
+                {selectedReport.content}
+              </div>
+            )}
+          </div>
+          
+          <DialogFooter className="mt-6">
+            <Button 
+              variant="outline" 
+              onClick={() => setReportDialogOpen(false)}
+              className="mr-2 border-gray-700"
+            >
+              Close
+            </Button>
+            <Button 
+              onClick={() => {
+                toast.success('Report downloaded successfully');
+                setReportDialogOpen(false);
+              }}
+              className="bg-revithalize-green hover:bg-green-600 text-black"
+            >
+              <FileDown className="mr-2 h-4 w-4" />
+              Download PDF
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </DashboardLayout>
   );
 }

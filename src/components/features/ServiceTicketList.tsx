@@ -58,6 +58,7 @@ export function ServiceTicketList() {
   };
 
   const handleViewDetails = (ticket: ServiceTicket) => {
+    console.log("Viewing ticket details:", ticket);
     setSelectedTicket(ticket);
     setDetailsOpen(true);
   };

@@ -10,7 +10,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { Clock, Tag, AlertTriangle, Clipboard, Calendar, FileDown } from 'lucide-react';
+import { Clock, Tag, AlertTriangle, Clipboard, Calendar, FileDown, CheckCircle, XCircle, MessageSquare } from 'lucide-react';
 import { ServiceTicket } from '@/types/ServiceTicket';
 import { generateTicketPDF } from '@/utils/pdfGenerator';
 import { toast } from 'sonner';
@@ -85,6 +85,83 @@ export function ServiceTicketDetails({ ticket, open, onOpenChange }: ServiceTick
     toast.success('PDF downloaded successfully');
   };
 
+  // Mock comments for the ticket
+  const ticketComments = [
+    {
+      id: 1,
+      author: "Service Center",
+      date: new Date(new Date(ticket.createdAt).getTime() + 24 * 60 * 60 * 1000).toISOString(),
+      message: "We've received your ticket and are looking into the issue. A technician will be assigned shortly."
+    },
+    {
+      id: 2,
+      author: "Technician Ramesh",
+      date: new Date(new Date(ticket.createdAt).getTime() + 2 * 24 * 60 * 60 * 1000).toISOString(),
+      message: "I've been assigned to your case. Based on the description, it sounds like a potential cell balancing issue. We'll need to run diagnostics when you bring in the vehicle."
+    }
+  ];
+
+  // Mock timeline events based on ticket status
+  const getTimelineEvents = () => {
+    const baseEvents = [
+      {
+        label: "Ticket Created",
+        date: ticket.createdAt,
+        icon: <Clipboard className="h-4 w-4 text-revithalize-green" />,
+        color: "bg-revithalize-green"
+      },
+    ];
+    
+    if (ticket.status === 'in_progress') {
+      baseEvents.push({
+        label: "Technician Assigned",
+        date: new Date(new Date(ticket.createdAt).getTime() + 24 * 60 * 60 * 1000).toISOString(),
+        icon: <MessageSquare className="h-4 w-4 text-blue-400" />,
+        color: "bg-blue-400"
+      });
+    }
+    
+    if (ticket.status === 'resolved') {
+      baseEvents.push({
+        label: "Technician Assigned",
+        date: new Date(new Date(ticket.createdAt).getTime() + 24 * 60 * 60 * 1000).toISOString(),
+        icon: <MessageSquare className="h-4 w-4 text-blue-400" />,
+        color: "bg-blue-400"
+      });
+      baseEvents.push({
+        label: "Issue Resolved",
+        date: new Date(new Date(ticket.createdAt).getTime() + 5 * 24 * 60 * 60 * 1000).toISOString(),
+        icon: <CheckCircle className="h-4 w-4 text-green-400" />,
+        color: "bg-green-400"
+      });
+    }
+    
+    if (ticket.status === 'closed') {
+      baseEvents.push({
+        label: "Technician Assigned",
+        date: new Date(new Date(ticket.createdAt).getTime() + 24 * 60 * 60 * 1000).toISOString(),
+        icon: <MessageSquare className="h-4 w-4 text-blue-400" />,
+        color: "bg-blue-400"
+      });
+      baseEvents.push({
+        label: "Issue Resolved",
+        date: new Date(new Date(ticket.createdAt).getTime() + 5 * 24 * 60 * 60 * 1000).toISOString(),
+        icon: <CheckCircle className="h-4 w-4 text-green-400" />,
+        color: "bg-green-400"
+      });
+      baseEvents.push({
+        label: "Ticket Closed",
+        date: new Date(new Date(ticket.createdAt).getTime() + 6 * 24 * 60 * 60 * 1000).toISOString(),
+        icon: <XCircle className="h-4 w-4 text-gray-400" />,
+        color: "bg-gray-400"
+      });
+    }
+    
+    return baseEvents;
+  };
+
+  const timelineEvents = getTimelineEvents();
+
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700 max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -99,7 +176,7 @@ export function ServiceTicketDetails({ ticket, open, onOpenChange }: ServiceTick
         </AlertDialogHeader>
         
         <div className="space-y-4 py-4">
-          <div className="bg-gray-800/70 p-4 rounded-lg">
+          <div className="bg-gray-800/70 p-4 rounded-lg border border-gray-700">
             <h3 className="text-lg font-medium text-white mb-2">{ticket.title}</h3>
             <div className="flex items-center text-sm text-gray-400 mb-4">
               <span className="font-mono">{ticket.id}</span>
@@ -111,7 +188,7 @@ export function ServiceTicketDetails({ ticket, open, onOpenChange }: ServiceTick
           </div>
           
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-gray-800/70 p-4 rounded-lg">
+            <div className="bg-gray-800/70 p-4 rounded-lg border border-gray-700">
               <h4 className="text-sm font-medium text-gray-400 mb-2">Status</h4>
               <div className="flex items-center">
                 <div className={`w-3 h-3 rounded-full ${getStatusColor(ticket.status)} mr-2`}></div>
@@ -121,7 +198,7 @@ export function ServiceTicketDetails({ ticket, open, onOpenChange }: ServiceTick
               </div>
             </div>
             
-            <div className="bg-gray-800/70 p-4 rounded-lg">
+            <div className="bg-gray-800/70 p-4 rounded-lg border border-gray-700">
               <h4 className="text-sm font-medium text-gray-400 mb-2">Priority</h4>
               <div className="flex items-center">
                 {getPriorityIcon(ticket.priority)}
@@ -131,14 +208,14 @@ export function ServiceTicketDetails({ ticket, open, onOpenChange }: ServiceTick
               </div>
             </div>
             
-            <div className="bg-gray-800/70 p-4 rounded-lg">
+            <div className="bg-gray-800/70 p-4 rounded-lg border border-gray-700">
               <h4 className="text-sm font-medium text-gray-400 mb-2">Category</h4>
               <span className="text-white capitalize">
                 {ticket.category.replace('_', ' ')}
               </span>
             </div>
             
-            <div className="bg-gray-800/70 p-4 rounded-lg">
+            <div className="bg-gray-800/70 p-4 rounded-lg border border-gray-700">
               <h4 className="text-sm font-medium text-gray-400 mb-2">Created At</h4>
               <div className="flex items-center">
                 <Calendar className="h-4 w-4 text-gray-400 mr-2" />
@@ -148,7 +225,7 @@ export function ServiceTicketDetails({ ticket, open, onOpenChange }: ServiceTick
           </div>
           
           {ticket.attachments && ticket.attachments.length > 0 && (
-            <div className="bg-gray-800/70 p-4 rounded-lg">
+            <div className="bg-gray-800/70 p-4 rounded-lg border border-gray-700">
               <h4 className="text-sm font-medium text-gray-400 mb-2">Attachments</h4>
               <div className="flex flex-wrap gap-2">
                 {ticket.attachments.map((attachment, index) => (
@@ -160,29 +237,40 @@ export function ServiceTicketDetails({ ticket, open, onOpenChange }: ServiceTick
             </div>
           )}
           
-          <div className="bg-gray-800/70 p-4 rounded-lg">
-            <h4 className="text-sm font-medium text-gray-400 mb-2">Timeline</h4>
+          <div className="bg-gray-800/70 p-4 rounded-lg border border-gray-700">
+            <h4 className="text-sm font-medium text-gray-400 mb-4">Timeline</h4>
             <div className="space-y-3">
-              <div className="flex items-start">
-                <div className="flex-shrink-0 mt-1">
-                  <div className="w-2 h-2 bg-revithalize-green rounded-full"></div>
-                  <div className="w-0.5 h-8 bg-gray-700 ml-0.75 -mt-1 mx-auto"></div>
+              {timelineEvents.map((event, index) => (
+                <div key={index} className="flex items-start">
+                  <div className="flex-shrink-0 mt-1">
+                    <div className={`flex items-center justify-center w-6 h-6 rounded-full ${event.color}`}>
+                      {event.icon}
+                    </div>
+                    {index < timelineEvents.length - 1 && (
+                      <div className="w-0.5 h-8 bg-gray-700 ml-3 -mt-1 mx-auto"></div>
+                    )}
+                  </div>
+                  <div className="ml-4">
+                    <p className="text-white text-sm font-medium">{event.label}</p>
+                    <p className="text-gray-400 text-xs">{formatDate(event.date)}</p>
+                  </div>
                 </div>
-                <div className="ml-3">
-                  <p className="text-white text-sm">Ticket Created</p>
-                  <p className="text-gray-400 text-xs">{formatDate(ticket.createdAt)}</p>
+              ))}
+            </div>
+          </div>
+          
+          <div className="bg-gray-800/70 p-4 rounded-lg border border-gray-700">
+            <h4 className="text-sm font-medium text-gray-400 mb-4">Comments</h4>
+            <div className="space-y-4">
+              {ticketComments.map((comment) => (
+                <div key={comment.id} className="p-3 bg-gray-700/50 rounded-lg">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="font-medium text-white">{comment.author}</span>
+                    <span className="text-xs text-gray-400">{formatDate(comment.date)}</span>
+                  </div>
+                  <p className="text-sm text-gray-300">{comment.message}</p>
                 </div>
-              </div>
-              
-              <div className="flex items-start">
-                <div className="flex-shrink-0 mt-1">
-                  <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                </div>
-                <div className="ml-3">
-                  <p className="text-white text-sm">Current Status: <span className="capitalize">{ticket.status.replace('_', ' ')}</span></p>
-                  <p className="text-gray-400 text-xs">{formatDate(ticket.updatedAt || ticket.createdAt)}</p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
