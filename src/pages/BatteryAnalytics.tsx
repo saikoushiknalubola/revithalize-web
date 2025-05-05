@@ -3,10 +3,13 @@ import React, { useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { BatteryMetrics } from '@/components/features/BatteryMetrics';
 import { BatteryPrediction } from '@/components/features/BatteryPrediction';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { BatteryEfficiencyChart } from '@/components/features/BatteryEfficiencyChart';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { FileDown, FileText, BarChart3, Eye, Calendar } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { FileDown, FileText, BarChart3, Eye, Calendar, Droplets, Zap, Download, FileBarChart } from 'lucide-react';
 import { generateBatteryReportPDF } from '@/utils/pdfGenerator';
+import { generateAnalyticsReportPDF } from '@/utils/analyticsReportPDF';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import {
@@ -27,6 +30,7 @@ interface HistoricalReport {
 export default function BatteryAnalytics() {
   const [selectedReport, setSelectedReport] = useState<HistoricalReport | null>(null);
   const [reportDialogOpen, setReportDialogOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('overview');
   
   // Historical reports data
   const historicalReports: HistoricalReport[] = [
@@ -166,9 +170,69 @@ export default function BatteryAnalytics() {
     toast.success('Battery report downloaded successfully');
   };
 
+  const handleDownloadAnalyticsReport = () => {
+    // Get user data from localStorage
+    const userData = JSON.parse(localStorage.getItem('user') || '{}');
+    const userName = userData.fullName || userData.name || 'Customer';
+    
+    // Mock analytics data
+    const analyticsData = {
+      periodStart: '2024-01-01',
+      periodEnd: '2024-04-30',
+      batteryHealthStart: 100,
+      batteryHealthEnd: 97,
+      efficiencyTrend: [
+        { month: 'Jan', value: 95 },
+        { month: 'Feb', value: 94 },
+        { month: 'Mar', value: 93 },
+        { month: 'Apr', value: 92 },
+      ],
+      tempTrend: [
+        { month: 'Jan', value: 27 },
+        { month: 'Feb', value: 28 },
+        { month: 'Mar', value: 30 },
+        { month: 'Apr', value: 32 },
+      ],
+      chargeCycles: 124,
+      topSpeed: 55,
+      avgSpeed: 32,
+      rangeTrend: [
+        { month: 'Jan', value: 155 },
+        { month: 'Feb', value: 152 },
+        { month: 'Mar', value: 148 },
+        { month: 'Apr', value: 145 },
+      ],
+      powerConsumption: 8.2, // kWh/100km
+      carbonSaved: 120, // kg
+    };
+    
+    // Generate PDF blob
+    const pdfBlob = generateAnalyticsReportPDF(analyticsData, userName, vehicleData);
+    
+    // Create download link
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(pdfBlob);
+    link.download = `analytics-report-${new Date().toISOString().split('T')[0]}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    toast.success('Analytics report downloaded successfully');
+  };
+
   const handleViewReport = (report: HistoricalReport) => {
     setSelectedReport(report);
     setReportDialogOpen(true);
+  };
+
+  // Vehicle data for analytics report
+  const vehicleData = {
+    model: 'Hero Honda Passion AP02SK2409',
+    batteryType: '51.2V 45Ah Lithium-Ion',
+    range: 'Up to 110 km',
+    power: '2.2 kW',
+    capacity: '45 Ah',
+    registrationNumber: 'AP02SK2409',
   };
 
   return (
@@ -179,24 +243,181 @@ export default function BatteryAnalytics() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <header className="flex justify-between items-center">
+        <header className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
           <div>
             <h1 className="text-3xl font-heading font-bold text-white">Battery Analytics</h1>
             <p className="text-gray-400 mt-1">Insights and predictions for your EV battery</p>
           </div>
-          <Button 
-            onClick={handleDownloadBatteryReport}
-            className="bg-revithalize-green hover:bg-green-600 text-black font-medium"
-          >
-            <FileDown className="mr-2 h-4 w-4" />
-            Download Battery Report
-          </Button>
+          <div className="flex flex-wrap gap-3">
+            <Button 
+              onClick={handleDownloadBatteryReport}
+              className="bg-revithalize-green hover:bg-green-600 text-black font-medium"
+              size="sm"
+            >
+              <FileDown className="mr-2 h-4 w-4" />
+              Battery Report
+            </Button>
+            <Button 
+              onClick={handleDownloadAnalyticsReport}
+              className="bg-revithalize-blue hover:bg-blue-600 text-black font-medium"
+              size="sm"
+            >
+              <FileBarChart className="mr-2 h-4 w-4" />
+              Analytics Report
+            </Button>
+          </div>
         </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="space-y-6">
-            <BatteryMetrics />
+        <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid grid-cols-3 mb-6 bg-gray-800 p-1 w-full max-w-md mx-auto">
+            <TabsTrigger value="overview" className="text-sm">
+              Overview
+            </TabsTrigger>
+            <TabsTrigger value="detailed" className="text-sm">
+              Detailed Analysis
+            </TabsTrigger>
+            <TabsTrigger value="historical" className="text-sm">
+              Historical Data
+            </TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="overview" className="space-y-6 animate-fade-in">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <BatteryMetrics />
+              <BatteryPrediction className="h-full" />
+            </div>
             
+            <Card className="bg-gray-900/80 backdrop-blur-sm border-gray-800/50 overflow-hidden">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-white flex items-center">
+                  <Droplets className="mr-2 h-5 w-5 text-revithalize-blue" />
+                  Battery Efficiency Insights
+                </CardTitle>
+                <CardDescription>
+                  Track your battery efficiency over time
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <BatteryEfficiencyChart />
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          <TabsContent value="detailed" className="space-y-6 animate-fade-in">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Card className="bg-gray-900/80 backdrop-blur-sm border-gray-800/50 overflow-hidden">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-white text-lg flex items-center">
+                    <Zap className="mr-2 h-5 w-5 text-yellow-500" />
+                    Power Efficiency
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-4xl font-bold text-white mb-2">91%</div>
+                  <div className="text-sm text-gray-400">Above average for your vehicle model</div>
+                  
+                  <div className="mt-4 space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-400">Peak Power</span>
+                      <span className="text-white">2.2 kW</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-400">Energy Consumption</span>
+                      <span className="text-white">8.2 kWh/100km</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-400">Range per Charge</span>
+                      <span className="text-white">110 km</span>
+                    </div>
+                  </div>
+                </CardContent>
+                <CardFooter className="pt-0 pb-3">
+                  <Button variant="outline" size="sm" className="text-xs w-full border-gray-700">
+                    <Download className="mr-1 h-3 w-3" />
+                    Export Data
+                  </Button>
+                </CardFooter>
+              </Card>
+              
+              <Card className="bg-gray-900/80 backdrop-blur-sm border-gray-800/50 overflow-hidden">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-white text-lg flex items-center">
+                    <Calendar className="mr-2 h-5 w-5 text-green-500" />
+                    Charging Cycles
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-4xl font-bold text-white mb-2">124</div>
+                  <div className="text-sm text-gray-400">Out of 1,500 total cycles</div>
+                  
+                  <div className="mt-4">
+                    <div className="h-2 w-full bg-gray-800 rounded-full">
+                      <div 
+                        className="h-full bg-gradient-to-r from-green-500 to-green-400 rounded-full" 
+                        style={{ width: '8.3%' }} 
+                      />
+                    </div>
+                    <div className="mt-1 text-xs text-gray-400 text-right">8.3% used</div>
+                  </div>
+                  
+                  <div className="mt-4 space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-400">Last Full Charge</span>
+                      <span className="text-white">Today, 8:30 AM</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-400">Avg. Charge Time</span>
+                      <span className="text-white">3h 20m</span>
+                    </div>
+                  </div>
+                </CardContent>
+                <CardFooter className="pt-0 pb-3">
+                  <Button variant="outline" size="sm" className="text-xs w-full border-gray-700">
+                    <Download className="mr-1 h-3 w-3" />
+                    Export Data
+                  </Button>
+                </CardFooter>
+              </Card>
+              
+              <Card className="bg-gray-900/80 backdrop-blur-sm border-gray-800/50 overflow-hidden">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-white text-lg flex items-center">
+                    <BarChart3 className="mr-2 h-5 w-5 text-blue-500" />
+                    Environmental Impact
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-4xl font-bold text-white mb-2">120 kg</div>
+                  <div className="text-sm text-gray-400">CO₂ emissions saved</div>
+                  
+                  <div className="mt-4 space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-400">Trees Equivalent</span>
+                      <span className="text-white">6 trees</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-400">Petrol Saved</span>
+                      <span className="text-white">52 liters</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-400">Energy Source</span>
+                      <span className="text-white">82% Renewable</span>
+                    </div>
+                  </div>
+                </CardContent>
+                <CardFooter className="pt-0 pb-3">
+                  <Button variant="outline" size="sm" className="text-xs w-full border-gray-700">
+                    <Download className="mr-1 h-3 w-3" />
+                    Export Data
+                  </Button>
+                </CardFooter>
+              </Card>
+            </div>
+            
+            <BatteryPrediction showFullCard={true} className="w-full" />
+          </TabsContent>
+          
+          <TabsContent value="historical" className="space-y-6 animate-fade-in">
             <Card className="bg-gray-900 border-gray-800 hover:border-gray-700 transition-all duration-300">
               <CardHeader>
                 <CardTitle className="text-white flex items-center">
@@ -222,24 +443,78 @@ export default function BatteryAnalytics() {
                           <p className="text-gray-400 text-xs">{report.date}</p>
                         </div>
                       </div>
-                      <Button 
-                        size="sm" 
-                        variant="outline" 
-                        className="border-gray-700 bg-gray-700 text-white hover:bg-gray-600"
-                        onClick={() => handleViewReport(report)}
-                      >
-                        <Eye className="h-3 w-3 mr-1" />
-                        View
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          className="border-gray-700 bg-gray-700 text-white hover:bg-gray-600"
+                          onClick={() => handleViewReport(report)}
+                        >
+                          <Eye className="h-3 w-3 mr-1" />
+                          View
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          className="border-gray-700 bg-gray-700 text-white hover:bg-gray-600"
+                          onClick={() => {
+                            toast.success(`${report.title} downloaded successfully`);
+                          }}
+                        >
+                          <FileDown className="h-3 w-3 mr-1" />
+                          Download
+                        </Button>
+                      </div>
                     </motion.div>
                   ))}
                 </div>
               </CardContent>
             </Card>
-          </div>
-          
-          <BatteryPrediction className="h-full" />
-        </div>
+            
+            <Card className="bg-gray-900 border-gray-800 hover:border-gray-700 transition-all duration-300">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center">
+                  <FileText className="mr-2 h-5 w-5 text-revithalize-blue" />
+                  Raw Data Export
+                </CardTitle>
+                <CardDescription>Download your battery data in various formats</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <Button
+                    variant="outline"
+                    className="h-auto py-6 border-gray-700 hover:border-gray-600 flex flex-col items-center justify-center"
+                    onClick={() => toast.success("Data exported as CSV successfully")}
+                  >
+                    <FileDown className="h-8 w-8 mb-2 text-green-500" />
+                    <span className="text-white">CSV Format</span>
+                    <span className="text-xs text-gray-400 mt-1">Complete raw data</span>
+                  </Button>
+                  
+                  <Button
+                    variant="outline"
+                    className="h-auto py-6 border-gray-700 hover:border-gray-600 flex flex-col items-center justify-center"
+                    onClick={() => toast.success("Data exported as JSON successfully")}
+                  >
+                    <FileDown className="h-8 w-8 mb-2 text-blue-500" />
+                    <span className="text-white">JSON Format</span>
+                    <span className="text-xs text-gray-400 mt-1">For developers</span>
+                  </Button>
+                  
+                  <Button
+                    variant="outline"
+                    className="h-auto py-6 border-gray-700 hover:border-gray-600 flex flex-col items-center justify-center"
+                    onClick={() => toast.success("Data exported as PDF successfully")}
+                  >
+                    <FileDown className="h-8 w-8 mb-2 text-red-500" />
+                    <span className="text-white">PDF Format</span>
+                    <span className="text-xs text-gray-400 mt-1">Formatted report</span>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </motion.div>
 
       {/* Report Viewing Dialog */}
