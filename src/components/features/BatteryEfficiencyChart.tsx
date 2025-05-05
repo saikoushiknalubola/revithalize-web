@@ -3,7 +3,7 @@ import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { useScreenSize } from '@/hooks/use-mobile';
 
-// Mock data for the battery efficiency chart
+// Extended data for the battery efficiency chart
 const batteryEfficiencyData = [
   { month: 'Jan', efficiency: 95, temperature: 27, range: 155 },
   { month: 'Feb', efficiency: 94, temperature: 28, range: 152 },
@@ -11,6 +11,12 @@ const batteryEfficiencyData = [
   { month: 'Apr', efficiency: 92, temperature: 32, range: 145 },
   { month: 'May', efficiency: 91, temperature: 35, range: 141 },
   { month: 'Jun', efficiency: 90, temperature: 36, range: 138 },
+  { month: 'Jul', efficiency: 89, temperature: 38, range: 135 },
+  { month: 'Aug', efficiency: 88, temperature: 39, range: 132 },
+  { month: 'Sep', efficiency: 90, temperature: 36, range: 138 },
+  { month: 'Oct', efficiency: 91, temperature: 33, range: 142 },
+  { month: 'Nov', efficiency: 93, temperature: 30, range: 146 },
+  { month: 'Dec', efficiency: 94, temperature: 28, range: 150 },
 ];
 
 export function BatteryEfficiencyChart() {

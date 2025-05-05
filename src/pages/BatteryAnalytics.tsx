@@ -9,7 +9,13 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { FileDown, FileText, BarChart3, Eye, Calendar, Droplets, Zap, Download, FileBarChart } from 'lucide-react';
 import { generateBatteryReportPDF } from '@/utils/pdfGenerator';
-import { generateAnalyticsReportPDF } from '@/utils/analyticsReportPDF';
+import { 
+  generateAnalyticsReportPDF, 
+  generateExportDataPDF,
+  generatePowerEfficiencyPDF,
+  generateChargingCyclesPDF,
+  generateEnvironmentalImpactPDF
+} from '@/utils/analyticsReportPDF';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import {
@@ -20,6 +26,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 interface HistoricalReport {
   date: string;
@@ -31,6 +38,7 @@ export default function BatteryAnalytics() {
   const [selectedReport, setSelectedReport] = useState<HistoricalReport | null>(null);
   const [reportDialogOpen, setReportDialogOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
+  const [exportFormat, setExportFormat] = useState('pdf');
   
   // Historical reports data
   const historicalReports: HistoricalReport[] = [
@@ -178,7 +186,7 @@ export default function BatteryAnalytics() {
     // Mock analytics data
     const analyticsData = {
       periodStart: '2024-01-01',
-      periodEnd: '2024-04-30',
+      periodEnd: '2024-05-05',
       batteryHealthStart: 100,
       batteryHealthEnd: 97,
       efficiencyTrend: [
@@ -186,12 +194,14 @@ export default function BatteryAnalytics() {
         { month: 'Feb', value: 94 },
         { month: 'Mar', value: 93 },
         { month: 'Apr', value: 92 },
+        { month: 'May', value: 91 },
       ],
       tempTrend: [
         { month: 'Jan', value: 27 },
         { month: 'Feb', value: 28 },
         { month: 'Mar', value: 30 },
         { month: 'Apr', value: 32 },
+        { month: 'May', value: 35 },
       ],
       chargeCycles: 124,
       topSpeed: 55,
@@ -201,6 +211,7 @@ export default function BatteryAnalytics() {
         { month: 'Feb', value: 152 },
         { month: 'Mar', value: 148 },
         { month: 'Apr', value: 145 },
+        { month: 'May', value: 141 },
       ],
       powerConsumption: 8.2, // kWh/100km
       carbonSaved: 120, // kg
@@ -223,6 +234,123 @@ export default function BatteryAnalytics() {
   const handleViewReport = (report: HistoricalReport) => {
     setSelectedReport(report);
     setReportDialogOpen(true);
+  };
+
+  // Handle export data from cards
+  const handleExportCardData = (dataType: string) => {
+    // Get user data from localStorage
+    const userData = JSON.parse(localStorage.getItem('user') || '{}');
+    const userName = userData.fullName || userData.name || 'Customer';
+    
+    // Generate appropriate PDF based on data type
+    const pdfBlob = generateExportDataPDF(dataType, userName, vehicleData);
+    
+    // Create download link
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(pdfBlob);
+    link.download = `${dataType}-report-${new Date().toISOString().split('T')[0]}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    toast.success(`${dataType} data exported successfully`);
+  };
+
+  // Export data based on format
+  const handleRawDataExport = (format: string) => {
+    const userData = JSON.parse(localStorage.getItem('user') || '{}');
+    const userName = userData.fullName || userData.name || 'Customer';
+    
+    if (format === 'pdf') {
+      // Generate complete analytics report
+      const analyticsData = {
+        periodStart: '2024-01-01',
+        periodEnd: '2024-05-05',
+        batteryHealthStart: 100,
+        batteryHealthEnd: 97,
+        efficiencyTrend: [
+          { month: 'Jan', value: 95 },
+          { month: 'Feb', value: 94 },
+          { month: 'Mar', value: 93 },
+          { month: 'Apr', value: 92 },
+          { month: 'May', value: 91 },
+        ],
+        tempTrend: [
+          { month: 'Jan', value: 27 },
+          { month: 'Feb', value: 28 },
+          { month: 'Mar', value: 30 },
+          { month: 'Apr', value: 32 },
+          { month: 'May', value: 35 },
+        ],
+        chargeCycles: 124,
+        topSpeed: 55,
+        avgSpeed: 32,
+        rangeTrend: [
+          { month: 'Jan', value: 155 },
+          { month: 'Feb', value: 152 },
+          { month: 'Mar', value: 148 },
+          { month: 'Apr', value: 145 },
+          { month: 'May', value: 141 },
+        ],
+        powerConsumption: 8.2,
+        carbonSaved: 120,
+      };
+      
+      const pdfBlob = generateAnalyticsReportPDF(analyticsData, userName, vehicleData);
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(pdfBlob);
+      link.download = `battery-data-${new Date().toISOString().split('T')[0]}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else if (format === 'csv') {
+      // Mock CSV data export
+      const csvContent = `Date,Efficiency,Temperature,Range,Power,Cycles
+2024-01-01,95,27,155,2.1,10
+2024-02-01,94,28,152,2.0,25
+2024-03-01,93,30,148,2.2,42
+2024-04-01,92,32,145,2.1,58
+2024-05-01,91,35,141,2.0,75`;
+      
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `battery-data-${new Date().toISOString().split('T')[0]}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else if (format === 'json') {
+      // Mock JSON data export
+      const jsonData = {
+        user: userName,
+        vehicle: vehicleData,
+        batteryData: {
+          monthly: [
+            { month: 'Jan', efficiency: 95, temperature: 27, range: 155, power: 2.1, cycles: 10 },
+            { month: 'Feb', efficiency: 94, temperature: 28, range: 152, power: 2.0, cycles: 25 },
+            { month: 'Mar', efficiency: 93, temperature: 30, range: 148, power: 2.2, cycles: 42 },
+            { month: 'Apr', efficiency: 92, temperature: 32, range: 145, power: 2.1, cycles: 58 },
+            { month: 'May', efficiency: 91, temperature: 35, range: 141, power: 2.0, cycles: 75 }
+          ],
+          health: {
+            current: 97,
+            projected: 90,
+            cellBalance: 95,
+            capacityRetention: 97
+          }
+        }
+      };
+      
+      const blob = new Blob([JSON.stringify(jsonData, null, 2)], { type: 'application/json' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `battery-data-${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+    
+    toast.success(`Data exported as ${format.toUpperCase()} successfully`);
   };
 
   // Vehicle data for analytics report
@@ -332,7 +460,12 @@ export default function BatteryAnalytics() {
                   </div>
                 </CardContent>
                 <CardFooter className="pt-0 pb-3">
-                  <Button variant="outline" size="sm" className="text-xs w-full border-gray-700">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="text-xs w-full border-gray-700 bg-gray-700 text-white hover:bg-gray-600"
+                    onClick={() => handleExportCardData('power')}
+                  >
                     <Download className="mr-1 h-3 w-3" />
                     Export Data
                   </Button>
@@ -372,7 +505,12 @@ export default function BatteryAnalytics() {
                   </div>
                 </CardContent>
                 <CardFooter className="pt-0 pb-3">
-                  <Button variant="outline" size="sm" className="text-xs w-full border-gray-700">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="text-xs w-full border-gray-700 bg-gray-700 text-white hover:bg-gray-600"
+                    onClick={() => handleExportCardData('charging')}
+                  >
                     <Download className="mr-1 h-3 w-3" />
                     Export Data
                   </Button>
@@ -406,7 +544,12 @@ export default function BatteryAnalytics() {
                   </div>
                 </CardContent>
                 <CardFooter className="pt-0 pb-3">
-                  <Button variant="outline" size="sm" className="text-xs w-full border-gray-700">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="text-xs w-full border-gray-700 bg-gray-700 text-white hover:bg-gray-600"
+                    onClick={() => handleExportCardData('environmental')}
+                  >
                     <Download className="mr-1 h-3 w-3" />
                     Export Data
                   </Button>
@@ -479,36 +622,57 @@ export default function BatteryAnalytics() {
                 </CardTitle>
                 <CardDescription>Download your battery data in various formats</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="space-y-4">
+                <div className="flex justify-center">
+                  <ToggleGroup 
+                    type="single" 
+                    value={exportFormat} 
+                    onValueChange={(value) => {
+                      if (value) setExportFormat(value);
+                    }}
+                    className="bg-gray-800 p-1 rounded-md"
+                  >
+                    <ToggleGroupItem value="csv" className="data-[state=on]:bg-gray-700 data-[state=on]:text-white text-sm">
+                      CSV Format
+                    </ToggleGroupItem>
+                    <ToggleGroupItem value="json" className="data-[state=on]:bg-gray-700 data-[state=on]:text-white text-sm">
+                      JSON Format
+                    </ToggleGroupItem>
+                    <ToggleGroupItem value="pdf" className="data-[state=on]:bg-gray-700 data-[state=on]:text-white text-sm">
+                      PDF Format
+                    </ToggleGroupItem>
+                  </ToggleGroup>
+                </div>
+                
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <Button
                     variant="outline"
-                    className="h-auto py-6 border-gray-700 hover:border-gray-600 flex flex-col items-center justify-center"
-                    onClick={() => toast.success("Data exported as CSV successfully")}
+                    className="h-auto py-6 border-gray-700 bg-gray-700 hover:bg-gray-600 flex flex-col items-center justify-center text-white"
+                    onClick={() => handleRawDataExport('csv')}
                   >
                     <FileDown className="h-8 w-8 mb-2 text-green-500" />
-                    <span className="text-white">CSV Format</span>
-                    <span className="text-xs text-gray-400 mt-1">Complete raw data</span>
+                    <span>CSV Format</span>
+                    <span className="text-xs text-gray-300 mt-1">Complete raw data</span>
                   </Button>
                   
                   <Button
                     variant="outline"
-                    className="h-auto py-6 border-gray-700 hover:border-gray-600 flex flex-col items-center justify-center"
-                    onClick={() => toast.success("Data exported as JSON successfully")}
+                    className="h-auto py-6 border-gray-700 bg-gray-700 hover:bg-gray-600 flex flex-col items-center justify-center text-white"
+                    onClick={() => handleRawDataExport('json')}
                   >
                     <FileDown className="h-8 w-8 mb-2 text-blue-500" />
-                    <span className="text-white">JSON Format</span>
-                    <span className="text-xs text-gray-400 mt-1">For developers</span>
+                    <span>JSON Format</span>
+                    <span className="text-xs text-gray-300 mt-1">For developers</span>
                   </Button>
                   
                   <Button
                     variant="outline"
-                    className="h-auto py-6 border-gray-700 hover:border-gray-600 flex flex-col items-center justify-center"
-                    onClick={() => toast.success("Data exported as PDF successfully")}
+                    className="h-auto py-6 border-gray-700 bg-gray-700 hover:bg-gray-600 flex flex-col items-center justify-center text-white"
+                    onClick={() => handleRawDataExport('pdf')}
                   >
                     <FileDown className="h-8 w-8 mb-2 text-red-500" />
-                    <span className="text-white">PDF Format</span>
-                    <span className="text-xs text-gray-400 mt-1">Formatted report</span>
+                    <span>PDF Format</span>
+                    <span className="text-xs text-gray-300 mt-1">Formatted report</span>
                   </Button>
                 </div>
               </CardContent>
@@ -539,7 +703,7 @@ export default function BatteryAnalytics() {
             <Button 
               variant="outline" 
               onClick={() => setReportDialogOpen(false)}
-              className="mr-2 border-gray-700"
+              className="mr-2 border-gray-700 bg-gray-700 text-white hover:bg-gray-600"
             >
               Close
             </Button>
