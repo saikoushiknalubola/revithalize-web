@@ -553,7 +553,7 @@ export const generateEnvironmentalImpactPDF = (userName: string, vehicleData: an
       [102, 102, 102],  // Coal - grey
     ];
     
-    doc.setFillColor(...colors[i]);
+    doc.setFillColor(colors[i][0], colors[i][1], colors[i][2]);
     doc.roundedRect(margin.left + 30, barY, source.percentage, 8, 1, 1, 'F');
   });
   
