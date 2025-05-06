@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, Battery, MapPin, BarChart2, User, Settings, Menu, X, LogOut, Bike, HelpCircle, Info } from 'lucide-react';
+import { Home, Battery, MapPin, BarChart2, User, Settings, Menu, X, LogOut, Bike, HelpCircle, Info, Shield, Leaf, ScanLine, Cpu } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useState, useEffect } from 'react';
 import { useScreenSize } from '@/hooks/use-mobile';
@@ -71,6 +71,14 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
     { icon: BarChart2, label: "Analytics", to: "/analytics" },
   ];
 
+  // Add the new innovative features to the sidebar
+  const innovativeFeatures = [
+    { icon: Shield, label: "Battery Twin", to: "/battery-twin" },
+    { icon: Leaf, label: "Eco Program", to: "/eco-program" },
+    { icon: ScanLine, label: "AI Range", to: "/ai-range" },
+    { icon: Cpu, label: "Smart Grid", to: "/smart-grid" },
+  ];
+
   const secondaryNavItems = [
     { icon: User, label: "Profile", to: "/profile" },
     { icon: HelpCircle, label: "Support", to: "/support" },
@@ -80,7 +88,8 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
 
   // Combined nav items for mobile bottom navigation (limit to 5)
   const mobileNavItems = [
-    ...mainNavItems,
+    ...mainNavItems.slice(0, 3), // Just include first 3 from main items
+    innovativeFeatures[0], // Include just the Battery Twin
     secondaryNavItems[0], // Just include Profile from secondary items
   ];
 
@@ -140,13 +149,31 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
             ))}
             
             <div className="mt-6 mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              Innovative Features
+            </div>
+            {innovativeFeatures.map((item, index) => (
+              <div 
+                key={item.to}
+                className="animate-fade-in"
+                style={{ animationDelay: `${(index + mainNavItems.length) * 50}ms` }}
+              >
+                <NavItem
+                  icon={item.icon}
+                  label={item.label}
+                  to={item.to}
+                  active={location.pathname === item.to}
+                />
+              </div>
+            ))}
+            
+            <div className="mt-6 mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
               Account
             </div>
             {secondaryNavItems.map((item, index) => (
               <div 
                 key={item.to}
                 className="animate-fade-in"
-                style={{ animationDelay: `${(index + mainNavItems.length) * 50}ms` }}
+                style={{ animationDelay: `${(index + mainNavItems.length + innovativeFeatures.length) * 50}ms` }}
               >
                 <NavItem
                   icon={item.icon}
@@ -213,7 +240,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
           </div>
         </div>
         
-        {/* Improved Mobile bottom navigation */}
+        {/* Improved Mobile bottom navigation - updated with innovative features */}
         <div className="fixed inset-x-0 bottom-0 bg-black/90 backdrop-blur-md border-t border-gray-800 md:hidden z-30 shadow-lg">
           <div className="flex justify-around items-center py-2">
             {mobileNavItems.map((item, index) => {

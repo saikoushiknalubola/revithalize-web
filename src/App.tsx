@@ -16,6 +16,10 @@ import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
 import Support from "./pages/Support";
 import About from "./pages/About";
+import { VirtualBatteryTwin } from "./components/features/VirtualBatteryTwin";
+import { EcoGamification } from "./components/features/EcoGamification";
+import { AdaptiveRangePrediction } from "./components/features/AdaptiveRangePrediction";
+import { SmartGridIntegration } from "./components/features/SmartGridIntegration";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -47,6 +51,12 @@ const App = () => (
           <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
           <Route path="/support" element={<ProtectedRoute><Support /></ProtectedRoute>} />
           <Route path="/about" element={<ProtectedRoute><About /></ProtectedRoute>} />
+          
+          {/* New innovative feature routes */}
+          <Route path="/battery-twin" element={<ProtectedRoute><div className="p-4"><VirtualBatteryTwin /></div></ProtectedRoute>} />
+          <Route path="/eco-program" element={<ProtectedRoute><div className="p-4"><EcoGamification /></div></ProtectedRoute>} />
+          <Route path="/ai-range" element={<ProtectedRoute><div className="p-4"><AdaptiveRangePrediction /></div></ProtectedRoute>} />
+          <Route path="/smart-grid" element={<ProtectedRoute><div className="p-4"><SmartGridIntegration /></div></ProtectedRoute>} />
           
           {/* Not found route */}
           <Route path="*" element={<NotFound />} />
