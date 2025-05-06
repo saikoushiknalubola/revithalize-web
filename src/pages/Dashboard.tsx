@@ -1,21 +1,28 @@
 
 import React, { useEffect, useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { Battery, Bolt, Gauge, ThermometerSnowflake, Clock, Zap, MapPin, Bell, Bike, Sparkles, Shield, Calendar, Leaf, Cpu } from 'lucide-react';
+import { Battery, Bolt, Gauge, ThermometerSnowflake, Clock, Zap, MapPin, Bell, Bike, Sparkles, Shield, Calendar, Leaf, Cpu, BarChart2, ScanLine, Lightbulb, Activity } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { BatteryMetrics } from '@/components/features/BatteryMetrics';
 import { ChargingScheduler } from '@/components/features/ChargingScheduler';
 import { IoTInsights } from '@/components/features/IoTInsights';
 import { EcoScore } from '@/components/features/EcoScore';
+import { VirtualBatteryTwin } from '@/components/features/VirtualBatteryTwin';
+import { EcoGamification } from '@/components/features/EcoGamification';
+import { AdaptiveRangePrediction } from '@/components/features/AdaptiveRangePrediction';
+import { SmartGridIntegration } from '@/components/features/SmartGridIntegration';
 import { useNavigate } from 'react-router-dom';
 import { useScreenSize } from '@/hooks/use-mobile';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const [userName, setUserName] = useState('User');
   const { isMobile, isTablet } = useScreenSize();
+  const [activeFeature, setActiveFeature] = useState<string | null>(null);
+  const [showAllFeatures, setShowAllFeatures] = useState(false);
   
   // Check for authentication and get user data
   useEffect(() => {
@@ -52,9 +59,13 @@ export default function Dashboard() {
 
   // Smart features handlers
   const handleSmartFeature = (feature: string) => {
-    toast.info(`${feature} activated`, {
-      description: 'This feature will be available in the next update'
-    });
+    setActiveFeature(feature === activeFeature ? null : feature);
+    
+    if (feature !== activeFeature) {
+      toast.info(`${feature} activated`, {
+        description: 'Detailed information is now available'
+      });
+    }
   };
 
   // Animation variants for staggered animations
@@ -80,6 +91,49 @@ export default function Dashboard() {
     }
   };
 
+  const smartFeatures = [
+    {
+      id: 'battery-twin',
+      title: "Virtual Battery Twin",
+      description: "Real-time 3D visualization of battery cell health",
+      icon: Shield,
+      color: "bg-gradient-to-br from-blue-900/40 to-blue-800/20",
+      iconColor: "text-blue-400",
+      borderColor: "border-blue-600/20",
+      component: VirtualBatteryTwin
+    },
+    {
+      id: 'eco-gamification',
+      title: "Eco Riding Program",
+      description: "Complete challenges and earn rewards for eco-friendly riding",
+      icon: Leaf,
+      color: "bg-gradient-to-br from-purple-900/40 to-purple-800/20",
+      iconColor: "text-purple-400",
+      borderColor: "border-purple-600/20",
+      component: EcoGamification
+    },
+    {
+      id: 'range-prediction',
+      title: "AI Range Prediction",
+      description: "Accurate range forecasting with adaptive learning",
+      icon: ScanLine,
+      color: "bg-gradient-to-br from-green-900/40 to-green-800/20",
+      iconColor: "text-green-400", 
+      borderColor: "border-green-600/20",
+      component: AdaptiveRangePrediction
+    },
+    {
+      id: 'smart-grid',
+      title: "Smart Grid Integration",
+      description: "Optimize charging and participate in grid energy sharing",
+      icon: Cpu,
+      color: "bg-gradient-to-br from-red-900/40 to-red-800/20",
+      iconColor: "text-red-400",
+      borderColor: "border-red-600/20",
+      component: SmartGridIntegration
+    }
+  ];
+
   return (
     <DashboardLayout>
       <motion.div 
@@ -89,16 +143,16 @@ export default function Dashboard() {
         animate="visible"
       >
         <motion.header variants={itemVariants} className="animate-fade-in">
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-heading font-bold text-white">Welcome back, {userName}</h1>
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-revithalize-green to-revithalize-blue">Welcome back, {userName}</h1>
           <p className="text-gray-400 mt-1 text-sm sm:text-base">Here's the current status of your EV</p>
         </motion.header>
 
         {/* Vehicle status overview */}
         <motion.div 
-          className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4"
+          className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4"
           variants={itemVariants}
         >
-          {/* Vehicle status cards */}
+          {/* Vehicle status cards - enhanced with better visuals */}
           <motion.div
             variants={itemVariants}
             whileHover={{ scale: 1.02, boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)' }}
@@ -205,6 +259,18 @@ export default function Dashboard() {
           </Card>
         </motion.div>
 
+        {/* Show active feature component */}
+        {activeFeature && (
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            {smartFeatures.find(f => f.id === activeFeature)?.component && 
+              React.createElement(smartFeatures.find(f => f.id === activeFeature)?.component as React.ComponentType)}
+          </motion.div>
+        )}
+
         {/* Analytics Section */}
         <motion.div 
           className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-6" 
@@ -277,7 +343,7 @@ export default function Dashboard() {
           </div>
         </motion.div>
 
-        {/* Smart Features Section - NEW */}
+        {/* Smart Features Section - ENHANCED */}
         <motion.div 
           className="mt-6"
           initial={{ opacity: 0, y: 30 }}
@@ -285,49 +351,19 @@ export default function Dashboard() {
           transition={{ duration: 0.6, delay: 0.3 }}
         >
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-white flex items-center">
+            <h2 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-revithalize-green to-revithalize-blue flex items-center">
               <Sparkles className="mr-2 h-5 w-5 text-revithalize-green" />
               Smart Features
             </h2>
-            <button className="text-sm text-revithalize-green hover:underline">View All</button>
+            <Button variant="outline" size="sm" className="bg-gray-800 border-gray-700 text-gray-300 hover:bg-gray-700 hover:text-white" onClick={() => setShowAllFeatures(!showAllFeatures)}>
+              {showAllFeatures ? 'Show Less' : 'Show All'}
+            </Button>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {[
-              {
-                title: "Battery Health Monitor",
-                description: "Advanced battery cell monitoring with predictive analysis",
-                icon: Shield,
-                color: "bg-gradient-to-br from-blue-900/40 to-blue-800/20",
-                iconColor: "text-blue-400",
-                borderColor: "border-blue-600/20"
-              },
-              {
-                title: "Maintenance Reminders",
-                description: "Intelligent service scheduling based on usage patterns",
-                icon: Calendar,
-                color: "bg-gradient-to-br from-purple-900/40 to-purple-800/20",
-                iconColor: "text-purple-400",
-                borderColor: "border-purple-600/20"
-              },
-              {
-                title: "Eco-Driving Coach",
-                description: "Real-time guidance to maximize range and efficiency",
-                icon: Leaf,
-                color: "bg-gradient-to-br from-green-900/40 to-green-800/20",
-                iconColor: "text-green-400", 
-                borderColor: "border-green-600/20"
-              },
-              {
-                title: "Performance Tuning",
-                description: "Customize your EV's response and power delivery",
-                icon: Cpu,
-                color: "bg-gradient-to-br from-red-900/40 to-red-800/20",
-                iconColor: "text-red-400",
-                borderColor: "border-red-600/20"
-              }
-            ].map((feature, index) => {
+            {smartFeatures.map((feature, index) => {
               const Icon = feature.icon;
+              const isActive = activeFeature === feature.id;
               return (
                 <motion.div
                   key={index}
@@ -340,11 +376,18 @@ export default function Dashboard() {
                     type: "spring",
                     stiffness: 200
                   }}
-                  onClick={() => handleSmartFeature(feature.title)}
-                  className={`${feature.color} border ${feature.borderColor} rounded-lg p-5 cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300`}
+                  onClick={() => handleSmartFeature(feature.id)}
+                  className={cn(
+                    feature.color, 
+                    `border ${feature.borderColor} rounded-lg p-5 cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300`,
+                    isActive ? 'ring-2 ring-white/30' : ''
+                  )}
                 >
                   <div className="flex items-start">
-                    <div className="bg-black/30 p-3 rounded-lg mr-4">
+                    <div className={cn(
+                      "bg-black/30 p-3 rounded-lg mr-4",
+                      isActive ? "bg-black/50" : ""
+                    )}>
                       <Icon className={`h-6 w-6 ${feature.iconColor}`} />
                     </div>
                     <div>
@@ -360,6 +403,61 @@ export default function Dashboard() {
               );
             })}
           </div>
+
+          {/* Only show if showAllFeatures is true */}
+          {showAllFeatures && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4"
+            >
+              <div className="bg-gradient-to-br from-indigo-900/40 to-indigo-800/20 border border-indigo-600/20 rounded-lg p-5 hover:shadow-xl transition-all duration-300">
+                <div className="flex items-start">
+                  <div className="bg-black/30 p-3 rounded-lg mr-4">
+                    <Activity className="h-6 w-6 text-indigo-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-white font-medium mb-1">Predictive Maintenance</h3>
+                    <p className="text-gray-400 text-sm">AI-powered service scheduling based on riding patterns</p>
+                  </div>
+                </div>
+                <div className="mt-4 ml-16">
+                  <span className="text-xs bg-black/30 px-2 py-1 rounded-full text-white">Coming Soon</span>
+                </div>
+              </div>
+              
+              <div className="bg-gradient-to-br from-amber-900/40 to-amber-800/20 border border-amber-600/20 rounded-lg p-5 hover:shadow-xl transition-all duration-300">
+                <div className="flex items-start">
+                  <div className="bg-black/30 p-3 rounded-lg mr-4">
+                    <Lightbulb className="h-6 w-6 text-amber-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-white font-medium mb-1">Smart Home Integration</h3>
+                    <p className="text-gray-400 text-sm">Connect your EV with your smart home ecosystem</p>
+                  </div>
+                </div>
+                <div className="mt-4 ml-16">
+                  <span className="text-xs bg-black/30 px-2 py-1 rounded-full text-white">Coming Soon</span>
+                </div>
+              </div>
+              
+              <div className="bg-gradient-to-br from-teal-900/40 to-teal-800/20 border border-teal-600/20 rounded-lg p-5 hover:shadow-xl transition-all duration-300">
+                <div className="flex items-start">
+                  <div className="bg-black/30 p-3 rounded-lg mr-4">
+                    <BarChart2 className="h-6 w-6 text-teal-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-white font-medium mb-1">Performance Tuning</h3>
+                    <p className="text-gray-400 text-sm">Customize your EV's response and power delivery</p>
+                  </div>
+                </div>
+                <div className="mt-4 ml-16">
+                  <span className="text-xs bg-black/30 px-2 py-1 rounded-full text-white">Coming Soon</span>
+                </div>
+              </div>
+            </motion.div>
+          )}
         </motion.div>
       </motion.div>
     </DashboardLayout>
