@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Battery, Bolt, Gauge, ThermometerSnowflake, Clock, Zap, MapPin, Bell, Bike, Sparkles, Shield, Calendar, Leaf, Cpu, BarChart2, ScanLine, Lightbulb, Activity } from 'lucide-react';
@@ -16,6 +15,7 @@ import { useScreenSize } from '@/hooks/use-mobile';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 export default function Dashboard() {
   const navigate = useNavigate();
