@@ -10,7 +10,7 @@ import { VirtualBatteryTwin } from '@/components/features/VirtualBatteryTwin';
 import { EcoGamification } from '@/components/features/EcoGamification';
 import { AdaptiveRangePrediction } from '@/components/features/AdaptiveRangePrediction';
 import { SmartGridIntegration } from '@/components/features/SmartGridIntegration';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useScreenSize } from '@/hooks/use-mobile';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
@@ -19,6 +19,7 @@ import { cn } from '@/lib/utils';
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const { feature } = useParams<{ feature?: string }>();
   const [userName, setUserName] = useState('User');
   const { isMobile, isTablet } = useScreenSize();
   const [activeFeature, setActiveFeature] = useState<string | null>(null);
@@ -38,6 +39,13 @@ export default function Dashboard() {
       }
     }
   }, [navigate]);
+
+  // Set active feature from URL parameter if present
+  useEffect(() => {
+    if (feature) {
+      setActiveFeature(feature);
+    }
+  }, [feature]);
 
   // Function handlers for quick actions
   const handleFindChargingStations = () => {
@@ -59,12 +67,17 @@ export default function Dashboard() {
 
   // Smart features handlers
   const handleSmartFeature = (feature: string) => {
-    setActiveFeature(feature === activeFeature ? null : feature);
+    const newActiveFeature = feature === activeFeature ? null : feature;
+    setActiveFeature(newActiveFeature);
     
-    if (feature !== activeFeature) {
-      toast.info(`${feature} activated`, {
+    // Update URL without navigating
+    if (newActiveFeature) {
+      navigate(`/dashboard/${newActiveFeature}`, { replace: true });
+      toast.info(`${smartFeatures.find(f => f.id === newActiveFeature)?.title} activated`, {
         description: 'Detailed information is now available'
       });
+    } else {
+      navigate('/dashboard', { replace: true });
     }
   };
 
@@ -103,7 +116,7 @@ export default function Dashboard() {
       component: VirtualBatteryTwin
     },
     {
-      id: 'eco-gamification',
+      id: 'eco-program',
       title: "Eco Riding Program",
       description: "Complete challenges and earn rewards for eco-friendly riding",
       icon: Leaf,
@@ -135,7 +148,7 @@ export default function Dashboard() {
   ];
 
   return (
-    <DashboardLayout>
+    <DashboardLayout activeFeature={activeFeature} setActiveFeature={setActiveFeature}>
       <motion.div 
         className="space-y-4 sm:space-y-6 px-2 sm:px-4 pb-16 md:pb-4"
         variants={containerVariants}
@@ -265,83 +278,90 @@ export default function Dashboard() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
+            className="border-2 border-gray-800/50 p-4 rounded-lg shadow-lg"
           >
             {smartFeatures.find(f => f.id === activeFeature)?.component && 
               React.createElement(smartFeatures.find(f => f.id === activeFeature)?.component as React.ComponentType)}
           </motion.div>
         )}
 
-        {/* Analytics Section */}
-        <motion.div 
-          className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-6" 
-          variants={itemVariants}
-        >
-          <BatteryMetrics />
-          <ChargingScheduler />
-        </motion.div>
+        {/* Analytics Section - Hide when a feature is active on mobile */}
+        {(!activeFeature || !isMobile) && (
+          <motion.div 
+            className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-6" 
+            variants={itemVariants}
+          >
+            <BatteryMetrics />
+            <ChargingScheduler />
+          </motion.div>
+        )}
 
-        {/* EcoScore Component */}
-        <motion.div variants={itemVariants}>
-          <EcoScore score={87} scoreChange={3} />
-        </motion.div>
+        {/* EcoScore Component - Hide when a feature is active on mobile */}
+        {(!activeFeature || !isMobile) && (
+          <motion.div variants={itemVariants}>
+            <EcoScore score={87} scoreChange={3} />
+          </motion.div>
+        )}
 
-        {/* Additional Analytics */}
-        <motion.div 
-          className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-6" 
-          variants={itemVariants}
-        >
-          <div className="lg:col-span-2">
-            <IoTInsights />
-          </div>
+        {/* Additional Analytics - Hide when a feature is active on mobile */}
+        {(!activeFeature || !isMobile) && (
+          <motion.div 
+            className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-6" 
+            variants={itemVariants}
+          >
+            <div className="lg:col-span-2">
+              <IoTInsights />
+            </div>
 
-          <div>
-            <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-800 shadow-lg">
-              <CardHeader className="pb-3 pt-3 px-3 sm:pb-4 sm:pt-4 sm:px-4">
-                <CardTitle className="text-white text-lg sm:text-xl">Quick Actions</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2 sm:space-y-3 px-3 pb-3 sm:px-4 sm:pb-4">
-                <motion.button 
-                  onClick={handleFindChargingStations}
-                  className="w-full bg-gray-800 hover:bg-gray-700 text-white font-medium py-2 sm:py-3 px-3 sm:px-4 rounded-lg flex items-center justify-between group transition-all duration-300 shadow-md hover:shadow-lg text-sm sm:text-base"
-                  whileHover={{ scale: 1.02, x: 5 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <span className="flex items-center">
-                    <MapPin className="mr-2 h-4 w-4 sm:h-5 sm:w-5 text-revithalize-green" />
-                    Find Charging Stations
-                  </span>
-                  <span className="text-revithalize-green group-hover:translate-x-1 transition-transform">→</span>
-                </motion.button>
-                
-                <motion.button 
-                  onClick={handleRemoteCharging}
-                  className="w-full bg-gray-800 hover:bg-gray-700 text-white font-medium py-2 sm:py-3 px-3 sm:px-4 rounded-lg flex items-center justify-between group transition-all duration-300 shadow-md hover:shadow-lg text-sm sm:text-base"
-                  whileHover={{ scale: 1.02, x: 5 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <span className="flex items-center">
-                    <Bolt className="mr-2 h-4 w-4 sm:h-5 sm:w-5 text-revithalize-blue" />
-                    Start Remote Charging
-                  </span>
-                  <span className="text-revithalize-blue group-hover:translate-x-1 transition-transform">→</span>
-                </motion.button>
-                
-                <motion.button 
-                  onClick={handleSetChargeAlert}
-                  className="w-full bg-gray-800 hover:bg-gray-700 text-white font-medium py-2 sm:py-3 px-3 sm:px-4 rounded-lg flex items-center justify-between group transition-all duration-300 shadow-md hover:shadow-lg text-sm sm:text-base"
-                  whileHover={{ scale: 1.02, x: 5 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <span className="flex items-center">
-                    <Bell className="mr-2 h-4 w-4 sm:h-5 sm:w-5 text-yellow-400" />
-                    Set Charge Alert
-                  </span>
-                  <span className="text-yellow-400 group-hover:translate-x-1 transition-transform">→</span>
-                </motion.button>
-              </CardContent>
-            </Card>
-          </div>
-        </motion.div>
+            <div>
+              <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-800 shadow-lg">
+                <CardHeader className="pb-3 pt-3 px-3 sm:pb-4 sm:pt-4 sm:px-4">
+                  <CardTitle className="text-white text-lg sm:text-xl">Quick Actions</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2 sm:space-y-3 px-3 pb-3 sm:px-4 sm:pb-4">
+                  <motion.button 
+                    onClick={handleFindChargingStations}
+                    className="w-full bg-gray-800 hover:bg-gray-700 text-white font-medium py-2 sm:py-3 px-3 sm:px-4 rounded-lg flex items-center justify-between group transition-all duration-300 shadow-md hover:shadow-lg text-sm sm:text-base"
+                    whileHover={{ scale: 1.02, x: 5 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <span className="flex items-center">
+                      <MapPin className="mr-2 h-4 w-4 sm:h-5 sm:w-5 text-revithalize-green" />
+                      Find Charging Stations
+                    </span>
+                    <span className="text-revithalize-green group-hover:translate-x-1 transition-transform">→</span>
+                  </motion.button>
+                  
+                  <motion.button 
+                    onClick={handleRemoteCharging}
+                    className="w-full bg-gray-800 hover:bg-gray-700 text-white font-medium py-2 sm:py-3 px-3 sm:px-4 rounded-lg flex items-center justify-between group transition-all duration-300 shadow-md hover:shadow-lg text-sm sm:text-base"
+                    whileHover={{ scale: 1.02, x: 5 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <span className="flex items-center">
+                      <Bolt className="mr-2 h-4 w-4 sm:h-5 sm:w-5 text-revithalize-blue" />
+                      Start Remote Charging
+                    </span>
+                    <span className="text-revithalize-blue group-hover:translate-x-1 transition-transform">→</span>
+                  </motion.button>
+                  
+                  <motion.button 
+                    onClick={handleSetChargeAlert}
+                    className="w-full bg-gray-800 hover:bg-gray-700 text-white font-medium py-2 sm:py-3 px-3 sm:px-4 rounded-lg flex items-center justify-between group transition-all duration-300 shadow-md hover:shadow-lg text-sm sm:text-base"
+                    whileHover={{ scale: 1.02, x: 5 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <span className="flex items-center">
+                      <Bell className="mr-2 h-4 w-4 sm:h-5 sm:w-5 text-yellow-400" />
+                      Set Charge Alert
+                    </span>
+                    <span className="text-yellow-400 group-hover:translate-x-1 transition-transform">→</span>
+                  </motion.button>
+                </CardContent>
+              </Card>
+            </div>
+          </motion.div>
+        )}
 
         {/* Smart Features Section - ENHANCED */}
         <motion.div 

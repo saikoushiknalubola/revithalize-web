@@ -12,9 +12,30 @@ interface NavItemProps {
   label: string;
   to: string;
   active: boolean;
+  onClick?: () => void;
 }
 
-const NavItem = ({ icon: Icon, label, to, active }: NavItemProps) => {
+const NavItem = ({ icon: Icon, label, to, active, onClick }: NavItemProps) => {
+  if (onClick) {
+    return (
+      <button
+        onClick={onClick}
+        className={cn(
+          "flex w-full items-center gap-3 px-3 py-3 rounded-lg transition-all duration-200 font-poppins text-left",
+          active 
+            ? "bg-gradient-to-r from-revithalize-dark to-gray-800 text-revithalize-green shadow-md" 
+            : "text-gray-400 hover:text-white hover:bg-gray-800/50"
+        )}
+      >
+        <Icon size={20} className={cn(
+          "transition-all", 
+          active ? "text-revithalize-green" : "text-gray-400 group-hover:text-white"
+        )} />
+        <span className="font-medium">{label}</span>
+      </button>
+    );
+  }
+  
   return (
     <Link
       to={to}
@@ -34,7 +55,13 @@ const NavItem = ({ icon: Icon, label, to, active }: NavItemProps) => {
   );
 };
 
-export function DashboardLayout({ children }: { children: React.ReactNode }) {
+interface DashboardLayoutProps {
+  children: React.ReactNode;
+  activeFeature?: string | null;
+  setActiveFeature?: (feature: string | null) => void;
+}
+
+export function DashboardLayout({ children, activeFeature, setActiveFeature }: DashboardLayoutProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -71,12 +98,12 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
     { icon: BarChart2, label: "Analytics", to: "/analytics" },
   ];
 
-  // Add the new innovative features to the sidebar
+  // Updated innovative features to use feature toggle instead of direct navigation
   const innovativeFeatures = [
-    { icon: Shield, label: "Battery Twin", to: "/battery-twin" },
-    { icon: Leaf, label: "Eco Program", to: "/eco-program" },
-    { icon: ScanLine, label: "AI Range", to: "/ai-range" },
-    { icon: Cpu, label: "Smart Grid", to: "/smart-grid" },
+    { icon: Shield, label: "Battery Twin", id: "battery-twin" },
+    { icon: Leaf, label: "Eco Program", id: "eco-program" },
+    { icon: ScanLine, label: "AI Range", id: "range-prediction" },
+    { icon: Cpu, label: "Smart Grid", id: "smart-grid" },
   ];
 
   const secondaryNavItems = [
@@ -86,11 +113,33 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
     { icon: Settings, label: "Settings", to: "/settings" },
   ];
 
+  // Handle feature click
+  const handleFeatureClick = (featureId: string) => {
+    if (location.pathname !== '/dashboard') {
+      navigate(`/dashboard/${featureId}`);
+    } else if (setActiveFeature) {
+      setActiveFeature(featureId === activeFeature ? null : featureId);
+    }
+  };
+
   // Combined nav items for mobile bottom navigation (limit to 5)
   const mobileNavItems = [
-    ...mainNavItems.slice(0, 3), // Just include first 3 from main items
-    innovativeFeatures[0], // Include just the Battery Twin
-    secondaryNavItems[0], // Just include Profile from secondary items
+    { icon: Home, label: "Dashboard", to: "/dashboard" },
+    { icon: Bike, label: "Vehicle", to: "/vehicle" },
+    { icon: MapPin, label: "Map", to: "/map" },
+    // Add smart features as a button that opens sidebar instead
+    { 
+      icon: Shield, 
+      label: "Features", 
+      action: () => {
+        setSidebarOpen(true);
+        // Scroll to innovative features section
+        setTimeout(() => {
+          document.querySelector('.innovative-features-section')?.scrollIntoView({ behavior: 'smooth' });
+        }, 300);
+      }
+    },
+    { icon: User, label: "Profile", to: "/profile" },
   ];
 
   return (
@@ -148,20 +197,21 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
               </div>
             ))}
             
-            <div className="mt-6 mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            <div className="mt-6 mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider innovative-features-section">
               Innovative Features
             </div>
             {innovativeFeatures.map((item, index) => (
               <div 
-                key={item.to}
+                key={item.id}
                 className="animate-fade-in"
                 style={{ animationDelay: `${(index + mainNavItems.length) * 50}ms` }}
               >
                 <NavItem
                   icon={item.icon}
                   label={item.label}
-                  to={item.to}
-                  active={location.pathname === item.to}
+                  to=""
+                  active={activeFeature === item.id}
+                  onClick={() => handleFeatureClick(item.id)}
                 />
               </div>
             ))}
@@ -245,10 +295,36 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
           <div className="flex justify-around items-center py-2">
             {mobileNavItems.map((item, index) => {
               const Icon = item.icon;
-              const active = location.pathname === item.to;
+              const active = item.to ? location.pathname === item.to : false;
+              
+              // Handle items with action instead of navigation
+              if ('action' in item) {
+                return (
+                  <button 
+                    key={index} 
+                    onClick={item.action}
+                    className={cn(
+                      "flex flex-col items-center p-2 transition-all duration-200",
+                      active 
+                        ? "text-revithalize-green" 
+                        : "text-gray-400 hover:text-gray-200"
+                    )}
+                    style={{ animationDelay: `${index * 100}ms` }}
+                  >
+                    <div className={cn(
+                      "flex items-center justify-center h-8 w-8 rounded-full mb-1",
+                      active && "bg-revithalize-green/10"
+                    )}>
+                      <Icon size={20} className="text-revithalize-green animate-pulse" />
+                    </div>
+                    <span className="text-xs font-poppins">{item.label}</span>
+                  </button>
+                );
+              }
+              
               return (
                 <Link 
-                  key={item.to} 
+                  key={index} 
                   to={item.to}
                   className={cn(
                     "flex flex-col items-center p-2 transition-all duration-200",

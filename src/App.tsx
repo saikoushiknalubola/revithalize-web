@@ -16,10 +16,7 @@ import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
 import Support from "./pages/Support";
 import About from "./pages/About";
-import { VirtualBatteryTwin } from "./components/features/VirtualBatteryTwin";
-import { EcoGamification } from "./components/features/EcoGamification";
-import { AdaptiveRangePrediction } from "./components/features/AdaptiveRangePrediction";
-import { SmartGridIntegration } from "./components/features/SmartGridIntegration";
+// Remove separate imports of feature components since they'll be used within Dashboard
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -44,6 +41,7 @@ const App = () => (
           
           {/* Protected routes */}
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/dashboard/:feature" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/vehicle" element={<ProtectedRoute><VehicleDetails /></ProtectedRoute>} />
           <Route path="/map" element={<ProtectedRoute><MapView /></ProtectedRoute>} />
           <Route path="/analytics" element={<ProtectedRoute><BatteryAnalytics /></ProtectedRoute>} />
@@ -52,11 +50,7 @@ const App = () => (
           <Route path="/support" element={<ProtectedRoute><Support /></ProtectedRoute>} />
           <Route path="/about" element={<ProtectedRoute><About /></ProtectedRoute>} />
           
-          {/* New innovative feature routes */}
-          <Route path="/battery-twin" element={<ProtectedRoute><div className="p-4"><VirtualBatteryTwin /></div></ProtectedRoute>} />
-          <Route path="/eco-program" element={<ProtectedRoute><div className="p-4"><EcoGamification /></div></ProtectedRoute>} />
-          <Route path="/ai-range" element={<ProtectedRoute><div className="p-4"><AdaptiveRangePrediction /></div></ProtectedRoute>} />
-          <Route path="/smart-grid" element={<ProtectedRoute><div className="p-4"><SmartGridIntegration /></div></ProtectedRoute>} />
+          {/* Remove separate routes for innovative features since they'll be part of the dashboard */}
           
           {/* Not found route */}
           <Route path="*" element={<NotFound />} />
