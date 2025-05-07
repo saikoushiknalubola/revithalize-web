@@ -1,6 +1,7 @@
+
 import React, { useEffect, useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { Battery, Bolt, Gauge, ThermometerSnowflake, Clock, Zap, MapPin, Bell, Bike, Sparkles, Shield, Calendar, Leaf, Cpu, BarChart2, ScanLine, Lightbulb, Activity } from 'lucide-react';
+import { Battery, Bolt, Gauge, ThermometerSnowflake, MapPin, Bell, Shield, Leaf, ScanLine, Cpu } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { BatteryMetrics } from '@/components/features/BatteryMetrics';
 import { ChargingScheduler } from '@/components/features/ChargingScheduler';
@@ -14,7 +15,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useScreenSize } from '@/hooks/use-mobile';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 export default function Dashboard() {
@@ -23,7 +23,6 @@ export default function Dashboard() {
   const [userName, setUserName] = useState('User');
   const { isMobile, isTablet } = useScreenSize();
   const [activeFeature, setActiveFeature] = useState<string | null>(null);
-  const [showAllFeatures, setShowAllFeatures] = useState(false);
   
   // Check for authentication and get user data
   useEffect(() => {
@@ -65,22 +64,6 @@ export default function Dashboard() {
     });
   };
 
-  // Smart features handlers
-  const handleSmartFeature = (feature: string) => {
-    const newActiveFeature = feature === activeFeature ? null : feature;
-    setActiveFeature(newActiveFeature);
-    
-    // Update URL without navigating
-    if (newActiveFeature) {
-      navigate(`/dashboard/${newActiveFeature}`, { replace: true });
-      toast.info(`${smartFeatures.find(f => f.id === newActiveFeature)?.title} activated`, {
-        description: 'Detailed information is now available'
-      });
-    } else {
-      navigate('/dashboard', { replace: true });
-    }
-  };
-
   // Animation variants for staggered animations
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -104,6 +87,7 @@ export default function Dashboard() {
     }
   };
 
+  // Smart features definition
   const smartFeatures = [
     {
       id: 'battery-twin',
@@ -160,12 +144,12 @@ export default function Dashboard() {
           <p className="text-gray-400 mt-1 text-sm sm:text-base">Here's the current status of your EV</p>
         </motion.header>
 
-        {/* Vehicle status overview */}
+        {/* Vehicle status overview - simplified and consolidated */}
         <motion.div 
           className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4"
           variants={itemVariants}
         >
-          {/* Vehicle status cards - enhanced with better visuals */}
+          {/* Battery Level */}
           <motion.div
             variants={itemVariants}
             whileHover={{ scale: 1.02, boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)' }}
@@ -188,6 +172,7 @@ export default function Dashboard() {
             </CardContent>
           </motion.div>
 
+          {/* Power Output */}
           <motion.div
             variants={itemVariants}
             whileHover={{ scale: 1.02, boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)' }}
@@ -205,6 +190,7 @@ export default function Dashboard() {
             </CardContent>
           </motion.div>
 
+          {/* Temperature */}
           <motion.div
             variants={itemVariants}
             whileHover={{ scale: 1.02, boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)' }}
@@ -222,6 +208,7 @@ export default function Dashboard() {
             </CardContent>
           </motion.div>
 
+          {/* Health */}
           <motion.div
             variants={itemVariants}
             whileHover={{ scale: 1.02, boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)' }}
@@ -238,38 +225,6 @@ export default function Dashboard() {
               <p className="text-xs sm:text-sm text-gray-400 mt-1 sm:mt-2">System Optimal</p>
             </CardContent>
           </motion.div>
-        </motion.div>
-
-        {/* Vehicle Information */}
-        <motion.div variants={itemVariants}>
-          <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-800 shadow-lg">
-            <CardHeader className="pb-3 pt-3 px-3 sm:pb-4 sm:pt-4 sm:px-4">
-              <CardTitle className="text-white flex items-center text-lg sm:text-xl">
-                <Bike className="mr-2 h-4 w-4 sm:h-5 sm:w-5 text-revithalize-green" />
-                Hero Honda Passion AP02SK2409
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="px-3 pb-3 sm:px-4 sm:pb-4">
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4">
-                <div className="bg-gray-800/60 p-2 sm:p-3 rounded-lg backdrop-blur-md hover:bg-gray-800/80 transition-colors">
-                  <p className="text-gray-400 text-xs sm:text-sm">Battery Type</p>
-                  <p className="text-white font-medium mt-1 text-sm sm:text-base truncate">51.2V 45Ah Lithium-Ion</p>
-                </div>
-                <div className="bg-gray-800/60 p-2 sm:p-3 rounded-lg backdrop-blur-md hover:bg-gray-800/80 transition-colors">
-                  <p className="text-gray-400 text-xs sm:text-sm">Range</p>
-                  <p className="text-white font-medium mt-1 text-sm sm:text-base">Up to 110 km</p>
-                </div>
-                <div className="bg-gray-800/60 p-2 sm:p-3 rounded-lg backdrop-blur-md hover:bg-gray-800/80 transition-colors">
-                  <p className="text-gray-400 text-xs sm:text-sm">Charging Time</p>
-                  <p className="text-white font-medium mt-1 text-sm sm:text-base">3-4 Hours</p>
-                </div>
-                <div className="bg-gray-800/60 p-2 sm:p-3 rounded-lg backdrop-blur-md hover:bg-gray-800/80 transition-colors">
-                  <p className="text-gray-400 text-xs sm:text-sm">Max Speed</p>
-                  <p className="text-white font-medium mt-1 text-sm sm:text-base">55 km/h</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
         </motion.div>
 
         {/* Show active feature component */}
@@ -363,22 +318,17 @@ export default function Dashboard() {
           </motion.div>
         )}
 
-        {/* Smart Features Section - ENHANCED */}
+        {/* Smart Features Section - STREAMLINED */}
         <motion.div 
           className="mt-6"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
         >
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-revithalize-green to-revithalize-blue flex items-center">
-              <Sparkles className="mr-2 h-5 w-5 text-revithalize-green" />
-              Smart Features
-            </h2>
-            <Button variant="outline" size="sm" className="bg-gray-800 border-gray-700 text-gray-300 hover:bg-gray-700 hover:text-white" onClick={() => setShowAllFeatures(!showAllFeatures)}>
-              {showAllFeatures ? 'Show Less' : 'Show All'}
-            </Button>
-          </div>
+          <h2 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-revithalize-green to-revithalize-blue flex items-center mb-4">
+            <Shield className="mr-2 h-5 w-5 text-revithalize-green" />
+            Smart Features
+          </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {smartFeatures.map((feature, index) => {
@@ -386,7 +336,7 @@ export default function Dashboard() {
               const isActive = activeFeature === feature.id;
               return (
                 <motion.div
-                  key={index}
+                  key={feature.id}
                   whileHover={{ scale: 1.03, y: -5 }}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -396,7 +346,7 @@ export default function Dashboard() {
                     type: "spring",
                     stiffness: 200
                   }}
-                  onClick={() => handleSmartFeature(feature.id)}
+                  onClick={() => setActiveFeature(isActive ? null : feature.id)}
                   className={cn(
                     feature.color, 
                     `border ${feature.borderColor} rounded-lg p-5 cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300`,
@@ -415,69 +365,10 @@ export default function Dashboard() {
                       <p className="text-gray-400 text-sm">{feature.description}</p>
                     </div>
                   </div>
-                  <div className="mt-4 ml-16 flex justify-between items-center">
-                    <span className="text-xs text-gray-500">New</span>
-                    <span className="text-xs bg-black/30 px-2 py-1 rounded-full text-white">BETA</span>
-                  </div>
                 </motion.div>
               );
             })}
           </div>
-
-          {/* Only show if showAllFeatures is true */}
-          {showAllFeatures && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4"
-            >
-              <div className="bg-gradient-to-br from-indigo-900/40 to-indigo-800/20 border border-indigo-600/20 rounded-lg p-5 hover:shadow-xl transition-all duration-300">
-                <div className="flex items-start">
-                  <div className="bg-black/30 p-3 rounded-lg mr-4">
-                    <Activity className="h-6 w-6 text-indigo-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-white font-medium mb-1">Predictive Maintenance</h3>
-                    <p className="text-gray-400 text-sm">AI-powered service scheduling based on riding patterns</p>
-                  </div>
-                </div>
-                <div className="mt-4 ml-16">
-                  <span className="text-xs bg-black/30 px-2 py-1 rounded-full text-white">Coming Soon</span>
-                </div>
-              </div>
-              
-              <div className="bg-gradient-to-br from-amber-900/40 to-amber-800/20 border border-amber-600/20 rounded-lg p-5 hover:shadow-xl transition-all duration-300">
-                <div className="flex items-start">
-                  <div className="bg-black/30 p-3 rounded-lg mr-4">
-                    <Lightbulb className="h-6 w-6 text-amber-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-white font-medium mb-1">Smart Home Integration</h3>
-                    <p className="text-gray-400 text-sm">Connect your EV with your smart home ecosystem</p>
-                  </div>
-                </div>
-                <div className="mt-4 ml-16">
-                  <span className="text-xs bg-black/30 px-2 py-1 rounded-full text-white">Coming Soon</span>
-                </div>
-              </div>
-              
-              <div className="bg-gradient-to-br from-teal-900/40 to-teal-800/20 border border-teal-600/20 rounded-lg p-5 hover:shadow-xl transition-all duration-300">
-                <div className="flex items-start">
-                  <div className="bg-black/30 p-3 rounded-lg mr-4">
-                    <BarChart2 className="h-6 w-6 text-teal-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-white font-medium mb-1">Performance Tuning</h3>
-                    <p className="text-gray-400 text-sm">Customize your EV's response and power delivery</p>
-                  </div>
-                </div>
-                <div className="mt-4 ml-16">
-                  <span className="text-xs bg-black/30 px-2 py-1 rounded-full text-white">Coming Soon</span>
-                </div>
-              </div>
-            </motion.div>
-          )}
         </motion.div>
       </motion.div>
     </DashboardLayout>

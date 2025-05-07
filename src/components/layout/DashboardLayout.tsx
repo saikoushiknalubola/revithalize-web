@@ -84,6 +84,17 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
     }
   }, [location.pathname, isMobile]);
 
+  // Handle feature clicks more efficiently
+  const handleFeatureClick = (featureId: string) => {
+    if (setActiveFeature) {
+      setActiveFeature(featureId === activeFeature ? null : featureId);
+      // Auto-close sidebar on mobile after selection
+      if (isMobile) {
+        setSidebarOpen(false);
+      }
+    }
+  };
+
   const handleLogout = () => {
     localStorage.removeItem('isAuthenticated');
     localStorage.removeItem('user');
@@ -98,7 +109,7 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
     { icon: BarChart2, label: "Analytics", to: "/analytics" },
   ];
 
-  // Updated innovative features to use feature toggle instead of direct navigation
+  // Innovative features for direct activation
   const innovativeFeatures = [
     { icon: Shield, label: "Battery Twin", id: "battery-twin" },
     { icon: Leaf, label: "Eco Program", id: "eco-program" },
@@ -113,21 +124,11 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
     { icon: Settings, label: "Settings", to: "/settings" },
   ];
 
-  // Handle feature click
-  const handleFeatureClick = (featureId: string) => {
-    if (location.pathname !== '/dashboard') {
-      navigate(`/dashboard/${featureId}`);
-    } else if (setActiveFeature) {
-      setActiveFeature(featureId === activeFeature ? null : featureId);
-    }
-  };
-
   // Combined nav items for mobile bottom navigation (limit to 5)
   const mobileNavItems = [
     { icon: Home, label: "Dashboard", to: "/dashboard" },
     { icon: Bike, label: "Vehicle", to: "/vehicle" },
     { icon: MapPin, label: "Map", to: "/map" },
-    // Add smart features as a button that opens sidebar instead
     { 
       icon: Shield, 
       label: "Features", 
@@ -136,7 +137,7 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
         // Scroll to innovative features section
         setTimeout(() => {
           document.querySelector('.innovative-features-section')?.scrollIntoView({ behavior: 'smooth' });
-        }, 300);
+        }, 100);
       }
     },
     { icon: User, label: "Profile", to: "/profile" },
@@ -198,7 +199,7 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
             ))}
             
             <div className="mt-6 mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider innovative-features-section">
-              Innovative Features
+              Smart Features
             </div>
             {innovativeFeatures.map((item, index) => (
               <div 
@@ -249,7 +250,6 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
               <span className="text-white font-medium font-poppins">75%</span>
             </div>
             <p className="text-xs text-gray-400 mt-2 font-poppins">Estimated Range: 110 km</p>
-            <p className="text-xs text-gray-400 mt-1 font-poppins">51.2V 45Ah Battery</p>
           </div>
           
           {userName && (
@@ -290,7 +290,7 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
           </div>
         </div>
         
-        {/* Improved Mobile bottom navigation - updated with innovative features */}
+        {/* Improved Mobile bottom navigation */}
         <div className="fixed inset-x-0 bottom-0 bg-black/90 backdrop-blur-md border-t border-gray-800 md:hidden z-30 shadow-lg">
           <div className="flex justify-around items-center py-2">
             {mobileNavItems.map((item, index) => {
@@ -312,10 +312,10 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
                     style={{ animationDelay: `${index * 100}ms` }}
                   >
                     <div className={cn(
-                      "flex items-center justify-center h-8 w-8 rounded-full mb-1",
+                      "flex items-center justify-center h-10 w-10 rounded-full mb-1", // Increased touch target
                       active && "bg-revithalize-green/10"
                     )}>
-                      <Icon size={20} className="text-revithalize-green animate-pulse" />
+                      <Icon size={22} className="text-revithalize-green animate-pulse" />
                     </div>
                     <span className="text-xs font-poppins">{item.label}</span>
                   </button>
@@ -335,10 +335,10 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <div className={cn(
-                    "flex items-center justify-center h-8 w-8 rounded-full mb-1",
+                    "flex items-center justify-center h-10 w-10 rounded-full mb-1", // Increased touch target
                     active && "bg-revithalize-green/10"
                   )}>
-                    <Icon size={20} className={active ? "animate-pulse" : ""} />
+                    <Icon size={22} className={active ? "animate-pulse" : ""} />
                   </div>
                   <span className="text-xs font-poppins">{item.label}</span>
                 </Link>

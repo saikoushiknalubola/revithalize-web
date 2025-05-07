@@ -16,7 +16,6 @@ import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
 import Support from "./pages/Support";
 import About from "./pages/About";
-// Remove separate imports of feature components since they'll be used within Dashboard
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -49,8 +48,6 @@ const App = () => (
           <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
           <Route path="/support" element={<ProtectedRoute><Support /></ProtectedRoute>} />
           <Route path="/about" element={<ProtectedRoute><About /></ProtectedRoute>} />
-          
-          {/* Remove separate routes for innovative features since they'll be part of the dashboard */}
           
           {/* Not found route */}
           <Route path="*" element={<NotFound />} />
