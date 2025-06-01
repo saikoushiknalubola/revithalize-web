@@ -52,38 +52,6 @@ export default function EcoProgram() {
         >
           <EcoGamification />
         </motion.div>
-
-        {/* Additional program information */}
-        <motion.div 
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-        >
-          <div className="bg-gradient-to-br from-green-900/40 to-green-800/20 border border-green-600/20 rounded-lg p-6">
-            <h3 className="text-white font-semibold mb-3">Environmental Impact</h3>
-            <p className="text-gray-300 text-sm">
-              Track your carbon footprint reduction and see how your eco-friendly riding 
-              contributes to a cleaner environment.
-            </p>
-          </div>
-          
-          <div className="bg-gradient-to-br from-purple-900/40 to-purple-800/20 border border-purple-600/20 rounded-lg p-6">
-            <h3 className="text-white font-semibold mb-3">Reward System</h3>
-            <p className="text-gray-300 text-sm">
-              Earn points for eco-friendly behavior and redeem them for discounts, 
-              accessories, or premium features.
-            </p>
-          </div>
-          
-          <div className="bg-gradient-to-br from-blue-900/40 to-blue-800/20 border border-blue-600/20 rounded-lg p-6">
-            <h3 className="text-white font-semibold mb-3">Community</h3>
-            <p className="text-gray-300 text-sm">
-              Connect with other eco-riders, share tips, and participate in 
-              community challenges for bigger rewards.
-            </p>
-          </div>
-        </motion.div>
       </motion.div>
     </DashboardLayout>
   );

@@ -52,30 +52,6 @@ export default function BatteryTwin() {
         >
           <VirtualBatteryTwin />
         </motion.div>
-
-        {/* Additional insights or tips specific to battery twin */}
-        <motion.div 
-          className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-        >
-          <div className="bg-gradient-to-br from-blue-900/40 to-blue-800/20 border border-blue-600/20 rounded-lg p-6">
-            <h3 className="text-white font-semibold mb-3">Battery Health Insights</h3>
-            <p className="text-gray-300 text-sm">
-              Monitor individual cell performance and identify potential issues before they impact your ride. 
-              The 3D visualization helps you understand your battery's condition at a glance.
-            </p>
-          </div>
-          
-          <div className="bg-gradient-to-br from-purple-900/40 to-purple-800/20 border border-purple-600/20 rounded-lg p-6">
-            <h3 className="text-white font-semibold mb-3">Predictive Maintenance</h3>
-            <p className="text-gray-300 text-sm">
-              AI-powered analysis predicts when maintenance might be needed, helping you prevent 
-              unexpected breakdowns and extend your battery's lifespan.
-            </p>
-          </div>
-        </motion.div>
       </motion.div>
     </DashboardLayout>
   );

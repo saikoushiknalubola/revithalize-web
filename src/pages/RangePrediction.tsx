@@ -52,30 +52,6 @@ export default function RangePrediction() {
         >
           <AdaptiveRangePrediction />
         </motion.div>
-
-        {/* Additional insights */}
-        <motion.div 
-          className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-        >
-          <div className="bg-gradient-to-br from-green-900/40 to-green-800/20 border border-green-600/20 rounded-lg p-6">
-            <h3 className="text-white font-semibold mb-3">Smart Learning</h3>
-            <p className="text-gray-300 text-sm">
-              Our AI learns from your riding patterns, weather conditions, and terrain 
-              to provide increasingly accurate range predictions over time.
-            </p>
-          </div>
-          
-          <div className="bg-gradient-to-br from-blue-900/40 to-blue-800/20 border border-blue-600/20 rounded-lg p-6">
-            <h3 className="text-white font-semibold mb-3">Route Optimization</h3>
-            <p className="text-gray-300 text-sm">
-              Get personalized route recommendations that maximize your range and 
-              suggest optimal charging stops for longer journeys.
-            </p>
-          </div>
-        </motion.div>
       </motion.div>
     </DashboardLayout>
   );
