@@ -1,7 +1,6 @@
-
 import React, { useEffect, useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { Battery, Bolt, Gauge, ThermometerSnowflake, MapPin, Bell, Shield, Leaf, ScanLine, Cpu } from 'lucide-react';
+import { Battery, Bolt, Gauge, ThermometerSnowflake, MapPin, Bell, Shield, Leaf, ScanLine, Cpu, Brain, Users } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { BatteryMetrics } from '@/components/features/BatteryMetrics';
 import { ChargingScheduler } from '@/components/features/ChargingScheduler';
