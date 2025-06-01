@@ -279,7 +279,7 @@ export default function Dashboard() {
         {/* Two Column Layout for Eco Score and IoT Insights */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <motion.div variants={itemVariants}>
-            <EcoScore />
+            <EcoScore score={87} />
           </motion.div>
           
           <motion.div variants={itemVariants}>
