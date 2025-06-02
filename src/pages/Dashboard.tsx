@@ -1,6 +1,7 @@
+
 import React, { useEffect, useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { Battery, Bolt, Gauge, ThermometerSnowflake, MapPin, Bell, Shield, Leaf, ScanLine, Cpu, Brain, Users } from 'lucide-react';
+import { Battery, Bolt, Gauge, ThermometerSnowflake, MapPin, Bell, Shield, Leaf, ScanLine, Cpu, Brain, Users, Building2, Activity, Wrench } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { BatteryMetrics } from '@/components/features/BatteryMetrics';
 import { ChargingScheduler } from '@/components/features/ChargingScheduler';
@@ -10,6 +11,10 @@ import { VirtualBatteryTwin } from '@/components/features/VirtualBatteryTwin';
 import { EcoGamification } from '@/components/features/EcoGamification';
 import { AdaptiveRangePrediction } from '@/components/features/AdaptiveRangePrediction';
 import { SmartGridIntegration } from '@/components/features/SmartGridIntegration';
+import { CompanyVision } from '@/components/features/CompanyVision';
+import { CarbonImpactTracker } from '@/components/features/CarbonImpactTracker';
+import { PredictiveMaintenance } from '@/components/features/PredictiveMaintenance';
+import { SocialEnergyNetwork } from '@/components/features/SocialEnergyNetwork';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useScreenSize } from '@/hooks/use-mobile';
 import { toast } from 'sonner';
@@ -86,8 +91,50 @@ export default function Dashboard() {
     }
   };
 
-  // Smart features definition
-  const smartFeatures = [
+  // ALL FEATURES - including dashboard features and smart features
+  const allFeatures = [
+    // Dashboard Features
+    {
+      id: 'company-vision',
+      title: "Company Vision",
+      description: "Learn about ReVithalize's mission and impact",
+      icon: Building2,
+      color: "bg-gradient-to-br from-indigo-900/40 to-indigo-800/20",
+      iconColor: "text-indigo-400",
+      borderColor: "border-indigo-600/20",
+      component: CompanyVision
+    },
+    {
+      id: 'carbon-tracker',
+      title: "Carbon Impact Tracker",
+      description: "Monitor your real-time environmental impact and earn carbon credits",
+      icon: Activity,
+      color: "bg-gradient-to-br from-emerald-900/40 to-emerald-800/20",
+      iconColor: "text-emerald-400",
+      borderColor: "border-emerald-600/20",
+      component: CarbonImpactTracker
+    },
+    {
+      id: 'predictive-maintenance',
+      title: "AI Maintenance Assistant",
+      description: "Predictive maintenance powered by machine learning",
+      icon: Wrench,
+      color: "bg-gradient-to-br from-orange-900/40 to-orange-800/20",
+      iconColor: "text-orange-400",
+      borderColor: "border-orange-600/20",
+      component: PredictiveMaintenance
+    },
+    {
+      id: 'social-energy',
+      title: "Energy Network",
+      description: "Connect with the community and share energy insights",
+      icon: Users,
+      color: "bg-gradient-to-br from-cyan-900/40 to-cyan-800/20",
+      iconColor: "text-cyan-400",
+      borderColor: "border-cyan-600/20",
+      component: SocialEnergyNetwork
+    },
+    // Smart Features
     {
       id: 'battery-twin',
       title: "Virtual Battery Twin",
@@ -129,6 +176,11 @@ export default function Dashboard() {
       component: SmartGridIntegration
     }
   ];
+
+  // Smart features only (for the Smart Features section display)
+  const smartFeatures = allFeatures.filter(f => 
+    ['battery-twin', 'eco-program', 'range-prediction', 'smart-grid'].includes(f.id)
+  );
 
   return (
     <DashboardLayout activeFeature={activeFeature} setActiveFeature={setActiveFeature}>
@@ -234,8 +286,8 @@ export default function Dashboard() {
             transition={{ duration: 0.4 }}
             className="border-2 border-gray-800/50 p-4 rounded-lg shadow-lg"
           >
-            {smartFeatures.find(f => f.id === activeFeature)?.component && 
-              React.createElement(smartFeatures.find(f => f.id === activeFeature)?.component as React.ComponentType)}
+            {allFeatures.find(f => f.id === activeFeature)?.component && 
+              React.createElement(allFeatures.find(f => f.id === activeFeature)?.component as React.ComponentType)}
           </motion.div>
         )}
 
