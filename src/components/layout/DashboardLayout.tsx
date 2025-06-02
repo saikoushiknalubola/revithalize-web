@@ -83,17 +83,6 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
     }
   }, [location.pathname, isMobile]);
 
-  // Handle feature clicks more efficiently
-  const handleFeatureClick = (featureId: string) => {
-    if (setActiveFeature) {
-      setActiveFeature(featureId === activeFeature ? null : featureId);
-      // Auto-close sidebar on mobile after selection
-      if (isMobile) {
-        setSidebarOpen(false);
-      }
-    }
-  };
-
   const handleLogout = () => {
     localStorage.removeItem('isAuthenticated');
     localStorage.removeItem('user');
@@ -110,18 +99,18 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
 
   // Innovative features for direct activation
   const innovativeFeatures = [
-    { icon: Shield, label: "Battery Twin", id: "battery-twin" },
-    { icon: Leaf, label: "Eco Program", id: "eco-program" },
-    { icon: ScanLine, label: "AI Range", id: "range-prediction" },
-    { icon: Cpu, label: "Smart Grid", id: "smart-grid" },
+    { icon: Shield, label: "Battery Twin", to: "/battery-twin" },
+    { icon: Leaf, label: "Eco Program", to: "/eco-program" },
+    { icon: ScanLine, label: "AI Range", to: "/range-prediction" },
+    { icon: Cpu, label: "Smart Grid", to: "/smart-grid" },
   ];
 
-  // New dashboard features
+  // New dashboard features - NOW WITH PROPER ROUTES
   const dashboardFeatures = [
-    { icon: Building2, label: "Company Vision", id: "company-vision" },
-    { icon: Activity, label: "Carbon Tracker", id: "carbon-tracker" },
-    { icon: Wrench, label: "Maintenance AI", id: "predictive-maintenance" },
-    { icon: Users, label: "Energy Network", id: "social-energy" },
+    { icon: Building2, label: "Company Vision", to: "/company-vision" },
+    { icon: Activity, label: "Carbon Tracker", to: "/carbon-tracker" },
+    { icon: Wrench, label: "Maintenance AI", to: "/maintenance-ai" },
+    { icon: Users, label: "Energy Network", to: "/energy-network" },
   ];
 
   const secondaryNavItems = [
@@ -210,16 +199,15 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
             </div>
             {dashboardFeatures.map((item, index) => (
               <div 
-                key={item.id}
+                key={item.to}
                 className="animate-fade-in"
                 style={{ animationDelay: `${(index + mainNavItems.length) * 50}ms` }}
               >
                 <NavItem
                   icon={item.icon}
                   label={item.label}
-                  to=""
-                  active={activeFeature === item.id}
-                  onClick={() => handleFeatureClick(item.id)}
+                  to={item.to}
+                  active={location.pathname === item.to}
                 />
               </div>
             ))}
@@ -229,16 +217,15 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
             </div>
             {innovativeFeatures.map((item, index) => (
               <div 
-                key={item.id}
+                key={item.to}
                 className="animate-fade-in"
                 style={{ animationDelay: `${(index + mainNavItems.length + dashboardFeatures.length) * 50}ms` }}
               >
                 <NavItem
                   icon={item.icon}
                   label={item.label}
-                  to=""
-                  active={activeFeature === item.id}
-                  onClick={() => handleFeatureClick(item.id)}
+                  to={item.to}
+                  active={location.pathname === item.to}
                 />
               </div>
             ))}
