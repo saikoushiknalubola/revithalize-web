@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, Battery, MapPin, BarChart2, User, Settings, Menu, X, LogOut, Bike, HelpCircle, Info, Shield, Leaf, ScanLine, Cpu } from 'lucide-react';
+import { Home, Battery, MapPin, BarChart2, User, Settings, Menu, X, LogOut, Bike, HelpCircle, Info, Shield, Leaf, ScanLine, Cpu, Building2, Activity, Wrench, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useState, useEffect } from 'react';
 import { useScreenSize } from '@/hooks/use-mobile';
@@ -117,6 +116,14 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
     { icon: Cpu, label: "Smart Grid", id: "smart-grid" },
   ];
 
+  // New dashboard features
+  const dashboardFeatures = [
+    { icon: Building2, label: "Company Vision", id: "company-vision" },
+    { icon: Activity, label: "Carbon Tracker", id: "carbon-tracker" },
+    { icon: Wrench, label: "Maintenance AI", id: "predictive-maintenance" },
+    { icon: Users, label: "Energy Network", id: "social-energy" },
+  ];
+
   const secondaryNavItems = [
     { icon: User, label: "Profile", to: "/profile" },
     { icon: HelpCircle, label: "Support", to: "/support" },
@@ -198,14 +205,33 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
               </div>
             ))}
             
-            <div className="mt-6 mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider innovative-features-section">
+            <div className="mt-6 mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              Dashboard Features
+            </div>
+            {dashboardFeatures.map((item, index) => (
+              <div 
+                key={item.id}
+                className="animate-fade-in"
+                style={{ animationDelay: `${(index + mainNavItems.length) * 50}ms` }}
+              >
+                <NavItem
+                  icon={item.icon}
+                  label={item.label}
+                  to=""
+                  active={activeFeature === item.id}
+                  onClick={() => handleFeatureClick(item.id)}
+                />
+              </div>
+            ))}
+            
+            <div className="mt-6 mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
               Smart Features
             </div>
             {innovativeFeatures.map((item, index) => (
               <div 
                 key={item.id}
                 className="animate-fade-in"
-                style={{ animationDelay: `${(index + mainNavItems.length) * 50}ms` }}
+                style={{ animationDelay: `${(index + mainNavItems.length + dashboardFeatures.length) * 50}ms` }}
               >
                 <NavItem
                   icon={item.icon}
@@ -224,7 +250,7 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
               <div 
                 key={item.to}
                 className="animate-fade-in"
-                style={{ animationDelay: `${(index + mainNavItems.length + innovativeFeatures.length) * 50}ms` }}
+                style={{ animationDelay: `${(index + mainNavItems.length + dashboardFeatures.length + innovativeFeatures.length) * 50}ms` }}
               >
                 <NavItem
                   icon={item.icon}
