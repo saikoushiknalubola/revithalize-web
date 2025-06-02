@@ -20,6 +20,10 @@ import BatteryTwin from "./pages/BatteryTwin";
 import EcoProgram from "./pages/EcoProgram";
 import RangePrediction from "./pages/RangePrediction";
 import SmartGrid from "./pages/SmartGrid";
+import CompanyVisionPage from "./pages/CompanyVision";
+import CarbonTracker from "./pages/CarbonTracker";
+import MaintenanceAI from "./pages/MaintenanceAI";
+import EnergyNetwork from "./pages/EnergyNetwork";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -58,6 +62,12 @@ const App = () => (
           <Route path="/eco-program" element={<ProtectedRoute><EcoProgram /></ProtectedRoute>} />
           <Route path="/range-prediction" element={<ProtectedRoute><RangePrediction /></ProtectedRoute>} />
           <Route path="/smart-grid" element={<ProtectedRoute><SmartGrid /></ProtectedRoute>} />
+          
+          {/* Dashboard Feature routes */}
+          <Route path="/company-vision" element={<ProtectedRoute><CompanyVisionPage /></ProtectedRoute>} />
+          <Route path="/carbon-tracker" element={<ProtectedRoute><CarbonTracker /></ProtectedRoute>} />
+          <Route path="/maintenance-ai" element={<ProtectedRoute><MaintenanceAI /></ProtectedRoute>} />
+          <Route path="/energy-network" element={<ProtectedRoute><EnergyNetwork /></ProtectedRoute>} />
           
           {/* Not found route */}
           <Route path="*" element={<NotFound />} />
