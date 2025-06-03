@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Battery, Bolt, Gauge, ThermometerSnowflake, MapPin, Bell, Building2, Activity, Wrench, Users, TrendingUp, Zap, Leaf, Shield, ChevronRight, Wifi, AlertTriangle, CheckCircle, Clock } from 'lucide-react';
@@ -23,6 +22,9 @@ import { CustomerManagement } from '@/components/professional/CustomerManagement
 import { SecurityManager } from '@/components/professional/SecurityManager';
 import { ReportsExport } from '@/components/professional/ReportsExport';
 import { AIInsights } from '@/components/professional/AIInsights';
+import { AdvancedAnalytics } from '@/components/professional/AdvancedAnalytics';
+import { SystemMonitoring } from '@/components/professional/SystemMonitoring';
+import { EnergyOptimization } from '@/components/professional/EnergyOptimization';
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -344,6 +346,20 @@ export default function Dashboard() {
               );
             })}
           </div>
+        </motion.div>
+
+        {/* Advanced Analytics & System Monitoring */}
+        <motion.div 
+          className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mt-8" 
+          variants={itemVariants}
+        >
+          <AdvancedAnalytics />
+          <SystemMonitoring />
+        </motion.div>
+
+        {/* Energy Optimization */}
+        <motion.div variants={itemVariants}>
+          <EnergyOptimization />
         </motion.div>
 
         {/* New Professional Components */}
