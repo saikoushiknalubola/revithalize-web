@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { Battery, Bolt, Gauge, ThermometerSnowflake, MapPin, Bell, Building2, Activity, Wrench, Users, TrendingUp, Zap, Leaf, Shield } from 'lucide-react';
+import { Battery, Bolt, Gauge, ThermometerSnowflake, MapPin, Bell, Building2, Activity, Wrench, Users, TrendingUp, Zap, Leaf, Shield, ChevronRight, Wifi, AlertTriangle, CheckCircle, Clock } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { BatteryMetrics } from '@/components/features/BatteryMetrics';
 import { ChargingScheduler } from '@/components/features/ChargingScheduler';
@@ -12,6 +12,9 @@ import { useScreenSize } from '@/hooks/use-mobile';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { RealTimeStatusCard } from '@/components/professional/RealTimeStatusCard';
+import { ProfessionalQuickActions } from '@/components/professional/ProfessionalQuickActions';
+import { MobileVehicleStatus } from '@/components/mobile/MobileVehicleStatus';
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -20,22 +23,29 @@ export default function Dashboard() {
   const { isMobile, isTablet } = useScreenSize();
   const [activeFeature, setActiveFeature] = useState<string | null>(null);
   
-  // Real-time data states
-  const [batteryLevel, setBatteryLevel] = useState(75);
+  // Enhanced real-time data states with professional metrics
+  const [batteryLevel, setBatteryLevel] = useState(78);
   const [voltage, setVoltage] = useState(51.2);
   const [temperature, setTemperature] = useState(32);
   const [health, setHealth] = useState(98);
-  const [range, setRange] = useState(110);
-  const [powerConsumption, setPowerConsumption] = useState(45);
+  const [range, setRange] = useState(118);
+  const [powerConsumption, setPowerConsumption] = useState(42);
   const [chargingStatus, setChargingStatus] = useState('Not Charging');
+  const [connectionStatus, setConnectionStatus] = useState('Connected');
+  const [lastUpdated, setLastUpdated] = useState(new Date());
   
+  // Professional metrics
+  const [efficiencyScore, setEfficiencyScore] = useState(87);
+  const [totalDistance, setTotalDistance] = useState(2847);
+  const [carbonSaved, setCarbonSaved] = useState(234.5);
+  const [energyCost, setEnergyCost] = useState(45.20);
+
   // Check for authentication and get user data
   useEffect(() => {
     const isAuthenticated = localStorage.getItem('isAuthenticated');
     if (!isAuthenticated || isAuthenticated !== 'true') {
       navigate('/auth');
     } else {
-      // Get user data from localStorage
       const userData = localStorage.getItem('user');
       if (userData) {
         const user = JSON.parse(userData);
@@ -44,16 +54,18 @@ export default function Dashboard() {
     }
   }, [navigate]);
 
-  // Simulate real-time data updates
+  // Enhanced real-time data simulation with professional metrics
   useEffect(() => {
     const interval = setInterval(() => {
-      setBatteryLevel(prev => Math.max(0, Math.min(100, prev + (Math.random() - 0.5) * 2)));
-      setVoltage(prev => Math.max(48, Math.min(54, prev + (Math.random() - 0.5) * 0.5)));
-      setTemperature(prev => Math.max(25, Math.min(45, prev + (Math.random() - 0.5) * 2)));
-      setHealth(prev => Math.max(90, Math.min(100, prev + (Math.random() - 0.5) * 0.1)));
-      setRange(prev => Math.max(50, Math.min(150, prev + (Math.random() - 0.5) * 5)));
-      setPowerConsumption(prev => Math.max(30, Math.min(60, prev + (Math.random() - 0.5) * 3)));
-    }, 5000);
+      setBatteryLevel(prev => Math.max(0, Math.min(100, prev + (Math.random() - 0.5) * 1.5)));
+      setVoltage(prev => Math.max(48, Math.min(54, prev + (Math.random() - 0.5) * 0.3)));
+      setTemperature(prev => Math.max(25, Math.min(45, prev + (Math.random() - 0.5) * 1.5)));
+      setHealth(prev => Math.max(95, Math.min(100, prev + (Math.random() - 0.5) * 0.05)));
+      setRange(prev => Math.max(50, Math.min(150, prev + (Math.random() - 0.5) * 3)));
+      setPowerConsumption(prev => Math.max(30, Math.min(60, prev + (Math.random() - 0.5) * 2)));
+      setEfficiencyScore(prev => Math.max(70, Math.min(100, prev + (Math.random() - 0.5) * 0.5)));
+      setLastUpdated(new Date());
+    }, 3000);
 
     return () => clearInterval(interval);
   }, []);
@@ -65,27 +77,66 @@ export default function Dashboard() {
     }
   }, [feature]);
 
-  // Function handlers for quick actions
-  const handleFindChargingStations = () => {
-    toast.info('Finding nearby charging stations');
-    navigate('/map');
-  };
+  // Enhanced Dashboard Features with professional data
+  const dashboardFeatures = [
+    {
+      id: 'company-vision',
+      title: "Company Vision",
+      description: "Discover ReVithalize's mission to revolutionize EV retrofitting",
+      icon: Building2,
+      color: "bg-gradient-to-br from-indigo-900/80 to-indigo-600/40",
+      iconColor: "text-indigo-300",
+      borderColor: "border-indigo-500/40",
+      route: "/company-vision",
+      stats: "Global Impact",
+      value: "50K+ Vehicles",
+      professional: true,
+      badge: "Mission"
+    },
+    {
+      id: 'carbon-tracker',
+      title: "Carbon Impact Tracker",
+      description: "Real-time environmental impact monitoring with carbon credits marketplace",
+      icon: Activity,
+      color: "bg-gradient-to-br from-emerald-900/80 to-emerald-600/40",
+      iconColor: "text-emerald-300",
+      borderColor: "border-emerald-500/40",
+      route: "/carbon-tracker",
+      stats: "CO₂ Saved Today",
+      value: `${carbonSaved.toFixed(1)} kg`,
+      professional: true,
+      badge: "Environmental"
+    },
+    {
+      id: 'predictive-maintenance',
+      title: "AI Maintenance Assistant",
+      description: "Predictive maintenance powered by advanced machine learning algorithms",
+      icon: Wrench,
+      color: "bg-gradient-to-br from-orange-900/80 to-orange-600/40",
+      iconColor: "text-orange-300",
+      borderColor: "border-orange-500/40",
+      route: "/maintenance-ai",
+      stats: "Next Service",
+      value: "42 days",
+      professional: true,
+      badge: "AI Powered"
+    },
+    {
+      id: 'social-energy',
+      title: "Energy Network",
+      description: "Connect with EV community and participate in energy trading marketplace",
+      icon: Users,
+      color: "bg-gradient-to-br from-cyan-900/80 to-cyan-600/40",
+      iconColor: "text-cyan-300",
+      borderColor: "border-cyan-500/40",
+      route: "/energy-network",
+      stats: "Network Users",
+      value: "47.2K Active",
+      professional: true,
+      badge: "Community"
+    }
+  ];
 
-  const handleRemoteCharging = () => {
-    setChargingStatus('Charging...');
-    toast.success('Remote charging initiated', {
-      description: 'Your vehicle will begin charging shortly'
-    });
-    setTimeout(() => setChargingStatus('Charging'), 2000);
-  };
-
-  const handleSetChargeAlert = () => {
-    toast.success('Charge alert set', {
-      description: 'You will be notified when the battery is fully charged'
-    });
-  };
-
-  // Animation variants for staggered animations
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -108,160 +159,94 @@ export default function Dashboard() {
     }
   };
 
-  // Enhanced Dashboard Features with better data and navigation
-  const dashboardFeatures = [
-    {
-      id: 'company-vision',
-      title: "Company Vision",
-      description: "Discover ReVithalize's mission to revolutionize EV retrofitting",
-      icon: Building2,
-      color: "bg-gradient-to-br from-indigo-900/60 to-indigo-600/30",
-      iconColor: "text-indigo-300",
-      borderColor: "border-indigo-500/30",
-      route: "/company-vision",
-      stats: "Global Impact",
-      value: "50K+ Vehicles"
-    },
-    {
-      id: 'carbon-tracker',
-      title: "Carbon Impact Tracker",
-      description: "Real-time environmental impact monitoring with carbon credits",
-      icon: Activity,
-      color: "bg-gradient-to-br from-emerald-900/60 to-emerald-600/30",
-      iconColor: "text-emerald-300",
-      borderColor: "border-emerald-500/30",
-      route: "/carbon-tracker",
-      stats: "CO₂ Saved Today",
-      value: "2.3 kg"
-    },
-    {
-      id: 'predictive-maintenance',
-      title: "AI Maintenance Assistant",
-      description: "Predictive maintenance powered by advanced machine learning",
-      icon: Wrench,
-      color: "bg-gradient-to-br from-orange-900/60 to-orange-600/30",
-      iconColor: "text-orange-300",
-      borderColor: "border-orange-500/30",
-      route: "/maintenance-ai",
-      stats: "Next Service",
-      value: "45 days"
-    },
-    {
-      id: 'social-energy',
-      title: "Energy Network",
-      description: "Connect with EV community and share energy insights",
-      icon: Users,
-      color: "bg-gradient-to-br from-cyan-900/60 to-cyan-600/30",
-      iconColor: "text-cyan-300",
-      borderColor: "border-cyan-500/30",
-      route: "/energy-network",
-      stats: "Network Users",
-      value: "45K+ Active"
-    }
-  ];
-
   return (
     <DashboardLayout activeFeature={activeFeature} setActiveFeature={setActiveFeature}>
       <motion.div 
-        className="space-y-4 sm:space-y-6 px-2 sm:px-4 pb-16 md:pb-4"
+        className="space-y-4 sm:space-y-6 px-2 sm:px-4 pb-20 md:pb-6"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
+        {/* Enhanced Header with Professional Branding */}
         <motion.header variants={itemVariants} className="animate-fade-in">
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-revithalize-green to-revithalize-blue">Welcome back, {userName}</h1>
-          <p className="text-gray-400 mt-1 text-sm sm:text-base">Real-time status of your Hero Honda Passion Pro</p>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
+            <div>
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-revithalize-green to-revithalize-blue">
+                Welcome back, {userName}
+              </h1>
+              <p className="text-gray-400 mt-1 text-sm sm:text-base">
+                Hero Honda Passion Pro • Last updated: {lastUpdated.toLocaleTimeString()}
+              </p>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className={cn(
+                "flex items-center space-x-2 px-3 py-1.5 rounded-full text-xs font-medium",
+                connectionStatus === 'Connected' ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"
+              )}>
+                <Wifi className="h-3 w-3" />
+                <span>{connectionStatus}</span>
+              </div>
+              <div className="bg-revithalize-dark/50 px-3 py-1.5 rounded-full">
+                <span className="text-xs font-medium text-revithalize-green">Pro Plan</span>
+              </div>
+            </div>
+          </div>
         </motion.header>
 
-        {/* Enhanced Vehicle Status Overview with Real-time Data */}
-        <motion.div 
-          className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4"
-          variants={itemVariants}
-        >
-          {/* Enhanced Battery Level */}
-          <motion.div
+        {/* Mobile-Optimized Vehicle Status */}
+        {isMobile ? (
+          <MobileVehicleStatus 
+            batteryLevel={batteryLevel}
+            voltage={voltage}
+            temperature={temperature}
+            health={health}
+            range={range}
+            powerConsumption={powerConsumption}
+            chargingStatus={chargingStatus}
+            efficiencyScore={efficiencyScore}
+          />
+        ) : (
+          <motion.div 
+            className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4"
             variants={itemVariants}
-            whileHover={{ scale: 1.02, boxShadow: '0 8px 25px rgba(34, 197, 94, 0.15)' }}
-            className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 border border-revithalize-green/20 shadow-lg rounded-xl overflow-hidden transition-all duration-300 group"
           >
-            <CardHeader className="pb-1 px-3 pt-3">
-              <CardDescription className="text-gray-400 flex items-center text-xs sm:text-sm">
-                <Battery className="mr-2 h-4 w-4 text-revithalize-green group-hover:animate-pulse" />
-                Battery Level
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="px-3 pb-3">
-              <div className="flex items-center mb-2">
-                <div className="relative w-full h-3 bg-gray-800 rounded-full overflow-hidden mr-3">
-                  <motion.div 
-                    className="absolute top-0 left-0 h-full bg-gradient-to-r from-revithalize-green to-revithalize-blue rounded-full"
-                    initial={{ width: 0 }}
-                    animate={{ width: `${batteryLevel}%` }}
-                    transition={{ duration: 1, ease: "easeOut" }}
-                  />
-                </div>
-                <span className="text-xl font-bold text-white">{batteryLevel.toFixed(0)}%</span>
-              </div>
-              <p className="text-xs text-gray-400">Range: {range.toFixed(0)} km • {chargingStatus}</p>
-            </CardContent>
+            <RealTimeStatusCard
+              icon={Battery}
+              label="Battery Level"
+              value={`${batteryLevel.toFixed(0)}%`}
+              subtext={`Range: ${range.toFixed(0)} km • ${chargingStatus}`}
+              color="text-revithalize-green"
+              progress={batteryLevel}
+            />
+            
+            <RealTimeStatusCard
+              icon={Bolt}
+              label="Power System"
+              value={`${voltage.toFixed(1)} V`}
+              subtext={`Consumption: ${powerConsumption.toFixed(0)} Ah`}
+              color="text-blue-400"
+            />
+            
+            <RealTimeStatusCard
+              icon={ThermometerSnowflake}
+              label="Temperature"
+              value={`${temperature.toFixed(0)}°C`}
+              subtext={temperature > 40 ? 'Hot' : temperature > 35 ? 'Warm' : 'Optimal'}
+              color="text-purple-400"
+            />
+            
+            <RealTimeStatusCard
+              icon={Gauge}
+              label="System Health"
+              value={`${health.toFixed(0)}%`}
+              subtext={health > 95 ? 'Excellent' : health > 90 ? 'Good' : 'Fair'}
+              color="text-amber-400"
+              progress={health}
+            />
           </motion.div>
+        )}
 
-          {/* Enhanced Power Output */}
-          <motion.div
-            variants={itemVariants}
-            whileHover={{ scale: 1.02, boxShadow: '0 8px 25px rgba(59, 130, 246, 0.15)' }}
-            className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 border border-blue-500/20 shadow-lg rounded-xl overflow-hidden transition-all duration-300 group"
-          >
-            <CardHeader className="pb-1 px-3 pt-3">
-              <CardDescription className="text-gray-400 flex items-center text-xs sm:text-sm">
-                <Bolt className="mr-2 h-4 w-4 text-blue-400 group-hover:animate-pulse" />
-                Power System
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="px-3 pb-3">
-              <p className="text-xl font-bold text-white">{voltage.toFixed(1)} V</p>
-              <p className="text-xs text-gray-400 mt-1">Consumption: {powerConsumption.toFixed(0)} Ah</p>
-            </CardContent>
-          </motion.div>
-
-          {/* Enhanced Temperature */}
-          <motion.div
-            variants={itemVariants}
-            whileHover={{ scale: 1.02, boxShadow: '0 8px 25px rgba(168, 85, 247, 0.15)' }}
-            className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 border border-purple-500/20 shadow-lg rounded-xl overflow-hidden transition-all duration-300 group"
-          >
-            <CardHeader className="pb-1 px-3 pt-3">
-              <CardDescription className="text-gray-400 flex items-center text-xs sm:text-sm">
-                <ThermometerSnowflake className="mr-2 h-4 w-4 text-purple-400 group-hover:animate-pulse" />
-                Temperature
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="px-3 pb-3">
-              <p className="text-xl font-bold text-white">{temperature.toFixed(0)}°C</p>
-              <p className="text-xs text-gray-400 mt-1">{temperature > 40 ? 'Hot' : temperature > 35 ? 'Warm' : 'Optimal'}</p>
-            </CardContent>
-          </motion.div>
-
-          {/* Enhanced Health */}
-          <motion.div
-            variants={itemVariants}
-            whileHover={{ scale: 1.02, boxShadow: '0 8px 25px rgba(245, 158, 11, 0.15)' }}
-            className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 border border-amber-500/20 shadow-lg rounded-xl overflow-hidden transition-all duration-300 group"
-          >
-            <CardHeader className="pb-1 px-3 pt-3">
-              <CardDescription className="text-gray-400 flex items-center text-xs sm:text-sm">
-                <Gauge className="mr-2 h-4 w-4 text-amber-400 group-hover:animate-pulse" />
-                System Health
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="px-3 pb-3">
-              <p className="text-xl font-bold text-white">{health.toFixed(0)}%</p>
-              <p className="text-xs text-gray-400 mt-1">{health > 95 ? 'Excellent' : health > 90 ? 'Good' : 'Fair'}</p>
-            </CardContent>
-          </motion.div>
-        </motion.div>
-
-        {/* Enhanced Dashboard Features Section */}
+        {/* Professional Dashboard Features */}
         <motion.div 
           className="mt-8"
           initial={{ opacity: 0, y: 30 }}
@@ -269,23 +254,25 @@ export default function Dashboard() {
           transition={{ duration: 0.6, delay: 0.3 }}
         >
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-revithalize-green to-revithalize-blue flex items-center">
-              <Shield className="mr-3 h-6 w-6 text-revithalize-green" />
-              ReVithalize Features
+            <h2 className="text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-revithalize-green to-revithalize-blue flex items-center">
+              <Shield className="mr-3 h-5 w-5 sm:h-6 sm:w-6 text-revithalize-green" />
+              Professional Features
             </h2>
             <div className="flex items-center text-sm text-gray-400">
               <TrendingUp className="mr-2 h-4 w-4 text-revithalize-green" />
-              Next-Gen EV Experience
+              <span className="hidden sm:inline">Enterprise Grade</span>
+              <span className="sm:hidden">Pro</span>
             </div>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             {dashboardFeatures.map((feature, index) => {
               const Icon = feature.icon;
               return (
                 <motion.div
                   key={feature.id}
-                  whileHover={{ scale: 1.02, y: -8 }}
+                  whileHover={{ scale: 1.02, y: -4 }}
+                  whileTap={{ scale: 0.98 }}
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ 
@@ -297,41 +284,51 @@ export default function Dashboard() {
                   onClick={() => navigate(feature.route)}
                   className={cn(
                     feature.color, 
-                    `border ${feature.borderColor} rounded-2xl p-6 cursor-pointer shadow-xl hover:shadow-2xl transition-all duration-500 backdrop-blur-sm relative overflow-hidden group`
+                    `border ${feature.borderColor} rounded-2xl p-4 sm:p-6 cursor-pointer shadow-xl hover:shadow-2xl transition-all duration-500 backdrop-blur-sm relative overflow-hidden group`
                   )}
                 >
+                  {/* Professional badge */}
+                  <div className="absolute top-3 right-3">
+                    <span className="bg-black/40 text-xs px-2 py-1 rounded-full text-gray-300 font-medium">
+                      {feature.badge}
+                    </span>
+                  </div>
+                  
                   {/* Animated background gradient */}
                   <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   
                   <div className="relative z-10">
                     <div className="flex items-start justify-between mb-4">
                       <div className={cn(
-                        "bg-black/40 p-4 rounded-xl group-hover:bg-black/50 transition-all duration-300",
+                        "bg-black/40 p-3 sm:p-4 rounded-xl group-hover:bg-black/50 transition-all duration-300",
                         "group-hover:scale-110 group-hover:rotate-3"
                       )}>
-                        <Icon className={`h-7 w-7 ${feature.iconColor} group-hover:animate-pulse`} />
+                        <Icon className={`h-6 w-6 sm:h-7 sm:w-7 ${feature.iconColor} group-hover:animate-pulse`} />
                       </div>
-                      <div className="text-right">
-                        <div className="text-xs text-gray-400">{feature.stats}</div>
-                        <div className={`text-sm font-bold ${feature.iconColor}`}>{feature.value}</div>
-                      </div>
+                      <ChevronRight className="h-5 w-5 text-gray-400 group-hover:text-white transition-colors" />
                     </div>
                     
-                    <h3 className="text-white font-bold text-lg mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-300 transition-all duration-300">
+                    <h3 className="text-white font-bold text-base sm:text-lg mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-300 transition-all duration-300">
                       {feature.title}
                     </h3>
-                    <p className="text-gray-400 text-sm leading-relaxed">{feature.description}</p>
+                    <p className="text-gray-400 text-sm leading-relaxed mb-4">{feature.description}</p>
                     
-                    {/* Animated arrow */}
-                    <div className="flex items-center mt-4 text-xs text-gray-500 group-hover:text-gray-300 transition-all duration-300">
-                      <span>Explore Feature</span>
-                      <motion.span 
-                        className="ml-2"
-                        animate={{ x: [0, 5, 0] }}
-                        transition={{ duration: 1.5, repeat: Infinity }}
-                      >
-                        →
-                      </motion.span>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="text-xs text-gray-500">{feature.stats}</div>
+                        <div className={`text-sm font-bold ${feature.iconColor}`}>{feature.value}</div>
+                      </div>
+                      <div className="flex items-center text-xs text-gray-500 group-hover:text-gray-300 transition-all duration-300">
+                        <span className="hidden sm:inline">Explore Feature</span>
+                        <span className="sm:hidden">Open</span>
+                        <motion.span 
+                          className="ml-2"
+                          animate={{ x: [0, 5, 0] }}
+                          transition={{ duration: 1.5, repeat: Infinity }}
+                        >
+                          →
+                        </motion.span>
+                      </div>
                     </div>
                   </div>
                 </motion.div>
@@ -340,79 +337,49 @@ export default function Dashboard() {
           </div>
         </motion.div>
 
-        {/* Analytics Section */}
+        {/* Professional Analytics Section */}
         <motion.div 
-          className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8" 
+          className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mt-8" 
           variants={itemVariants}
         >
           <BatteryMetrics />
           <ChargingScheduler />
         </motion.div>
 
-        {/* EcoScore Component */}
+        {/* Enhanced EcoScore Component */}
         <motion.div variants={itemVariants}>
-          <EcoScore score={87} scoreChange={3} />
+          <EcoScore score={efficiencyScore} scoreChange={3} />
         </motion.div>
 
-        {/* Additional Analytics */}
+        {/* Professional Quick Actions and Analytics */}
         <motion.div 
-          className="grid grid-cols-1 lg:grid-cols-3 gap-6" 
+          className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6" 
           variants={itemVariants}
         >
           <div className="lg:col-span-2">
             <IoTInsights />
           </div>
 
-          <div>
-            <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700 shadow-xl">
-              <CardHeader className="pb-3 pt-4 px-4">
-                <CardTitle className="text-white text-xl flex items-center">
-                  <Zap className="mr-2 h-5 w-5 text-revithalize-green" />
-                  Quick Actions
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3 px-4 pb-4">
-                <motion.button 
-                  onClick={handleFindChargingStations}
-                  className="w-full bg-gradient-to-r from-gray-800 to-gray-700 hover:from-gray-700 hover:to-gray-600 text-white font-medium py-3 px-4 rounded-xl flex items-center justify-between group transition-all duration-300 shadow-lg hover:shadow-xl border border-gray-600/30"
-                  whileHover={{ scale: 1.02, x: 5 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <span className="flex items-center">
-                    <MapPin className="mr-3 h-5 w-5 text-revithalize-green" />
-                    Find Charging Stations
-                  </span>
-                  <span className="text-revithalize-green group-hover:translate-x-1 transition-transform text-lg">→</span>
-                </motion.button>
-                
-                <motion.button 
-                  onClick={handleRemoteCharging}
-                  className="w-full bg-gradient-to-r from-gray-800 to-gray-700 hover:from-gray-700 hover:to-gray-600 text-white font-medium py-3 px-4 rounded-xl flex items-center justify-between group transition-all duration-300 shadow-lg hover:shadow-xl border border-gray-600/30"
-                  whileHover={{ scale: 1.02, x: 5 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <span className="flex items-center">
-                    <Bolt className="mr-3 h-5 w-5 text-revithalize-blue" />
-                    Start Remote Charging
-                  </span>
-                  <span className="text-revithalize-blue group-hover:translate-x-1 transition-transform text-lg">→</span>
-                </motion.button>
-                
-                <motion.button 
-                  onClick={handleSetChargeAlert}
-                  className="w-full bg-gradient-to-r from-gray-800 to-gray-700 hover:from-gray-700 hover:to-gray-600 text-white font-medium py-3 px-4 rounded-xl flex items-center justify-between group transition-all duration-300 shadow-lg hover:shadow-xl border border-gray-600/30"
-                  whileHover={{ scale: 1.02, x: 5 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <span className="flex items-center">
-                    <Bell className="mr-3 h-5 w-5 text-amber-400" />
-                    Set Charge Alert
-                  </span>
-                  <span className="text-amber-400 group-hover:translate-x-1 transition-transform text-lg">→</span>
-                </motion.button>
-              </CardContent>
-            </Card>
-          </div>
+          <ProfessionalQuickActions 
+            totalDistance={totalDistance}
+            energyCost={energyCost}
+            onFindChargingStations={() => {
+              toast.info('Finding optimal charging stations');
+              navigate('/map');
+            }}
+            onRemoteCharging={() => {
+              setChargingStatus('Charging...');
+              toast.success('Remote charging initiated', {
+                description: 'Your vehicle will begin charging shortly'
+              });
+              setTimeout(() => setChargingStatus('Charging'), 2000);
+            }}
+            onSetChargeAlert={() => {
+              toast.success('Smart charge alert configured', {
+                description: 'AI will optimize charging based on your schedule'
+              });
+            }}
+          />
         </motion.div>
       </motion.div>
     </DashboardLayout>
