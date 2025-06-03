@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Battery, Bolt, Gauge, ThermometerSnowflake, MapPin, Bell, Building2, Activity, Wrench, Users, TrendingUp, Zap, Leaf, Shield, ChevronRight, Wifi, AlertTriangle, CheckCircle, Clock } from 'lucide-react';
@@ -15,6 +14,10 @@ import { cn } from '@/lib/utils';
 import { RealTimeStatusCard } from '@/components/professional/RealTimeStatusCard';
 import { ProfessionalQuickActions } from '@/components/professional/ProfessionalQuickActions';
 import { MobileVehicleStatus } from '@/components/mobile/MobileVehicleStatus';
+import { FleetManagement } from '@/components/professional/FleetManagement';
+import { ChargingIntelligence } from '@/components/professional/ChargingIntelligence';
+import { NotificationCenter } from '@/components/professional/NotificationCenter';
+import { MobileBottomSheet } from '@/components/mobile/MobileBottomSheet';
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -22,6 +25,7 @@ export default function Dashboard() {
   const [userName, setUserName] = useState('User');
   const { isMobile, isTablet } = useScreenSize();
   const [activeFeature, setActiveFeature] = useState<string | null>(null);
+  const [showBottomSheet, setShowBottomSheet] = useState(false);
   
   // Enhanced real-time data states with professional metrics
   const [batteryLevel, setBatteryLevel] = useState(78);
@@ -189,6 +193,14 @@ export default function Dashboard() {
               <div className="bg-revithalize-dark/50 px-3 py-1.5 rounded-full">
                 <span className="text-xs font-medium text-revithalize-green">Pro Plan</span>
               </div>
+              {isMobile && (
+                <button
+                  onClick={() => setShowBottomSheet(true)}
+                  className="p-2 rounded-full bg-revithalize-green/20 hover:bg-revithalize-green/30 transition-colors"
+                >
+                  <ChevronRight className="h-4 w-4 text-revithalize-green" />
+                </button>
+              )}
             </div>
           </div>
         </motion.header>
@@ -337,6 +349,20 @@ export default function Dashboard() {
           </div>
         </motion.div>
 
+        {/* New Professional Components */}
+        <motion.div 
+          className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mt-8" 
+          variants={itemVariants}
+        >
+          <FleetManagement />
+          <NotificationCenter />
+        </motion.div>
+
+        {/* Charging Intelligence */}
+        <motion.div variants={itemVariants}>
+          <ChargingIntelligence />
+        </motion.div>
+
         {/* Professional Analytics Section */}
         <motion.div 
           className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mt-8" 
@@ -381,6 +407,12 @@ export default function Dashboard() {
             }}
           />
         </motion.div>
+
+        {/* Mobile Bottom Sheet */}
+        <MobileBottomSheet 
+          isOpen={showBottomSheet} 
+          onClose={() => setShowBottomSheet(false)} 
+        />
       </motion.div>
     </DashboardLayout>
   );
