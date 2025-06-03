@@ -73,7 +73,7 @@ export function ProfessionalQuickActions({
               <DollarSign className="h-4 w-4 text-green-400" />
               <span className="text-xs text-gray-400">Monthly</span>
             </div>
-            <div className="text-sm font-bold text-white">${energyCost.toFixed(2)}</div>
+            <div className="text-sm font-bold text-white">₹{energyCost.toFixed(2)}</div>
             <div className="text-xs text-gray-400">Energy Cost</div>
           </div>
         </div>
@@ -101,7 +101,6 @@ export function ProfessionalQuickActions({
                 </div>
                 <div className="flex items-center">
                   <TrendingUp className={`h-3 w-3 ${item.color} opacity-60`} />
-                  <span className={`ml-2 text-lg ${item.color} group-hover:translate-x-1 transition-transform`}>→</span>
                 </div>
               </motion.button>
             );

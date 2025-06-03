@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Battery, Bolt, Gauge, ThermometerSnowflake, MapPin, Bell, Building2, Activity, Wrench, Users, TrendingUp, Zap, Leaf, Shield, ChevronRight, Wifi, AlertTriangle, CheckCircle, Clock } from 'lucide-react';
@@ -18,6 +19,10 @@ import { FleetManagement } from '@/components/professional/FleetManagement';
 import { ChargingIntelligence } from '@/components/professional/ChargingIntelligence';
 import { NotificationCenter } from '@/components/professional/NotificationCenter';
 import { MobileBottomSheet } from '@/components/mobile/MobileBottomSheet';
+import { CustomerManagement } from '@/components/professional/CustomerManagement';
+import { SecurityManager } from '@/components/professional/SecurityManager';
+import { ReportsExport } from '@/components/professional/ReportsExport';
+import { AIInsights } from '@/components/professional/AIInsights';
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -38,11 +43,11 @@ export default function Dashboard() {
   const [connectionStatus, setConnectionStatus] = useState('Connected');
   const [lastUpdated, setLastUpdated] = useState(new Date());
   
-  // Professional metrics
+  // Professional metrics (converted to INR)
   const [efficiencyScore, setEfficiencyScore] = useState(87);
   const [totalDistance, setTotalDistance] = useState(2847);
   const [carbonSaved, setCarbonSaved] = useState(234.5);
-  const [energyCost, setEnergyCost] = useState(45.20);
+  const [energyCost, setEnergyCost] = useState(3745.50); // Converted to INR
 
   // Check for authentication and get user data
   useEffect(() => {
@@ -81,7 +86,7 @@ export default function Dashboard() {
     }
   }, [feature]);
 
-  // Enhanced Dashboard Features with professional data
+  // Enhanced Dashboard Features with professional data (removed arrows)
   const dashboardFeatures = [
     {
       id: 'company-vision',
@@ -317,7 +322,6 @@ export default function Dashboard() {
                       )}>
                         <Icon className={`h-6 w-6 sm:h-7 sm:w-7 ${feature.iconColor} group-hover:animate-pulse`} />
                       </div>
-                      <ChevronRight className="h-5 w-5 text-gray-400 group-hover:text-white transition-colors" />
                     </div>
                     
                     <h3 className="text-white font-bold text-base sm:text-lg mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-300 transition-all duration-300">
@@ -333,13 +337,6 @@ export default function Dashboard() {
                       <div className="flex items-center text-xs text-gray-500 group-hover:text-gray-300 transition-all duration-300">
                         <span className="hidden sm:inline">Explore Feature</span>
                         <span className="sm:hidden">Open</span>
-                        <motion.span 
-                          className="ml-2"
-                          animate={{ x: [0, 5, 0] }}
-                          transition={{ duration: 1.5, repeat: Infinity }}
-                        >
-                          →
-                        </motion.span>
                       </div>
                     </div>
                   </div>
@@ -358,9 +355,27 @@ export default function Dashboard() {
           <NotificationCenter />
         </motion.div>
 
+        {/* Customer Management & Security */}
+        <motion.div 
+          className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6" 
+          variants={itemVariants}
+        >
+          <CustomerManagement />
+          <SecurityManager />
+        </motion.div>
+
         {/* Charging Intelligence */}
         <motion.div variants={itemVariants}>
           <ChargingIntelligence />
+        </motion.div>
+
+        {/* Reports & AI Insights */}
+        <motion.div 
+          className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6" 
+          variants={itemVariants}
+        >
+          <ReportsExport />
+          <AIInsights />
         </motion.div>
 
         {/* Professional Analytics Section */}
