@@ -359,7 +359,7 @@ export default function Dashboard() {
 
         {/* Energy Optimization */}
         <motion.div variants={itemVariants}>
-          <EnergyOptimization />
+          <EnergyOptimization energyCost={energyCost} />
         </motion.div>
 
         {/* New Professional Components */}

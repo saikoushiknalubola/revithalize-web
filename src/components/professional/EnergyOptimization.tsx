@@ -16,7 +16,11 @@ interface OptimizationRule {
   type: 'charging' | 'performance' | 'route';
 }
 
-export function EnergyOptimization() {
+interface EnergyOptimizationProps {
+  energyCost: number;
+}
+
+export function EnergyOptimization({ energyCost }: EnergyOptimizationProps) {
   const [optimizationMode, setOptimizationMode] = useState<'eco' | 'balanced' | 'performance'>('balanced');
   const [autoOptimize, setAutoOptimize] = useState(true);
 
