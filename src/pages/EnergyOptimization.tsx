@@ -1,11 +1,9 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { EnergyOptimization as EnergyOptimizationComponent } from '@/components/professional/EnergyOptimization';
 
 export default function EnergyOptimization() {
-  const [energyCost] = useState(3745.50); // INR
-
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -19,7 +17,7 @@ export default function EnergyOptimization() {
             </p>
           </div>
         </div>
-        <EnergyOptimizationComponent energyCost={energyCost} />
+        <EnergyOptimizationComponent />
       </div>
     </DashboardLayout>
   );
