@@ -1,217 +1,221 @@
 
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Plug, CheckCircle, AlertCircle, Globe, Smartphone, Cloud, Database, Settings } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Plug, Check, AlertCircle, Settings, RefreshCw, ExternalLink } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
-interface Integration {
-  id: string;
-  name: string;
-  description: string;
-  category: 'api' | 'iot' | 'cloud' | 'mobile';
-  status: 'connected' | 'disconnected' | 'error';
-  lastSync: string;
-  icon: string;
-}
+const integrations = [
+  {
+    id: 1,
+    name: "Tesla Charging Network",
+    description: "Access to Tesla Supercharger network",
+    status: "connected",
+    type: "charging",
+    lastSync: "2 mins ago",
+    health: "excellent"
+  },
+  {
+    id: 2,
+    name: "Google Maps API",
+    description: "Route optimization and traffic data",
+    status: "connected",
+    type: "navigation",
+    lastSync: "5 mins ago",
+    health: "good"
+  },
+  {
+    id: 3,
+    name: "Weather API",
+    description: "Weather-based range predictions",
+    status: "connected",
+    type: "data",
+    lastSync: "1 min ago",
+    health: "excellent"
+  },
+  {
+    id: 4,
+    name: "Fleet Management System",
+    description: "Enterprise fleet coordination",
+    status: "disconnected",
+    type: "management",
+    lastSync: "Never",
+    health: "unknown"
+  },
+  {
+    id: 5,
+    name: "Energy Grid API",
+    description: "Smart grid integration for optimal charging",
+    status: "warning",
+    type: "energy",
+    lastSync: "15 mins ago",
+    health: "warning"
+  },
+  {
+    id: 6,
+    name: "Maintenance Portal",
+    description: "Automated service scheduling",
+    status: "connected",
+    type: "service",
+    lastSync: "3 mins ago",
+    health: "good"
+  }
+];
+
+const availableIntegrations = [
+  {
+    id: 7,
+    name: "ChargePoint Network",
+    description: "Access to ChargePoint charging stations",
+    type: "charging",
+    popularity: "high"
+  },
+  {
+    id: 8,
+    name: "Waze Traffic Data",
+    description: "Real-time traffic optimization",
+    type: "navigation",
+    popularity: "medium"
+  },
+  {
+    id: 9,
+    name: "Smart Home Integration",
+    description: "Connect with home automation systems",
+    type: "smart-home",
+    popularity: "high"
+  }
+];
 
 export function IntegrationHub() {
-  const [selectedCategory, setSelectedCategory] = useState<'all' | 'api' | 'iot' | 'cloud' | 'mobile'>('all');
-
-  const [integrations] = useState<Integration[]>([
-    {
-      id: '1',
-      name: 'Google Maps API',
-      description: 'Real-time navigation and charging station data',
-      category: 'api',
-      status: 'connected',
-      lastSync: '2 min ago',
-      icon: '🗺️'
-    },
-    {
-      id: '2',
-      name: 'AWS IoT Core',
-      description: 'Cloud-based IoT device management',
-      category: 'cloud',
-      status: 'connected',
-      lastSync: '5 min ago',
-      icon: '☁️'
-    },
-    {
-      id: '3',
-      name: 'Mobile App Sync',
-      description: 'ReVithalize mobile application integration',
-      category: 'mobile',
-      status: 'connected',
-      lastSync: '1 min ago',
-      icon: '📱'
-    },
-    {
-      id: '4',
-      name: 'Weather API',
-      description: 'Weather data for route optimization',
-      category: 'api',
-      status: 'disconnected',
-      lastSync: '2 hours ago',
-      icon: '🌤️'
-    },
-    {
-      id: '5',
-      name: 'OBD-II Scanner',
-      description: 'Direct vehicle diagnostics interface',
-      category: 'iot',
-      status: 'error',
-      lastSync: '15 min ago',
-      icon: '🔧'
-    },
-    {
-      id: '6',
-      name: 'Stripe Payments',
-      description: 'Payment processing for charging sessions',
-      category: 'api',
-      status: 'connected',
-      lastSync: '30 min ago',
-      icon: '💳'
-    }
-  ]);
-
-  const categories = [
-    { key: 'all', label: 'All', icon: Globe },
-    { key: 'api', label: 'APIs', icon: Plug },
-    { key: 'iot', label: 'IoT', icon: Database },
-    { key: 'cloud', label: 'Cloud', icon: Cloud },
-    { key: 'mobile', label: 'Mobile', icon: Smartphone }
-  ];
+  const [selectedIntegration, setSelectedIntegration] = useState<number | null>(null);
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'connected': return 'text-green-400 bg-green-400/20';
-      case 'disconnected': return 'text-gray-400 bg-gray-400/20';
-      case 'error': return 'text-red-400 bg-red-400/20';
-      default: return 'text-gray-400 bg-gray-400/20';
+      case 'connected': return 'text-green-400';
+      case 'warning': return 'text-yellow-400';
+      case 'disconnected': return 'text-red-400';
+      default: return 'text-gray-400';
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'connected': return CheckCircle;
-      case 'error': return AlertCircle;
-      default: return AlertCircle;
+      case 'connected': return <Check className="h-4 w-4" />;
+      case 'warning': return <AlertCircle className="h-4 w-4" />;
+      case 'disconnected': return <RefreshCw className="h-4 w-4" />;
+      default: return <AlertCircle className="h-4 w-4" />;
     }
   };
-
-  const filteredIntegrations = selectedCategory === 'all' 
-    ? integrations 
-    : integrations.filter(integration => integration.category === selectedCategory);
-
-  const connectedCount = integrations.filter(i => i.status === 'connected').length;
 
   return (
     <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700 shadow-xl">
       <CardHeader className="pb-4">
-        <CardTitle className="text-white text-xl flex items-center justify-between">
-          <div className="flex items-center">
-            <Plug className="mr-3 h-6 w-6 text-cyan-400" />
-            Integration Hub
-          </div>
-          <div className="flex items-center space-x-2">
-            <Badge className="bg-cyan-500/20 text-cyan-400">
-              {connectedCount}/{integrations.length} Connected
-            </Badge>
-            <Button size="sm" variant="outline" className="text-xs">
-              <Settings className="h-3 w-3 mr-1" />
-              Manage
-            </Button>
+        <CardTitle className="text-white text-xl flex items-center">
+          <Plug className="mr-3 h-6 w-6 text-revithalize-green" />
+          Integration Hub
+          <div className="ml-auto bg-blue-500/20 px-3 py-1 rounded-full">
+            <span className="text-xs font-medium text-blue-400">6 Connected</span>
           </div>
         </CardTitle>
+        <CardDescription className="text-gray-400">
+          Manage all your third-party integrations and APIs
+        </CardDescription>
       </CardHeader>
       
       <CardContent className="space-y-6">
-        {/* Category Filter */}
-        <div className="flex flex-wrap gap-2">
-          {categories.map((category) => {
-            const Icon = category.icon;
-            return (
-              <motion.button
-                key={category.key}
-                onClick={() => setSelectedCategory(category.key as any)}
-                className={cn(
-                  "flex items-center space-x-2 px-3 py-2 rounded-lg text-xs font-medium transition-all",
-                  selectedCategory === category.key
-                    ? "bg-cyan-500/20 text-cyan-400 border border-cyan-500/40"
-                    : "bg-gray-800/50 text-gray-400 hover:bg-gray-700/50"
-                )}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+        {/* Active Integrations */}
+        <div className="space-y-3">
+          <h3 className="text-lg font-semibold text-white mb-3">Active Integrations</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {integrations.map((integration, index) => (
+              <motion.div
+                key={integration.id}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: index * 0.1 }}
+                className="bg-gradient-to-r from-gray-800/70 to-gray-700/70 rounded-xl p-4 border border-gray-600/30 hover:border-revithalize-green/50 transition-all cursor-pointer"
+                onClick={() => setSelectedIntegration(integration.id)}
               >
-                <Icon className="h-3 w-3" />
-                <span>{category.label}</span>
-              </motion.button>
-            );
-          })}
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex items-center space-x-3">
+                    <div className="bg-black/30 p-2 rounded-lg">
+                      <Plug className="h-4 w-4 text-revithalize-green" />
+                    </div>
+                    <div>
+                      <h4 className="text-white font-medium">{integration.name}</h4>
+                      <p className="text-xs text-gray-400">{integration.description}</p>
+                    </div>
+                  </div>
+                  <div className={`flex items-center space-x-1 ${getStatusColor(integration.status)}`}>
+                    {getStatusIcon(integration.status)}
+                    <span className="text-xs font-medium capitalize">{integration.status}</span>
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-between text-xs text-gray-400">
+                  <span>Last sync: {integration.lastSync}</span>
+                  <span className={`px-2 py-1 rounded ${
+                    integration.health === 'excellent' ? 'bg-green-500/20 text-green-400' :
+                    integration.health === 'good' ? 'bg-blue-500/20 text-blue-400' :
+                    integration.health === 'warning' ? 'bg-yellow-500/20 text-yellow-400' :
+                    'bg-gray-500/20 text-gray-400'
+                  }`}>
+                    {integration.health}
+                  </span>
+                </div>
+                
+                <div className="mt-3 flex space-x-2">
+                  <Button size="sm" variant="outline" className="bg-gray-800 border-gray-600 text-gray-300 hover:bg-gray-700">
+                    <Settings className="h-3 w-3 mr-1" />
+                    Configure
+                  </Button>
+                  {integration.status === 'disconnected' && (
+                    <Button size="sm" className="bg-revithalize-green hover:bg-revithalize-green/80 text-black">
+                      Connect
+                    </Button>
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
 
-        {/* Integrations List */}
+        {/* Available Integrations */}
         <div className="space-y-3">
-          {filteredIntegrations.map((integration, index) => {
-            const StatusIcon = getStatusIcon(integration.status);
-            return (
+          <h3 className="text-lg font-semibold text-white mb-3">Available Integrations</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {availableIntegrations.map((integration, index) => (
               <motion.div
                 key={integration.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="flex items-center justify-between p-4 bg-gray-800/30 rounded-lg border border-gray-700/50"
+                className="bg-gradient-to-r from-gray-800/50 to-gray-700/50 rounded-xl p-4 border border-gray-600/30 hover:border-revithalize-green/50 transition-all"
               >
-                <div className="flex items-center space-x-3">
-                  <span className="text-2xl">{integration.icon}</span>
-                  <div>
-                    <div className="text-sm font-medium text-white">{integration.name}</div>
-                    <div className="text-xs text-gray-400">{integration.description}</div>
-                    <div className="text-xs text-gray-500 mt-1">Last sync: {integration.lastSync}</div>
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex items-center space-x-3">
+                    <div className="bg-black/30 p-2 rounded-lg">
+                      <ExternalLink className="h-4 w-4 text-blue-400" />
+                    </div>
+                    <div>
+                      <h4 className="text-white font-medium text-sm">{integration.name}</h4>
+                      <p className="text-xs text-gray-400">{integration.description}</p>
+                    </div>
                   </div>
+                  <span className={`px-2 py-1 rounded text-xs ${
+                    integration.popularity === 'high' ? 'bg-green-500/20 text-green-400' :
+                    'bg-yellow-500/20 text-yellow-400'
+                  }`}>
+                    {integration.popularity} demand
+                  </span>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <Badge className={cn("text-xs", getStatusColor(integration.status))}>
-                    <StatusIcon className="h-3 w-3 mr-1" />
-                    {integration.status}
-                  </Badge>
-                  <Button size="sm" variant="ghost" className="text-xs">
-                    {integration.status === 'connected' ? 'Configure' : 'Connect'}
-                  </Button>
-                </div>
+                
+                <Button size="sm" className="w-full bg-revithalize-green hover:bg-revithalize-green/80 text-black">
+                  <Plug className="h-3 w-3 mr-1" />
+                  Add Integration
+                </Button>
               </motion.div>
-            );
-          })}
-        </div>
-
-        {/* Quick Actions */}
-        <div className="grid grid-cols-2 gap-3">
-          <Button className="bg-gradient-to-r from-cyan-600/80 to-cyan-500/80 hover:from-cyan-500/80 hover:to-cyan-400/80 text-white">
-            <Plug className="h-4 w-4 mr-2" />
-            Add Integration
-          </Button>
-          <Button variant="outline" className="border-gray-600 text-gray-300">
-            <Globe className="h-4 w-4 mr-2" />
-            Browse Marketplace
-          </Button>
-        </div>
-
-        {/* Integration Health */}
-        <div className="bg-gradient-to-r from-cyan-900/30 to-cyan-800/30 rounded-lg p-4 border border-cyan-500/30">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="text-sm font-medium text-white">Integration Health</div>
-              <div className="text-xs text-gray-400">Overall system connectivity status</div>
-            </div>
-            <div className="text-right">
-              <div className="text-lg font-bold text-cyan-400">
-                {((connectedCount / integrations.length) * 100).toFixed(0)}%
-              </div>
-              <div className="text-xs text-cyan-400">System reliability</div>
-            </div>
+            ))}
           </div>
         </div>
       </CardContent>

@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Zap, TrendingDown, Target, Lightbulb, Battery, BarChart3 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
 
 const energyData = [
   { time: '6AM', consumption: 12, optimization: 8, savings: 4 },
@@ -66,22 +67,21 @@ export function EnergyOptimization() {
       </CardHeader>
       
       <CardContent className="space-y-6">
-        {/* Period Selector */}
+        {/* Period Selector with improved visibility */}
         <div className="flex space-x-2">
           {periods.map((period) => (
-            <motion.button
+            <Button
               key={period.id}
               onClick={() => setSelectedPeriod(period.id)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                selectedPeriod === period.id
-                  ? 'bg-revithalize-green/20 text-revithalize-green border border-revithalize-green'
-                  : 'bg-gray-800/50 text-gray-400 border border-gray-600 hover:border-gray-500'
-              }`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              variant={selectedPeriod === period.id ? "default" : "outline"}
+              size="sm"
+              className={selectedPeriod === period.id
+                ? "bg-revithalize-green hover:bg-revithalize-green/80 text-black font-medium border-0"
+                : "bg-gray-800 border-gray-600 text-gray-300 hover:bg-gray-700 hover:border-gray-500 hover:text-white"
+              }
             >
               {period.label}
-            </motion.button>
+            </Button>
           ))}
         </div>
 
@@ -139,7 +139,7 @@ export function EnergyOptimization() {
           </ResponsiveContainer>
         </div>
 
-        {/* Optimization Suggestions */}
+        {/* Optimization Suggestions with improved buttons */}
         <div className="space-y-3">
           <h3 className="text-lg font-semibold text-white mb-3 flex items-center">
             <Lightbulb className="mr-2 h-5 w-5 text-yellow-400" />
@@ -175,7 +175,13 @@ export function EnergyOptimization() {
                         </span>
                       </div>
                     </div>
-                    <p className="text-sm text-gray-400">{suggestion.description}</p>
+                    <p className="text-sm text-gray-400 mb-3">{suggestion.description}</p>
+                    <Button
+                      size="sm"
+                      className="bg-revithalize-green hover:bg-revithalize-green/80 text-black font-medium"
+                    >
+                      Apply Optimization
+                    </Button>
                   </div>
                 </div>
               </motion.div>
