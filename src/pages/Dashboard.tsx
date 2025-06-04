@@ -25,6 +25,10 @@ import { AIInsights } from '@/components/professional/AIInsights';
 import { AdvancedAnalytics } from '@/components/professional/AdvancedAnalytics';
 import { SystemMonitoring } from '@/components/professional/SystemMonitoring';
 import { EnergyOptimization } from '@/components/professional/EnergyOptimization';
+import { PredictiveAnalytics } from '@/components/professional/PredictiveAnalytics';
+import { PerformanceOptimization } from '@/components/professional/PerformanceOptimization';
+import { IntegrationHub } from '@/components/professional/IntegrationHub';
+import { ComplianceManager } from '@/components/professional/ComplianceManager';
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -360,6 +364,23 @@ export default function Dashboard() {
         {/* Energy Optimization */}
         <motion.div variants={itemVariants}>
           <EnergyOptimization energyCost={energyCost} />
+        </motion.div>
+
+        {/* Next Phase Professional Features */}
+        <motion.div 
+          className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mt-8" 
+          variants={itemVariants}
+        >
+          <PredictiveAnalytics />
+          <PerformanceOptimization />
+        </motion.div>
+
+        <motion.div 
+          className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6" 
+          variants={itemVariants}
+        >
+          <IntegrationHub />
+          <ComplianceManager />
         </motion.div>
 
         {/* New Professional Components */}
