@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, Battery, MapPin, BarChart2, User, Settings, Menu, X, LogOut, Bike, HelpCircle, Info, Shield, Leaf, ScanLine, Cpu, Building2, Activity, Wrench, Users } from 'lucide-react';
+import { Home, Battery, MapPin, BarChart2, User, Settings, Menu, X, LogOut, Bike, HelpCircle, Info, Shield, Leaf, ScanLine, Cpu, Building2, Activity, Wrench, Users, Truck, TrendingUp, Monitor, Zap, Brain, Plug, FileCheck, BatteryCharging, Bell, UserCheck, Lock, FileBarChart, Lightbulb } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useState, useEffect } from 'react';
 import { useScreenSize } from '@/hooks/use-mobile';
@@ -97,6 +97,24 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
     { icon: BarChart2, label: "Analytics", to: "/analytics" },
   ];
 
+  // Professional Tools - Main management features
+  const professionalTools = [
+    { icon: Truck, label: "Fleet Management", to: "/fleet-management" },
+    { icon: TrendingUp, label: "Advanced Analytics", to: "/advanced-analytics" },
+    { icon: Monitor, label: "System Monitoring", to: "/system-monitoring" },
+    { icon: Zap, label: "Energy Optimization", to: "/energy-optimization" },
+    { icon: Brain, label: "Predictive Analytics", to: "/predictive-analytics" },
+    { icon: Settings, label: "Performance Optimization", to: "/performance-optimization" },
+    { icon: Plug, label: "Integration Hub", to: "/integration-hub" },
+    { icon: FileCheck, label: "Compliance Manager", to: "/compliance-manager" },
+    { icon: BatteryCharging, label: "Charging Intelligence", to: "/charging-intelligence" },
+    { icon: Bell, label: "Notifications", to: "/notifications" },
+    { icon: UserCheck, label: "Customer Management", to: "/customer-management" },
+    { icon: Lock, label: "Security", to: "/security" },
+    { icon: FileBarChart, label: "Reports", to: "/reports" },
+    { icon: Lightbulb, label: "AI Insights", to: "/ai-insights" },
+  ];
+
   // Innovative features for direct activation
   const innovativeFeatures = [
     { icon: Shield, label: "Battery Twin", to: "/battery-twin" },
@@ -105,7 +123,7 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
     { icon: Cpu, label: "Smart Grid", to: "/smart-grid" },
   ];
 
-  // New dashboard features - NOW WITH PROPER ROUTES
+  // Dashboard features
   const dashboardFeatures = [
     { icon: Building2, label: "Company Vision", to: "/company-vision" },
     { icon: Activity, label: "Carbon Tracker", to: "/carbon-tracker" },
@@ -195,13 +213,31 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
             ))}
             
             <div className="mt-6 mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              Professional Tools
+            </div>
+            {professionalTools.map((item, index) => (
+              <div 
+                key={item.to}
+                className="animate-fade-in"
+                style={{ animationDelay: `${(index + mainNavItems.length) * 50}ms` }}
+              >
+                <NavItem
+                  icon={item.icon}
+                  label={item.label}
+                  to={item.to}
+                  active={location.pathname === item.to}
+                />
+              </div>
+            ))}
+            
+            <div className="mt-6 mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
               Dashboard Features
             </div>
             {dashboardFeatures.map((item, index) => (
               <div 
                 key={item.to}
                 className="animate-fade-in"
-                style={{ animationDelay: `${(index + mainNavItems.length) * 50}ms` }}
+                style={{ animationDelay: `${(index + mainNavItems.length + professionalTools.length) * 50}ms` }}
               >
                 <NavItem
                   icon={item.icon}
@@ -219,7 +255,7 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
               <div 
                 key={item.to}
                 className="animate-fade-in"
-                style={{ animationDelay: `${(index + mainNavItems.length + dashboardFeatures.length) * 50}ms` }}
+                style={{ animationDelay: `${(index + mainNavItems.length + professionalTools.length + dashboardFeatures.length) * 50}ms` }}
               >
                 <NavItem
                   icon={item.icon}
@@ -237,7 +273,7 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
               <div 
                 key={item.to}
                 className="animate-fade-in"
-                style={{ animationDelay: `${(index + mainNavItems.length + dashboardFeatures.length + innovativeFeatures.length) * 50}ms` }}
+                style={{ animationDelay: `${(index + mainNavItems.length + professionalTools.length + dashboardFeatures.length + innovativeFeatures.length) * 50}ms` }}
               >
                 <NavItem
                   icon={item.icon}

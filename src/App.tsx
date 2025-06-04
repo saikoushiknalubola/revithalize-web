@@ -25,6 +25,22 @@ import CarbonTracker from "./pages/CarbonTracker";
 import MaintenanceAI from "./pages/MaintenanceAI";
 import EnergyNetwork from "./pages/EnergyNetwork";
 
+// Professional Feature Pages
+import FleetManagement from "./pages/FleetManagement";
+import AdvancedAnalytics from "./pages/AdvancedAnalytics";
+import SystemMonitoring from "./pages/SystemMonitoring";
+import EnergyOptimization from "./pages/EnergyOptimization";
+import PredictiveAnalytics from "./pages/PredictiveAnalytics";
+import PerformanceOptimization from "./pages/PerformanceOptimization";
+import IntegrationHub from "./pages/IntegrationHub";
+import ComplianceManager from "./pages/ComplianceManager";
+import ChargingIntelligence from "./pages/ChargingIntelligence";
+import NotificationCenter from "./pages/NotificationCenter";
+import CustomerManagement from "./pages/CustomerManagement";
+import SecurityManager from "./pages/SecurityManager";
+import ReportsExport from "./pages/ReportsExport";
+import AIInsights from "./pages/AIInsights";
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -68,6 +84,22 @@ const App = () => (
           <Route path="/carbon-tracker" element={<ProtectedRoute><CarbonTracker /></ProtectedRoute>} />
           <Route path="/maintenance-ai" element={<ProtectedRoute><MaintenanceAI /></ProtectedRoute>} />
           <Route path="/energy-network" element={<ProtectedRoute><EnergyNetwork /></ProtectedRoute>} />
+          
+          {/* Professional Tool routes */}
+          <Route path="/fleet-management" element={<ProtectedRoute><FleetManagement /></ProtectedRoute>} />
+          <Route path="/advanced-analytics" element={<ProtectedRoute><AdvancedAnalytics /></ProtectedRoute>} />
+          <Route path="/system-monitoring" element={<ProtectedRoute><SystemMonitoring /></ProtectedRoute>} />
+          <Route path="/energy-optimization" element={<ProtectedRoute><EnergyOptimization /></ProtectedRoute>} />
+          <Route path="/predictive-analytics" element={<ProtectedRoute><PredictiveAnalytics /></ProtectedRoute>} />
+          <Route path="/performance-optimization" element={<ProtectedRoute><PerformanceOptimization /></ProtectedRoute>} />
+          <Route path="/integration-hub" element={<ProtectedRoute><IntegrationHub /></ProtectedRoute>} />
+          <Route path="/compliance-manager" element={<ProtectedRoute><ComplianceManager /></ProtectedRoute>} />
+          <Route path="/charging-intelligence" element={<ProtectedRoute><ChargingIntelligence /></ProtectedRoute>} />
+          <Route path="/notifications" element={<ProtectedRoute><NotificationCenter /></ProtectedRoute>} />
+          <Route path="/customer-management" element={<ProtectedRoute><CustomerManagement /></ProtectedRoute>} />
+          <Route path="/security" element={<ProtectedRoute><SecurityManager /></ProtectedRoute>} />
+          <Route path="/reports" element={<ProtectedRoute><ReportsExport /></ProtectedRoute>} />
+          <Route path="/ai-insights" element={<ProtectedRoute><AIInsights /></ProtectedRoute>} />
           
           {/* Not found route */}
           <Route path="*" element={<NotFound />} />

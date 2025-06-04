@@ -1,6 +1,7 @@
+
 import React, { useEffect, useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { Battery, Bolt, Gauge, ThermometerSnowflake, MapPin, Bell, Building2, Activity, Wrench, Users, TrendingUp, Zap, Leaf, Shield, ChevronRight, Wifi, AlertTriangle, CheckCircle, Clock } from 'lucide-react';
+import { Battery, Bolt, Gauge, ThermometerSnowflake, MapPin, Bell, Building2, Activity, Wrench, Users, TrendingUp, Zap, Leaf, Shield, ChevronRight, Wifi, AlertTriangle, CheckCircle, Clock, Truck, Monitor, Brain, ArrowRight } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { BatteryMetrics } from '@/components/features/BatteryMetrics';
 import { ChargingScheduler } from '@/components/features/ChargingScheduler';
@@ -14,21 +15,7 @@ import { cn } from '@/lib/utils';
 import { RealTimeStatusCard } from '@/components/professional/RealTimeStatusCard';
 import { ProfessionalQuickActions } from '@/components/professional/ProfessionalQuickActions';
 import { MobileVehicleStatus } from '@/components/mobile/MobileVehicleStatus';
-import { FleetManagement } from '@/components/professional/FleetManagement';
-import { ChargingIntelligence } from '@/components/professional/ChargingIntelligence';
-import { NotificationCenter } from '@/components/professional/NotificationCenter';
 import { MobileBottomSheet } from '@/components/mobile/MobileBottomSheet';
-import { CustomerManagement } from '@/components/professional/CustomerManagement';
-import { SecurityManager } from '@/components/professional/SecurityManager';
-import { ReportsExport } from '@/components/professional/ReportsExport';
-import { AIInsights } from '@/components/professional/AIInsights';
-import { AdvancedAnalytics } from '@/components/professional/AdvancedAnalytics';
-import { SystemMonitoring } from '@/components/professional/SystemMonitoring';
-import { EnergyOptimization } from '@/components/professional/EnergyOptimization';
-import { PredictiveAnalytics } from '@/components/professional/PredictiveAnalytics';
-import { PerformanceOptimization } from '@/components/professional/PerformanceOptimization';
-import { IntegrationHub } from '@/components/professional/IntegrationHub';
-import { ComplianceManager } from '@/components/professional/ComplianceManager';
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -92,63 +79,47 @@ export default function Dashboard() {
     }
   }, [feature]);
 
-  // Enhanced Dashboard Features with professional data (removed arrows)
-  const dashboardFeatures = [
+  // Quick Access Cards for Professional Features
+  const quickAccessFeatures = [
     {
-      id: 'company-vision',
-      title: "Company Vision",
-      description: "Discover ReVithalize's mission to revolutionize EV retrofitting",
-      icon: Building2,
-      color: "bg-gradient-to-br from-indigo-900/80 to-indigo-600/40",
-      iconColor: "text-indigo-300",
-      borderColor: "border-indigo-500/40",
-      route: "/company-vision",
-      stats: "Global Impact",
-      value: "50K+ Vehicles",
-      professional: true,
-      badge: "Mission"
+      id: 'fleet',
+      title: "Fleet Management",
+      description: "Monitor and manage your entire vehicle fleet",
+      icon: Truck,
+      route: "/fleet-management",
+      color: "from-blue-900/80 to-blue-600/40",
+      iconColor: "text-blue-300",
+      stats: "12 Vehicles"
     },
     {
-      id: 'carbon-tracker',
-      title: "Carbon Impact Tracker",
-      description: "Real-time environmental impact monitoring with carbon credits marketplace",
-      icon: Activity,
-      color: "bg-gradient-to-br from-emerald-900/80 to-emerald-600/40",
-      iconColor: "text-emerald-300",
-      borderColor: "border-emerald-500/40",
-      route: "/carbon-tracker",
-      stats: "CO₂ Saved Today",
-      value: `${carbonSaved.toFixed(1)} kg`,
-      professional: true,
-      badge: "Environmental"
+      id: 'analytics',
+      title: "Advanced Analytics",
+      description: "Deep insights and comprehensive data analysis",
+      icon: TrendingUp,
+      route: "/advanced-analytics",
+      color: "from-purple-900/80 to-purple-600/40",
+      iconColor: "text-purple-300",
+      stats: "24 Reports"
     },
     {
-      id: 'predictive-maintenance',
-      title: "AI Maintenance Assistant",
-      description: "Predictive maintenance powered by advanced machine learning algorithms",
-      icon: Wrench,
-      color: "bg-gradient-to-br from-orange-900/80 to-orange-600/40",
+      id: 'monitoring',
+      title: "System Monitoring",
+      description: "Real-time system health and performance",
+      icon: Monitor,
+      route: "/system-monitoring",
+      color: "from-green-900/80 to-green-600/40",
+      iconColor: "text-green-300",
+      stats: "All Systems OK"
+    },
+    {
+      id: 'ai-insights',
+      title: "AI Insights",
+      description: "AI-powered recommendations and predictions",
+      icon: Brain,
+      route: "/ai-insights",
+      color: "from-orange-900/80 to-orange-600/40",
       iconColor: "text-orange-300",
-      borderColor: "border-orange-500/40",
-      route: "/maintenance-ai",
-      stats: "Next Service",
-      value: "42 days",
-      professional: true,
-      badge: "AI Powered"
-    },
-    {
-      id: 'social-energy',
-      title: "Energy Network",
-      description: "Connect with EV community and participate in energy trading marketplace",
-      icon: Users,
-      color: "bg-gradient-to-br from-cyan-900/80 to-cyan-600/40",
-      iconColor: "text-cyan-300",
-      borderColor: "border-cyan-500/40",
-      route: "/energy-network",
-      stats: "Network Users",
-      value: "47.2K Active",
-      professional: true,
-      badge: "Community"
+      stats: "5 New Insights"
     }
   ];
 
@@ -269,7 +240,7 @@ export default function Dashboard() {
           </motion.div>
         )}
 
-        {/* Professional Dashboard Features */}
+        {/* Quick Access to Professional Features */}
         <motion.div 
           className="mt-8"
           initial={{ opacity: 0, y: 30 }}
@@ -279,17 +250,19 @@ export default function Dashboard() {
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-revithalize-green to-revithalize-blue flex items-center">
               <Shield className="mr-3 h-5 w-5 sm:h-6 sm:w-6 text-revithalize-green" />
-              Professional Features
+              Quick Access
             </h2>
-            <div className="flex items-center text-sm text-gray-400">
-              <TrendingUp className="mr-2 h-4 w-4 text-revithalize-green" />
-              <span className="hidden sm:inline">Enterprise Grade</span>
-              <span className="sm:hidden">Pro</span>
-            </div>
+            <button
+              onClick={() => navigate('/fleet-management')}
+              className="text-sm text-gray-400 hover:text-revithalize-green transition-colors flex items-center"
+            >
+              View All Tools
+              <ArrowRight className="ml-1 h-4 w-4" />
+            </button>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-            {dashboardFeatures.map((feature, index) => {
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            {quickAccessFeatures.map((feature, index) => {
               const Icon = feature.icon;
               return (
                 <motion.div
@@ -306,45 +279,28 @@ export default function Dashboard() {
                   }}
                   onClick={() => navigate(feature.route)}
                   className={cn(
-                    feature.color, 
-                    `border ${feature.borderColor} rounded-2xl p-4 sm:p-6 cursor-pointer shadow-xl hover:shadow-2xl transition-all duration-500 backdrop-blur-sm relative overflow-hidden group`
+                    `bg-gradient-to-br ${feature.color} border border-gray-600/30 rounded-2xl p-4 cursor-pointer shadow-xl hover:shadow-2xl transition-all duration-500 backdrop-blur-sm relative overflow-hidden group`
                   )}
                 >
-                  {/* Professional badge */}
-                  <div className="absolute top-3 right-3">
-                    <span className="bg-black/40 text-xs px-2 py-1 rounded-full text-gray-300 font-medium">
-                      {feature.badge}
-                    </span>
-                  </div>
-                  
-                  {/* Animated background gradient */}
                   <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   
                   <div className="relative z-10">
-                    <div className="flex items-start justify-between mb-4">
+                    <div className="flex items-center justify-between mb-3">
                       <div className={cn(
-                        "bg-black/40 p-3 sm:p-4 rounded-xl group-hover:bg-black/50 transition-all duration-300",
-                        "group-hover:scale-110 group-hover:rotate-3"
+                        "bg-black/40 p-3 rounded-xl group-hover:bg-black/50 transition-all duration-300",
+                        "group-hover:scale-110"
                       )}>
-                        <Icon className={`h-6 w-6 sm:h-7 sm:w-7 ${feature.iconColor} group-hover:animate-pulse`} />
+                        <Icon className={`h-5 w-5 ${feature.iconColor} group-hover:animate-pulse`} />
                       </div>
+                      <ArrowRight className="h-4 w-4 text-gray-400 group-hover:text-white transition-colors" />
                     </div>
                     
-                    <h3 className="text-white font-bold text-base sm:text-lg mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-300 transition-all duration-300">
+                    <h3 className="text-white font-bold text-sm mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-300 transition-all duration-300">
                       {feature.title}
                     </h3>
-                    <p className="text-gray-400 text-sm leading-relaxed mb-4">{feature.description}</p>
+                    <p className="text-gray-400 text-xs leading-relaxed mb-2">{feature.description}</p>
                     
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="text-xs text-gray-500">{feature.stats}</div>
-                        <div className={`text-sm font-bold ${feature.iconColor}`}>{feature.value}</div>
-                      </div>
-                      <div className="flex items-center text-xs text-gray-500 group-hover:text-gray-300 transition-all duration-300">
-                        <span className="hidden sm:inline">Explore Feature</span>
-                        <span className="sm:hidden">Open</span>
-                      </div>
-                    </div>
+                    <div className="text-xs text-gray-500">{feature.stats}</div>
                   </div>
                 </motion.div>
               );
@@ -352,70 +308,7 @@ export default function Dashboard() {
           </div>
         </motion.div>
 
-        {/* Advanced Analytics & System Monitoring */}
-        <motion.div 
-          className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mt-8" 
-          variants={itemVariants}
-        >
-          <AdvancedAnalytics />
-          <SystemMonitoring />
-        </motion.div>
-
-        {/* Energy Optimization */}
-        <motion.div variants={itemVariants}>
-          <EnergyOptimization energyCost={energyCost} />
-        </motion.div>
-
-        {/* Next Phase Professional Features */}
-        <motion.div 
-          className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mt-8" 
-          variants={itemVariants}
-        >
-          <PredictiveAnalytics />
-          <PerformanceOptimization />
-        </motion.div>
-
-        <motion.div 
-          className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6" 
-          variants={itemVariants}
-        >
-          <IntegrationHub />
-          <ComplianceManager />
-        </motion.div>
-
-        {/* New Professional Components */}
-        <motion.div 
-          className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mt-8" 
-          variants={itemVariants}
-        >
-          <FleetManagement />
-          <NotificationCenter />
-        </motion.div>
-
-        {/* Customer Management & Security */}
-        <motion.div 
-          className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6" 
-          variants={itemVariants}
-        >
-          <CustomerManagement />
-          <SecurityManager />
-        </motion.div>
-
-        {/* Charging Intelligence */}
-        <motion.div variants={itemVariants}>
-          <ChargingIntelligence />
-        </motion.div>
-
-        {/* Reports & AI Insights */}
-        <motion.div 
-          className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6" 
-          variants={itemVariants}
-        >
-          <ReportsExport />
-          <AIInsights />
-        </motion.div>
-
-        {/* Professional Analytics Section */}
+        {/* Core Dashboard Analytics */}
         <motion.div 
           className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mt-8" 
           variants={itemVariants}
