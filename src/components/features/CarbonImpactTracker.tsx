@@ -100,15 +100,15 @@ export function CarbonImpactTracker() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
       {/* Enhanced Header */}
-      <Card className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border-slate-700 shadow-2xl">
+      <Card className="bg-slate-900/95 backdrop-blur-sm border-slate-700/60 shadow-2xl">
         <CardHeader className="pb-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="bg-green-500/10 p-4 rounded-xl border border-green-500/20 backdrop-blur-sm">
+              <div className="bg-green-500/20 p-4 rounded-xl border border-green-500/30 backdrop-blur-sm">
                 <Leaf className="h-8 w-8 text-green-400" />
               </div>
               <div>
-                <CardTitle className="text-white text-2xl font-bold flex items-center gap-3">
+                <CardTitle className="text-slate-100 text-2xl font-bold flex items-center gap-3">
                   Real-Time Carbon Impact Tracker
                   <Badge className="bg-green-500/20 text-green-400 border border-green-500/30 px-3 py-1">
                     <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse mr-2" />
@@ -139,7 +139,7 @@ export function CarbonImpactTracker() {
               <Button
                 variant="outline"
                 size="sm"
-                className="bg-slate-700 hover:bg-slate-600 text-white border-slate-600 shadow-lg"
+                className="bg-slate-700 hover:bg-slate-600 text-slate-200 border-slate-600 shadow-lg"
               >
                 <Download className="h-4 w-4 mr-2" />
                 Export
@@ -162,10 +162,10 @@ export function CarbonImpactTracker() {
               whileHover={{ scale: 1.02, y: -5 }}
               className="group"
             >
-              <Card className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border-slate-700 hover:border-slate-600 transition-all duration-300 shadow-xl hover:shadow-2xl backdrop-blur-sm">
+              <Card className="bg-slate-900/95 backdrop-blur-sm border-slate-700/60 hover:border-slate-600/80 transition-all duration-300 shadow-xl hover:shadow-2xl">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <div className="bg-slate-800/50 p-3 rounded-xl group-hover:bg-slate-700/50 transition-colors border border-slate-700">
+                    <div className="bg-slate-800/60 p-3 rounded-xl group-hover:bg-slate-700/60 transition-colors border border-slate-700/50">
                       <Icon className={`h-6 w-6 ${metric.color}`} />
                     </div>
                     <div className="flex items-center space-x-2">
@@ -189,7 +189,7 @@ export function CarbonImpactTracker() {
                       {metric.value}
                     </motion.div>
                     
-                    <h4 className="text-white text-sm font-semibold">{metric.title}</h4>
+                    <h4 className="text-slate-100 text-sm font-semibold">{metric.title}</h4>
                     
                     <div className="space-y-2">
                       <p className="text-slate-300 text-xs font-medium">{metric.change}</p>
@@ -202,7 +202,7 @@ export function CarbonImpactTracker() {
                         <span className="font-medium">Progress</span>
                         <span className="font-bold">{metric.percentage}%</span>
                       </div>
-                      <div className="w-full bg-slate-800 rounded-full h-3 border border-slate-700">
+                      <div className="w-full bg-slate-800/60 rounded-full h-3 border border-slate-700/50">
                         <motion.div 
                           className={cn(
                             "h-3 rounded-full shadow-lg",
@@ -226,14 +226,14 @@ export function CarbonImpactTracker() {
       </div>
 
       {/* Enhanced Time Period Selector */}
-      <Card className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border-slate-700 shadow-xl">
+      <Card className="bg-slate-900/95 backdrop-blur-sm border-slate-700/60 shadow-xl">
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
-            <h3 className="text-white font-semibold text-lg flex items-center">
+            <h3 className="text-slate-100 font-semibold text-lg flex items-center">
               <Calendar className="mr-3 h-5 w-5 text-blue-400" />
               View Period
             </h3>
-            <div className="flex space-x-1 bg-slate-800/50 rounded-xl p-1 border border-slate-700">
+            <div className="flex space-x-1 bg-slate-800/60 rounded-xl p-1 border border-slate-700/50">
               {periodOptions.map((option) => (
                 <button
                   key={option.value}
@@ -242,7 +242,7 @@ export function CarbonImpactTracker() {
                     "px-4 py-2 text-sm rounded-lg transition-all duration-200 font-medium",
                     selectedPeriod === option.value
                       ? "bg-blue-600 text-white shadow-lg shadow-blue-500/25"
-                      : "text-slate-400 hover:text-white hover:bg-slate-700"
+                      : "text-slate-400 hover:text-white hover:bg-slate-700/60"
                   )}
                 >
                   {option.label}
@@ -254,9 +254,9 @@ export function CarbonImpactTracker() {
       </Card>
 
       {/* Enhanced Achievements Section */}
-      <Card className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border-slate-700 shadow-xl">
+      <Card className="bg-slate-900/95 backdrop-blur-sm border-slate-700/60 shadow-xl">
         <CardHeader className="pb-4">
-          <CardTitle className="text-white text-xl font-bold flex items-center">
+          <CardTitle className="text-slate-100 text-xl font-bold flex items-center">
             <Award className="mr-3 h-6 w-6 text-yellow-400" />
             Environmental Achievements
           </CardTitle>
@@ -275,8 +275,8 @@ export function CarbonImpactTracker() {
                   className={cn(
                     "p-4 rounded-xl border transition-all duration-300 cursor-pointer",
                     achievement.earned 
-                      ? "bg-gradient-to-br from-yellow-900/20 via-orange-900/20 to-yellow-900/20 border-yellow-600/30 hover:border-yellow-500/50 shadow-lg hover:shadow-yellow-500/25" 
-                      : "bg-slate-800/30 border-slate-700/50 opacity-60 hover:opacity-80"
+                      ? "bg-gradient-to-br from-yellow-900/30 via-orange-900/30 to-yellow-900/30 border-yellow-600/40 hover:border-yellow-500/60 shadow-lg hover:shadow-yellow-500/25" 
+                      : "bg-slate-800/40 border-slate-700/60 opacity-60 hover:opacity-80"
                   )}
                 >
                   <div className="flex items-center space-x-3 mb-3">
@@ -290,7 +290,7 @@ export function CarbonImpactTracker() {
                       <AlertCircle className="h-4 w-4 text-slate-500" />
                     )}
                   </div>
-                  <div className="text-sm font-semibold text-white mb-1">
+                  <div className="text-sm font-semibold text-slate-100 mb-1">
                     {achievement.title}
                   </div>
                   <div className="text-xs text-slate-400">
@@ -303,25 +303,25 @@ export function CarbonImpactTracker() {
         </CardContent>
       </Card>
 
-      {/* Enhanced Impact Summary */}
-      <Card className="bg-gradient-to-br from-green-900/20 via-blue-900/20 to-purple-900/20 border border-green-600/20 shadow-2xl backdrop-blur-sm">
+      {/* Fixed Environmental Impact Milestone - Dark Theme */}
+      <Card className="bg-slate-900/95 backdrop-blur-sm border-slate-700/60 shadow-2xl">
         <CardContent className="p-8">
           <div className="text-center space-y-6">
             <div className="flex items-center justify-center space-x-3">
               <Globe className="h-8 w-8 text-green-400" />
-              <h3 className="text-white font-bold text-2xl">Environmental Impact Milestone</h3>
+              <h3 className="text-slate-100 font-bold text-2xl">Environmental Impact Milestone</h3>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-              <div className="space-y-2 p-4 rounded-xl bg-slate-800/30 border border-slate-700">
+              <div className="space-y-2 p-6 rounded-xl bg-slate-800/50 border border-slate-700/50 backdrop-blur-sm">
                 <div className="text-3xl font-bold text-green-400">23 Days</div>
                 <div className="text-sm text-slate-300 font-medium">Car off the road equivalent</div>
               </div>
-              <div className="space-y-2 p-4 rounded-xl bg-slate-800/30 border border-slate-700">
+              <div className="space-y-2 p-6 rounded-xl bg-slate-800/50 border border-slate-700/50 backdrop-blur-sm">
                 <div className="text-3xl font-bold text-blue-400">2,800</div>
                 <div className="text-sm text-slate-300 font-medium">Trees planted equivalent</div>
               </div>
-              <div className="space-y-2 p-4 rounded-xl bg-slate-800/30 border border-slate-700">
+              <div className="space-y-2 p-6 rounded-xl bg-slate-800/50 border border-slate-700/50 backdrop-blur-sm">
                 <div className="text-3xl font-bold text-purple-400">450kg</div>
                 <div className="text-sm text-slate-300 font-medium">Total CO₂ prevented</div>
               </div>
@@ -338,22 +338,22 @@ export function CarbonImpactTracker() {
       </Card>
 
       {/* Enhanced Quick Actions */}
-      <Card className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 border-slate-700 shadow-xl">
+      <Card className="bg-slate-900/95 backdrop-blur-sm border-slate-700/60 shadow-xl">
         <CardContent className="p-6">
           <div className="flex flex-wrap gap-3">
             <Button size="sm" className="bg-green-600 hover:bg-green-500 text-white shadow-lg shadow-green-500/25">
               <BarChart3 className="h-4 w-4 mr-2" />
               Detailed Analytics
             </Button>
-            <Button size="sm" variant="outline" className="bg-slate-700 hover:bg-slate-600 text-white border-slate-600 shadow-lg">
+            <Button size="sm" variant="outline" className="bg-slate-700/60 hover:bg-slate-600 text-slate-200 border-slate-600/60 shadow-lg">
               <Download className="h-4 w-4 mr-2" />
               Export Report
             </Button>
-            <Button size="sm" variant="outline" className="bg-slate-700 hover:bg-slate-600 text-white border-slate-600 shadow-lg">
+            <Button size="sm" variant="outline" className="bg-slate-700/60 hover:bg-slate-600 text-slate-200 border-slate-600/60 shadow-lg">
               <Target className="h-4 w-4 mr-2" />
               Set Goals
             </Button>
-            <Button size="sm" variant="outline" className="bg-slate-700 hover:bg-slate-600 text-white border-slate-600 shadow-lg">
+            <Button size="sm" variant="outline" className="bg-slate-700/60 hover:bg-slate-600 text-slate-200 border-slate-600/60 shadow-lg">
               <Activity className="h-4 w-4 mr-2" />
               Live Monitoring
             </Button>
