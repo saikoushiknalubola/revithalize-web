@@ -290,13 +290,13 @@ export function ReportsExport() {
       <CardContent className="space-y-6">
         {/* Enhanced Search and Filters */}
         <div className="flex flex-col md:flex-row gap-4 p-4 bg-gray-800/30 rounded-lg border border-gray-700/50">
-          <div className="flex-1">
+          <div className="flex-1 relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
               placeholder="Search reports..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="bg-gray-700 border-gray-600 text-white placeholder-gray-400"
-              icon={<Search className="h-4 w-4" />}
+              className="bg-gray-700 border-gray-600 text-white placeholder-gray-400 pl-10"
             />
           </div>
           <div className="flex gap-2">
