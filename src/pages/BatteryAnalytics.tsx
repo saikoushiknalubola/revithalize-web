@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { BatteryMetrics } from '@/components/features/BatteryMetrics';
@@ -8,14 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { FileDown, FileText, BarChart3, Eye, Calendar, Droplets, Zap, Download, FileBarChart } from 'lucide-react';
-import { generateBatteryReportPDF } from '@/utils/pdfGenerator';
-import { 
-  generateAnalyticsReportPDF, 
-  generateExportDataPDF,
-  generatePowerEfficiencyPDF,
-  generateChargingCyclesPDF,
-  generateEnvironmentalImpactPDF
-} from '@/utils/analyticsReportPDF';
+import { generateBatteryReportPDF, generateAdvancedAnalyticsReportPDF } from '@/utils/pdfGenerator';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import {
@@ -127,142 +119,69 @@ export default function BatteryAnalytics() {
   
   // Mock data for the battery report PDF
   const handleDownloadBatteryReport = () => {
-    // Get user data from localStorage
-    const userData = JSON.parse(localStorage.getItem('user') || '{}');
-    const userName = userData.fullName || userData.name || 'Customer';
-    
-    // Battery data - would typically come from state or API
-    const batteryData = {
-      currentHealth: 97,
-      projectedHealth: 90,
-      cellBalance: 95,
-      chargingCycles: 124,
-      capacityRetention: 97,
-      range: 110,
-      efficiency: 91,
-      averageTemp: 32,
-      lastCharge: 'Today, 08:30 AM',
-      nextService: 'In 3 months',
-    };
-    
-    // Vehicle data
-    const vehicleData = {
-      model: 'Hero Honda Passion AP02SK2409',
-      batteryType: '51.2V 45Ah Lithium-Ion',
-      range: 'Up to 110 km',
-      power: '2.2 kW',
-      capacity: '45 Ah',
-      registrationNumber: 'AP02SK2409',
-    };
-    
-    // Usage data
-    const usageData = {
-      weeklyDistance: 83,
-      monthlyDistance: 321,
-      totalDistance: 1275,
-      avgEfficiency: 91,
-      avgTemp: 32,
-    };
-    
-    // Generate PDF blob
-    const pdfBlob = generateBatteryReportPDF(batteryData, vehicleData, usageData, userName);
-    
-    // Create download link
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(pdfBlob);
-    link.download = `battery-report-${new Date().toISOString().split('T')[0]}.pdf`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    
-    toast.success('Battery report downloaded successfully');
+    try {
+      // Get user data from localStorage
+      const userData = JSON.parse(localStorage.getItem('user') || '{}');
+      const userName = userData.fullName || userData.name || 'Customer';
+      
+      // Battery data - would typically come from state or API
+      const batteryData = {
+        currentHealth: 97,
+        projectedHealth: 90,
+        cellBalance: 95,
+        chargingCycles: 124,
+        capacityRetention: 97,
+        range: 110,
+        efficiency: 91,
+        averageTemp: 32,
+        lastCharge: 'Today, 08:30 AM',
+        nextService: 'In 3 months',
+      };
+      
+      // Vehicle data
+      const vehicleData = {
+        model: 'Hero Honda Passion AP02SK2409',
+        batteryType: '51.2V 45Ah Lithium-Ion',
+        range: 'Up to 110 km',
+        power: '2.2 kW',
+        capacity: '45 Ah',
+        registrationNumber: 'AP02SK2409',
+      };
+      
+      // Usage data
+      const usageData = {
+        weeklyDistance: 83,
+        monthlyDistance: 321,
+        totalDistance: 1275,
+        avgEfficiency: 91,
+        avgTemp: 32,
+      };
+      
+      // Generate PDF blob
+      const pdfBlob = generateBatteryReportPDF(batteryData, vehicleData, usageData, userName);
+      
+      // Create download link
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(pdfBlob);
+      link.download = `battery-report-${new Date().toISOString().split('T')[0]}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      toast.success('Battery report downloaded successfully');
+    } catch (error) {
+      console.error('Error downloading battery report:', error);
+      toast.error('Failed to download battery report. Please try again.');
+    }
   };
 
   const handleDownloadAnalyticsReport = () => {
-    // Get user data from localStorage
-    const userData = JSON.parse(localStorage.getItem('user') || '{}');
-    const userName = userData.fullName || userData.name || 'Customer';
-    
-    // Mock analytics data
-    const analyticsData = {
-      periodStart: '2024-01-01',
-      periodEnd: '2024-05-05',
-      batteryHealthStart: 100,
-      batteryHealthEnd: 97,
-      efficiencyTrend: [
-        { month: 'Jan', value: 95 },
-        { month: 'Feb', value: 94 },
-        { month: 'Mar', value: 93 },
-        { month: 'Apr', value: 92 },
-        { month: 'May', value: 91 },
-      ],
-      tempTrend: [
-        { month: 'Jan', value: 27 },
-        { month: 'Feb', value: 28 },
-        { month: 'Mar', value: 30 },
-        { month: 'Apr', value: 32 },
-        { month: 'May', value: 35 },
-      ],
-      chargeCycles: 124,
-      topSpeed: 55,
-      avgSpeed: 32,
-      rangeTrend: [
-        { month: 'Jan', value: 155 },
-        { month: 'Feb', value: 152 },
-        { month: 'Mar', value: 148 },
-        { month: 'Apr', value: 145 },
-        { month: 'May', value: 141 },
-      ],
-      powerConsumption: 8.2, // kWh/100km
-      carbonSaved: 120, // kg
-    };
-    
-    // Generate PDF blob
-    const pdfBlob = generateAnalyticsReportPDF(analyticsData, userName, vehicleData);
-    
-    // Create download link
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(pdfBlob);
-    link.download = `analytics-report-${new Date().toISOString().split('T')[0]}.pdf`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    
-    toast.success('Analytics report downloaded successfully');
-  };
-
-  const handleViewReport = (report: HistoricalReport) => {
-    setSelectedReport(report);
-    setReportDialogOpen(true);
-  };
-
-  // Handle export data from cards
-  const handleExportCardData = (dataType: string) => {
-    // Get user data from localStorage
-    const userData = JSON.parse(localStorage.getItem('user') || '{}');
-    const userName = userData.fullName || userData.name || 'Customer';
-    
-    // Generate appropriate PDF based on data type
-    const pdfBlob = generateExportDataPDF(dataType, userName, vehicleData);
-    
-    // Create download link
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(pdfBlob);
-    link.download = `${dataType}-report-${new Date().toISOString().split('T')[0]}.pdf`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    
-    toast.success(`${dataType} data exported successfully`);
-  };
-
-  // Export data based on format
-  const handleRawDataExport = (format: string) => {
-    const userData = JSON.parse(localStorage.getItem('user') || '{}');
-    const userName = userData.fullName || userData.name || 'Customer';
-    
-    if (format === 'pdf') {
-      // Generate complete analytics report
+    try {
+      // Get user data from localStorage
+      const userData = JSON.parse(localStorage.getItem('user') || '{}');
+      const userName = userData.fullName || userData.name || 'Customer';
+      
+      // Mock analytics data
       const analyticsData = {
         periodStart: '2024-01-01',
         periodEnd: '2024-05-05',
@@ -292,65 +211,166 @@ export default function BatteryAnalytics() {
           { month: 'Apr', value: 145 },
           { month: 'May', value: 141 },
         ],
-        powerConsumption: 8.2,
-        carbonSaved: 120,
+        powerConsumption: 8.2, // kWh/100km
+        carbonSaved: 120, // kg
       };
       
-      const pdfBlob = generateAnalyticsReportPDF(analyticsData, userName, vehicleData);
+      // Generate PDF blob
+      const pdfBlob = generateAdvancedAnalyticsReportPDF(analyticsData, userName);
+      
+      // Create download link
       const link = document.createElement('a');
       link.href = URL.createObjectURL(pdfBlob);
-      link.download = `battery-data-${new Date().toISOString().split('T')[0]}.pdf`;
+      link.download = `analytics-report-${new Date().toISOString().split('T')[0]}.pdf`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-    } else if (format === 'csv') {
-      // Mock CSV data export
-      const csvContent = `Date,Efficiency,Temperature,Range,Power,Cycles
+      
+      toast.success('Analytics report downloaded successfully');
+    } catch (error) {
+      console.error('Error downloading analytics report:', error);
+      toast.error('Failed to download analytics report. Please try again.');
+    }
+  };
+
+  const handleViewReport = (report: HistoricalReport) => {
+    setSelectedReport(report);
+    setReportDialogOpen(true);
+  };
+
+  // Handle export data from cards
+  const handleExportCardData = (dataType: string) => {
+    try {
+      // Get user data from localStorage
+      const userData = JSON.parse(localStorage.getItem('user') || '{}');
+      const userName = userData.fullName || userData.name || 'Customer';
+      
+      // Generate appropriate analytics report
+      const analyticsData = {
+        dataType,
+        efficiency: 91,
+        batteryHealth: 97,
+        rangeOpt: 87,
+        costSavings: 12450
+      };
+      
+      const pdfBlob = generateAdvancedAnalyticsReportPDF(analyticsData, userName);
+      
+      // Create download link
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(pdfBlob);
+      link.download = `${dataType}-report-${new Date().toISOString().split('T')[0]}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      toast.success(`${dataType} data exported successfully`);
+    } catch (error) {
+      console.error('Error exporting card data:', error);
+      toast.error('Failed to export data. Please try again.');
+    }
+  };
+
+  // Export data based on format
+  const handleRawDataExport = (format: string) => {
+    try {
+      const userData = JSON.parse(localStorage.getItem('user') || '{}');
+      const userName = userData.fullName || userData.name || 'Customer';
+      
+      if (format === 'pdf') {
+        // Generate complete analytics report
+        const analyticsData = {
+          periodStart: '2024-01-01',
+          periodEnd: '2024-05-05',
+          batteryHealthStart: 100,
+          batteryHealthEnd: 97,
+          efficiencyTrend: [
+            { month: 'Jan', value: 95 },
+            { month: 'Feb', value: 94 },
+            { month: 'Mar', value: 93 },
+            { month: 'Apr', value: 92 },
+            { month: 'May', value: 91 },
+          ],
+          tempTrend: [
+            { month: 'Jan', value: 27 },
+            { month: 'Feb', value: 28 },
+            { month: 'Mar', value: 30 },
+            { month: 'Apr', value: 32 },
+            { month: 'May', value: 35 },
+          ],
+          chargeCycles: 124,
+          topSpeed: 55,
+          avgSpeed: 32,
+          rangeTrend: [
+            { month: 'Jan', value: 155 },
+            { month: 'Feb', value: 152 },
+            { month: 'Mar', value: 148 },
+            { month: 'Apr', value: 145 },
+            { month: 'May', value: 141 },
+          ],
+          powerConsumption: 8.2,
+          carbonSaved: 120,
+        };
+        
+        const pdfBlob = generateAdvancedAnalyticsReportPDF(analyticsData, userName);
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(pdfBlob);
+        link.download = `battery-data-${new Date().toISOString().split('T')[0]}.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else if (format === 'csv') {
+        // Mock CSV data export
+        const csvContent = `Date,Efficiency,Temperature,Range,Power,Cycles
 2024-01-01,95,27,155,2.1,10
 2024-02-01,94,28,152,2.0,25
 2024-03-01,93,30,148,2.2,42
 2024-04-01,92,32,145,2.1,58
 2024-05-01,91,35,141,2.0,75`;
-      
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = `battery-data-${new Date().toISOString().split('T')[0]}.csv`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } else if (format === 'json') {
-      // Mock JSON data export
-      const jsonData = {
-        user: userName,
-        vehicle: vehicleData,
-        batteryData: {
-          monthly: [
-            { month: 'Jan', efficiency: 95, temperature: 27, range: 155, power: 2.1, cycles: 10 },
-            { month: 'Feb', efficiency: 94, temperature: 28, range: 152, power: 2.0, cycles: 25 },
-            { month: 'Mar', efficiency: 93, temperature: 30, range: 148, power: 2.2, cycles: 42 },
-            { month: 'Apr', efficiency: 92, temperature: 32, range: 145, power: 2.1, cycles: 58 },
-            { month: 'May', efficiency: 91, temperature: 35, range: 141, power: 2.0, cycles: 75 }
-          ],
-          health: {
-            current: 97,
-            projected: 90,
-            cellBalance: 95,
-            capacityRetention: 97
+        
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `battery-data-${new Date().toISOString().split('T')[0]}.csv`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else if (format === 'json') {
+        // Mock JSON data export
+        const jsonData = {
+          user: userName,
+          vehicle: vehicleData,
+          batteryData: {
+            monthly: [
+              { month: 'Jan', efficiency: 95, temperature: 27, range: 155, power: 2.1, cycles: 10 },
+              { month: 'Feb', efficiency: 94, temperature: 28, range: 152, power: 2.0, cycles: 25 },
+              { month: 'Mar', efficiency: 93, temperature: 30, range: 148, power: 2.2, cycles: 42 },
+              { month: 'Apr', efficiency: 92, temperature: 32, range: 145, power: 2.1, cycles: 58 },
+              { month: 'May', efficiency: 91, temperature: 35, range: 141, power: 2.0, cycles: 75 }
+            ],
+            health: {
+              current: 97,
+              projected: 90,
+              cellBalance: 95,
+              capacityRetention: 97
+            }
           }
-        }
-      };
+        };
+        
+        const blob = new Blob([JSON.stringify(jsonData, null, 2)], { type: 'application/json' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `battery-data-${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
       
-      const blob = new Blob([JSON.stringify(jsonData, null, 2)], { type: 'application/json' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = `battery-data-${new Date().toISOString().split('T')[0]}.json`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      toast.success(`Data exported as ${format.toUpperCase()} successfully`);
+    } catch (error) {
+      console.error('Error exporting raw data:', error);
+      toast.error('Failed to export data. Please try again.');
     }
-    
-    toast.success(`Data exported as ${format.toUpperCase()} successfully`);
   };
 
   // Vehicle data for analytics report
