@@ -1,10 +1,9 @@
-
 import React from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { AdvancedAnalytics as AdvancedAnalyticsComponent } from '@/components/professional/AdvancedAnalytics';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { TrendingUp, Battery, Zap, Gauge, Calendar, Target, BarChart3, PieChart, LineChart, Activity, Award, AlertCircle } from 'lucide-react';
-import { LineChart as RechartsLineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart as RechartsPieChart, Cell } from 'recharts';
+import { LineChart as RechartsLineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart as RechartsPieChart, Cell, Pie } from 'recharts';
 
 const performanceData = [
   { month: 'Jan', efficiency: 85, consumption: 45, range: 120 },
