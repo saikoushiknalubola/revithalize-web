@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -39,6 +40,17 @@ const currentPlan = {
   amount: '₹99',
   status: 'Active'
 };
+
+const paymentMethods = [
+  { name: 'Visa', logo: '💳' },
+  { name: 'Mastercard', logo: '💳' },
+  { name: 'RuPay', logo: '🇮🇳' },
+  { name: 'UPI', logo: '📱' },
+  { name: 'GPay', logo: 'G' },
+  { name: 'PhonePe', logo: '📞' },
+  { name: 'Paytm', logo: '₹' },
+  { name: 'Net Banking', logo: '🏦' }
+];
 
 export default function Subscription() {
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
@@ -86,7 +98,7 @@ export default function Subscription() {
         </div>
 
         {/* Current Subscription Status */}
-        <Card className="bg-gray-900/50 border-revithalize-green/30 backdrop-blur-sm">
+        <Card className="bg-gray-900 border-revithalize-green/30">
           <CardHeader>
             <CardTitle className="text-white flex items-center">
               <Crown className="h-6 w-6 mr-3 text-revithalize-green" />
@@ -116,13 +128,13 @@ export default function Subscription() {
               </div>
             </div>
             <div className="mt-6 flex space-x-4">
-              <Button className="bg-revithalize-green hover:bg-revithalize-green/90">
+              <Button className="bg-revithalize-green hover:bg-revithalize-green/90 text-black font-medium">
                 <CreditCard className="h-4 w-4 mr-2" />
                 Manage Billing
               </Button>
               <Button 
                 variant="outline" 
-                className="border-gray-600 text-gray-300 hover:bg-gray-800"
+                className="border-revithalize-green text-revithalize-green hover:bg-revithalize-green hover:text-black"
                 onClick={downloadInvoice}
               >
                 <Download className="h-4 w-4 mr-2" />
@@ -134,13 +146,13 @@ export default function Subscription() {
 
         {/* Billing Toggle */}
         <div className="flex justify-center">
-          <div className="bg-gray-800/50 p-1 rounded-lg backdrop-blur-sm">
+          <div className="bg-gray-800 p-1 rounded-lg border border-gray-700">
             <button
               onClick={() => setBillingCycle('monthly')}
               className={cn(
-                "px-6 py-2 rounded-md transition-all",
+                "px-6 py-2 rounded-md transition-all font-medium",
                 billingCycle === 'monthly' 
-                  ? "bg-revithalize-green text-black font-medium" 
+                  ? "bg-revithalize-green text-black" 
                   : "text-gray-400 hover:text-white"
               )}
             >
@@ -149,9 +161,9 @@ export default function Subscription() {
             <button
               onClick={() => setBillingCycle('yearly')}
               className={cn(
-                "px-6 py-2 rounded-md transition-all relative",
+                "px-6 py-2 rounded-md transition-all relative font-medium",
                 billingCycle === 'yearly' 
-                  ? "bg-revithalize-green text-black font-medium" 
+                  ? "bg-revithalize-green text-black" 
                   : "text-gray-400 hover:text-white"
               )}
             >
@@ -170,16 +182,16 @@ export default function Subscription() {
             animate={{ opacity: 1, y: 0 }}
             className="relative max-w-md w-full"
           >
-            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-              <div className="bg-gradient-to-r from-revithalize-green to-revithalize-blue text-black px-4 py-2 rounded-full text-sm font-medium">
+            <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 z-10">
+              <div className="bg-gradient-to-r from-revithalize-green to-revithalize-blue text-black px-4 py-2 rounded-full text-sm font-medium shadow-lg">
                 Best Value
               </div>
             </div>
             
-            <Card className="border-revithalize-green/50 bg-gray-900/50 backdrop-blur-sm shadow-xl shadow-revithalize-green/20">
-              <div className="absolute inset-0 opacity-10 bg-gradient-to-br from-revithalize-green to-revithalize-blue rounded-lg" />
+            <Card className="border-revithalize-green/50 bg-gray-900 shadow-xl shadow-revithalize-green/20 mt-4">
+              <div className="absolute inset-0 opacity-5 bg-gradient-to-br from-revithalize-green to-revithalize-blue rounded-lg" />
               
-              <CardHeader className="relative z-10">
+              <CardHeader className="relative z-10 pt-8">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-white flex items-center">
                     <div className="p-2 rounded-lg mr-3 bg-gradient-to-br from-revithalize-green to-revithalize-blue">
@@ -187,7 +199,7 @@ export default function Subscription() {
                     </div>
                     {plans[0].name}
                   </CardTitle>
-                  <div className="bg-revithalize-green/20 text-revithalize-green px-2 py-1 rounded-full text-xs">
+                  <div className="bg-revithalize-green/20 text-revithalize-green px-3 py-1 rounded-full text-xs font-medium">
                     Current
                   </div>
                 </div>
@@ -202,7 +214,7 @@ export default function Subscription() {
                     {billingCycle === 'yearly' ? '/year' : plans[0].period}
                   </span>
                   {billingCycle === 'yearly' && (
-                    <div className="text-sm text-green-400 mt-1">
+                    <div className="text-sm text-green-400 mt-1 font-medium">
                       Save 25% with yearly billing
                     </div>
                   )}
@@ -228,7 +240,7 @@ export default function Subscription() {
         </div>
 
         {/* Features Showcase */}
-        <Card className="bg-gray-900/50 border-gray-700/50 backdrop-blur-sm">
+        <Card className="bg-gray-900 border-gray-700">
           <CardHeader>
             <CardTitle className="text-white flex items-center">
               <Star className="h-6 w-6 mr-3 text-yellow-400" />
@@ -296,22 +308,42 @@ export default function Subscription() {
         </Card>
 
         {/* Payment Security */}
-        <Card className="bg-gray-900/50 border-gray-700/50 backdrop-blur-sm">
+        <Card className="bg-gray-900 border-gray-700">
           <CardContent className="pt-6">
-            <div className="text-center space-y-4">
+            <div className="text-center space-y-6">
               <Shield className="h-12 w-12 text-revithalize-green mx-auto" />
-              <h3 className="text-xl font-semibold text-white">Secure & Encrypted</h3>
+              <h3 className="text-xl font-semibold text-white">Secure & Encrypted Payments</h3>
               <p className="text-gray-400 max-w-2xl mx-auto">
-                Your payment information is protected with bank-level security. 
-                We accept all major credit cards, UPI, and net banking.
+                Your payment information is protected with bank-level security and 256-bit SSL encryption. 
+                We support all major payment methods for your convenience.
               </p>
-              <div className="flex justify-center items-center space-x-6 mt-6">
-                <div className="text-gray-400 text-sm">Accepted payments:</div>
-                <div className="flex space-x-4">
-                  <div className="bg-gray-800 px-3 py-1 rounded text-sm text-gray-300">Visa</div>
-                  <div className="bg-gray-800 px-3 py-1 rounded text-sm text-gray-300">MasterCard</div>
-                  <div className="bg-gray-800 px-3 py-1 rounded text-sm text-gray-300">UPI</div>
-                  <div className="bg-gray-800 px-3 py-1 rounded text-sm text-gray-300">NetBanking</div>
+              
+              <div className="space-y-4">
+                <div className="text-sm text-gray-400 font-medium">Accepted Payment Methods:</div>
+                <div className="grid grid-cols-4 md:grid-cols-8 gap-4 max-w-2xl mx-auto">
+                  {paymentMethods.map((method, index) => (
+                    <div key={index} className="flex flex-col items-center space-y-2">
+                      <div className="bg-gray-800 border border-gray-600 rounded-lg p-3 w-16 h-16 flex items-center justify-center text-2xl hover:border-revithalize-green/50 transition-colors">
+                        {method.logo}
+                      </div>
+                      <span className="text-xs text-gray-400 text-center">{method.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="flex justify-center items-center space-x-6 pt-4">
+                <div className="flex items-center space-x-2 text-sm text-gray-400">
+                  <Shield className="h-4 w-4 text-green-400" />
+                  <span>SSL Secured</span>
+                </div>
+                <div className="flex items-center space-x-2 text-sm text-gray-400">
+                  <Check className="h-4 w-4 text-green-400" />
+                  <span>PCI Compliant</span>
+                </div>
+                <div className="flex items-center space-x-2 text-sm text-gray-400">
+                  <Shield className="h-4 w-4 text-green-400" />
+                  <span>Bank Grade Security</span>
                 </div>
               </div>
             </div>
