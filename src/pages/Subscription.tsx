@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Crown, Check, Star, Zap, Shield, Cpu, TrendingUp, Users, Clock, CreditCard, Gift, ArrowRight, Download } from 'lucide-react';
+import { Crown, Check, Star, Zap, Shield, Cpu, TrendingUp, Users, Clock, CreditCard, Gift, ArrowRight, Download, CheckCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { generateInvoicePDF } from '@/utils/invoiceGenerator';
@@ -14,7 +14,7 @@ const plans = [
     name: 'Monthly Plan',
     price: '₹99',
     period: '/month',
-    yearlyPrice: '₹1299',
+    yearlyPrice: '₹1,299',
     description: 'Essential features for EV management',
     features: [
       'Real-time battery monitoring',
@@ -42,14 +42,46 @@ const currentPlan = {
 };
 
 const paymentMethods = [
-  { name: 'Visa', logo: '💳' },
-  { name: 'Mastercard', logo: '💳' },
-  { name: 'RuPay', logo: '🇮🇳' },
-  { name: 'UPI', logo: '📱' },
-  { name: 'GPay', logo: 'G' },
-  { name: 'PhonePe', logo: '📞' },
-  { name: 'Paytm', logo: '₹' },
-  { name: 'Net Banking', logo: '🏦' }
+  { 
+    name: 'Visa', 
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg',
+    type: 'card'
+  },
+  { 
+    name: 'Mastercard', 
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg',
+    type: 'card'
+  },
+  { 
+    name: 'RuPay', 
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/d/d1/RuPay.svg',
+    type: 'card'
+  },
+  { 
+    name: 'UPI', 
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo-vector.svg',
+    type: 'digital'
+  },
+  { 
+    name: 'Google Pay', 
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/f/f2/Google_Pay_Logo.svg',
+    type: 'digital'
+  },
+  { 
+    name: 'PhonePe', 
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/0/09/PhonePe_Logo.svg',
+    type: 'digital'
+  },
+  { 
+    name: 'Paytm', 
+    logo: 'https://upload.wikimedia.org/wikipedia/commons/2/24/Paytm_Logo_%28standalone%29.svg',
+    type: 'digital'
+  },
+  { 
+    name: 'Net Banking', 
+    logo: 'https://cdn-icons-png.flaticon.com/512/4208/4208479.png',
+    type: 'banking'
+  }
 ];
 
 export default function Subscription() {
@@ -85,270 +117,380 @@ export default function Subscription() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-8">
-        {/* Header */}
-        <div className="text-center space-y-4">
-          <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-revithalize-green to-revithalize-blue">
-            Subscription Plan
-          </h1>
-          <p className="text-gray-400 max-w-2xl mx-auto">
-            Simple, transparent pricing for your electric vehicle management needs. 
-            Unlock powerful insights and advanced features to optimize your EV experience.
-          </p>
-        </div>
-
-        {/* Current Subscription Status */}
-        <Card className="bg-gray-900 border-revithalize-green/30">
-          <CardHeader>
-            <CardTitle className="text-white flex items-center">
-              <Crown className="h-6 w-6 mr-3 text-revithalize-green" />
-              Current Subscription
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div>
-                <p className="text-gray-400 text-sm">Plan</p>
-                <p className="text-xl font-bold text-revithalize-green">{currentPlan.name}</p>
-              </div>
-              <div>
-                <p className="text-gray-400 text-sm">Status</p>
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                  <p className="text-white font-medium">{currentPlan.status}</p>
-                </div>
-              </div>
-              <div>
-                <p className="text-gray-400 text-sm">Next Billing</p>
-                <p className="text-white font-medium">{new Date(currentPlan.nextBilling).toLocaleDateString()}</p>
-              </div>
-              <div>
-                <p className="text-gray-400 text-sm">Amount</p>
-                <p className="text-white font-medium">{currentPlan.amount}/month</p>
-              </div>
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+        <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
+          {/* Header Section */}
+          <div className="text-center space-y-6">
+            <div className="inline-flex items-center px-4 py-2 bg-revithalize-green/10 border border-revithalize-green/20 rounded-full">
+              <Crown className="h-4 w-4 text-revithalize-green mr-2" />
+              <span className="text-revithalize-green text-sm font-medium">Premium EV Management</span>
             </div>
-            <div className="mt-6 flex space-x-4">
-              <Button className="bg-revithalize-green hover:bg-revithalize-green/90 text-black font-medium">
-                <CreditCard className="h-4 w-4 mr-2" />
-                Manage Billing
-              </Button>
-              <Button 
-                variant="outline" 
-                className="border-revithalize-green text-revithalize-green hover:bg-revithalize-green hover:text-black"
-                onClick={downloadInvoice}
-              >
-                <Download className="h-4 w-4 mr-2" />
-                Download Invoice
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Billing Toggle */}
-        <div className="flex justify-center">
-          <div className="bg-gray-800 p-1 rounded-lg border border-gray-700">
-            <button
-              onClick={() => setBillingCycle('monthly')}
-              className={cn(
-                "px-6 py-2 rounded-md transition-all font-medium",
-                billingCycle === 'monthly' 
-                  ? "bg-revithalize-green text-black" 
-                  : "text-gray-400 hover:text-white"
-              )}
-            >
-              Monthly
-            </button>
-            <button
-              onClick={() => setBillingCycle('yearly')}
-              className={cn(
-                "px-6 py-2 rounded-md transition-all relative font-medium",
-                billingCycle === 'yearly' 
-                  ? "bg-revithalize-green text-black" 
-                  : "text-gray-400 hover:text-white"
-              )}
-            >
-              Yearly
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
-                Save 25%
-              </span>
-            </button>
+            <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-revithalize-green to-revithalize-blue">
+              Subscription Management
+            </h1>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+              Experience the future of electric vehicle management with our comprehensive suite of AI-powered tools and analytics.
+            </p>
           </div>
-        </div>
 
-        {/* Pricing Plan */}
-        <div className="flex justify-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="relative max-w-md w-full"
-          >
-            <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 z-10">
-              <div className="bg-gradient-to-r from-revithalize-green to-revithalize-blue text-black px-4 py-2 rounded-full text-sm font-medium shadow-lg">
-                Best Value
-              </div>
-            </div>
-            
-            <Card className="border-revithalize-green/50 bg-gray-900 shadow-xl shadow-revithalize-green/20 mt-4">
-              <div className="absolute inset-0 opacity-5 bg-gradient-to-br from-revithalize-green to-revithalize-blue rounded-lg" />
-              
-              <CardHeader className="relative z-10 pt-8">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-white flex items-center">
-                    <div className="p-2 rounded-lg mr-3 bg-gradient-to-br from-revithalize-green to-revithalize-blue">
-                      <Crown className="h-5 w-5 text-white" />
-                    </div>
-                    {plans[0].name}
-                  </CardTitle>
-                  <div className="bg-revithalize-green/20 text-revithalize-green px-3 py-1 rounded-full text-xs font-medium">
-                    Current
+          {/* Current Subscription Status Card */}
+          <Card className="bg-gradient-to-r from-gray-800/90 to-gray-900/90 border border-revithalize-green/30 shadow-2xl backdrop-blur-sm">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-2xl text-white flex items-center">
+                <div className="p-3 bg-revithalize-green/20 rounded-lg mr-4">
+                  <Crown className="h-8 w-8 text-revithalize-green" />
+                </div>
+                Active Subscription
+                <div className="ml-auto">
+                  <div className="flex items-center space-x-2 bg-green-500/20 px-3 py-1 rounded-full">
+                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                    <span className="text-green-400 text-sm font-medium">Live</span>
                   </div>
                 </div>
-                <CardDescription className="text-gray-400">
-                  {plans[0].description}
-                </CardDescription>
-                <div className="mt-4">
-                  <span className="text-3xl font-bold text-white">
-                    {billingCycle === 'yearly' ? plans[0].yearlyPrice : plans[0].price}
-                  </span>
-                  <span className="text-gray-400">
-                    {billingCycle === 'yearly' ? '/year' : plans[0].period}
-                  </span>
-                  {billingCycle === 'yearly' && (
-                    <div className="text-sm text-green-400 mt-1 font-medium">
-                      Save 25% with yearly billing
-                    </div>
-                  )}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div className="space-y-2">
+                  <p className="text-gray-400 text-sm uppercase tracking-wide">Current Plan</p>
+                  <p className="text-2xl font-bold text-revithalize-green">{currentPlan.name}</p>
+                  <p className="text-gray-300 text-sm">Premium features included</p>
                 </div>
-              </CardHeader>
+                <div className="space-y-2">
+                  <p className="text-gray-400 text-sm uppercase tracking-wide">Status</p>
+                  <div className="flex items-center space-x-2">
+                    <CheckCircle className="h-5 w-5 text-green-400" />
+                    <p className="text-white font-medium">{currentPlan.status}</p>
+                  </div>
+                  <p className="text-gray-300 text-sm">Auto-renewal enabled</p>
+                </div>
+                <div className="space-y-2">
+                  <p className="text-gray-400 text-sm uppercase tracking-wide">Next Billing</p>
+                  <p className="text-white font-medium text-lg">{new Date(currentPlan.nextBilling).toLocaleDateString()}</p>
+                  <p className="text-gray-300 text-sm">Automatic payment</p>
+                </div>
+                <div className="space-y-2">
+                  <p className="text-gray-400 text-sm uppercase tracking-wide">Monthly Cost</p>
+                  <p className="text-white font-bold text-2xl">{currentPlan.amount}</p>
+                  <p className="text-gray-300 text-sm">Excl. taxes</p>
+                </div>
+              </div>
               
-              <CardContent className="relative z-10">
-                <ul className="space-y-3 mb-6">
-                  {plans[0].features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-start space-x-3">
-                      <Check className="h-5 w-5 text-revithalize-green mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-300 text-sm">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                
-                <Button className="w-full bg-gray-600 hover:bg-gray-700 text-gray-300" disabled>
-                  Current Plan
+              <div className="mt-8 flex flex-wrap gap-4">
+                <Button className="bg-revithalize-green hover:bg-revithalize-green/90 text-black font-semibold px-6 py-3 text-lg">
+                  <CreditCard className="h-5 w-5 mr-2" />
+                  Manage Billing
                 </Button>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
+                <Button 
+                  variant="outline" 
+                  className="border-revithalize-green/50 text-revithalize-green hover:bg-revithalize-green hover:text-black font-semibold px-6 py-3 text-lg bg-transparent"
+                  onClick={downloadInvoice}
+                >
+                  <Download className="h-5 w-5 mr-2" />
+                  Download Invoice
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="border-gray-600 text-gray-300 hover:bg-gray-700 hover:text-white font-semibold px-6 py-3 text-lg bg-transparent"
+                >
+                  <Gift className="h-5 w-5 mr-2" />
+                  Refer Friends
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
 
-        {/* Features Showcase */}
-        <Card className="bg-gray-900 border-gray-700">
-          <CardHeader>
-            <CardTitle className="text-white flex items-center">
-              <Star className="h-6 w-6 mr-3 text-yellow-400" />
-              What's Included
-            </CardTitle>
-            <CardDescription className="text-gray-400">
-              Comprehensive EV management features
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="space-y-4">
-                <h3 className="font-semibold text-white flex items-center">
-                  <Zap className="h-5 w-5 mr-2 text-yellow-400" />
-                  Core Features
-                </h3>
-                <ul className="space-y-2 text-sm text-gray-300">
-                  <li>• Real-time monitoring</li>
-                  <li>• Mobile app access</li>
-                  <li>• Basic analytics</li>
-                  <li>• Range prediction</li>
-                </ul>
-              </div>
-              
-              <div className="space-y-4">
-                <h3 className="font-semibold text-white flex items-center">
-                  <TrendingUp className="h-5 w-5 mr-2 text-green-400" />
-                  Advanced Analytics
-                </h3>
-                <ul className="space-y-2 text-sm text-gray-300">
-                  <li>• Predictive maintenance</li>
-                  <li>• Energy optimization</li>
-                  <li>• Custom reports</li>
-                  <li>• Performance insights</li>
-                </ul>
-              </div>
-              
-              <div className="space-y-4">
-                <h3 className="font-semibold text-white flex items-center">
-                  <Cpu className="h-5 w-5 mr-2 text-blue-400" />
-                  AI Features
-                </h3>
-                <ul className="space-y-2 text-sm text-gray-300">
-                  <li>• Smart alerts</li>
-                  <li>• Usage optimization</li>
-                  <li>• Health predictions</li>
-                  <li>• Route planning</li>
-                </ul>
-              </div>
-              
-              <div className="space-y-4">
-                <h3 className="font-semibold text-white flex items-center">
-                  <Shield className="h-5 w-5 mr-2 text-purple-400" />
-                  Support
-                </h3>
-                <ul className="space-y-2 text-sm text-gray-300">
-                  <li>• Priority support</li>
-                  <li>• Data security</li>
-                  <li>• Regular updates</li>
-                  <li>• 24/7 monitoring</li>
-                </ul>
-              </div>
+          {/* Billing Toggle */}
+          <div className="flex justify-center">
+            <div className="bg-gray-800/80 p-2 rounded-xl border border-gray-700/50 backdrop-blur-sm">
+              <button
+                onClick={() => setBillingCycle('monthly')}
+                className={cn(
+                  "px-8 py-3 rounded-lg transition-all font-semibold text-lg",
+                  billingCycle === 'monthly' 
+                    ? "bg-revithalize-green text-black shadow-lg" 
+                    : "text-gray-400 hover:text-white hover:bg-gray-700"
+                )}
+              >
+                Monthly Billing
+              </button>
+              <button
+                onClick={() => setBillingCycle('yearly')}
+                className={cn(
+                  "px-8 py-3 rounded-lg transition-all relative font-semibold text-lg",
+                  billingCycle === 'yearly' 
+                    ? "bg-revithalize-green text-black shadow-lg" 
+                    : "text-gray-400 hover:text-white hover:bg-gray-700"
+                )}
+              >
+                Annual Billing
+                <span className="absolute -top-3 -right-3 bg-gradient-to-r from-red-500 to-orange-500 text-white text-xs px-3 py-1 rounded-full font-bold shadow-lg">
+                  Save 25%
+                </span>
+              </button>
             </div>
-          </CardContent>
-        </Card>
+          </div>
 
-        {/* Payment Security */}
-        <Card className="bg-gray-900 border-gray-700">
-          <CardContent className="pt-6">
-            <div className="text-center space-y-6">
-              <Shield className="h-12 w-12 text-revithalize-green mx-auto" />
-              <h3 className="text-xl font-semibold text-white">Secure & Encrypted Payments</h3>
-              <p className="text-gray-400 max-w-2xl mx-auto">
-                Your payment information is protected with bank-level security and 256-bit SSL encryption. 
-                We support all major payment methods for your convenience.
-              </p>
-              
-              <div className="space-y-4">
-                <div className="text-sm text-gray-400 font-medium">Accepted Payment Methods:</div>
-                <div className="grid grid-cols-4 md:grid-cols-8 gap-4 max-w-2xl mx-auto">
-                  {paymentMethods.map((method, index) => (
-                    <div key={index} className="flex flex-col items-center space-y-2">
-                      <div className="bg-gray-800 border border-gray-600 rounded-lg p-3 w-16 h-16 flex items-center justify-center text-2xl hover:border-revithalize-green/50 transition-colors">
-                        {method.logo}
+          {/* Pricing Plan */}
+          <div className="flex justify-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="relative max-w-lg w-full"
+            >
+              <Card className="border-2 border-revithalize-green/50 bg-gradient-to-br from-gray-800/90 to-gray-900/90 shadow-2xl shadow-revithalize-green/20 backdrop-blur-sm overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-revithalize-green/5 to-revithalize-blue/5" />
+                
+                <CardHeader className="relative z-10 pt-8 pb-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <CardTitle className="text-2xl text-white flex items-center">
+                      <div className="p-3 rounded-xl mr-4 bg-gradient-to-br from-revithalize-green to-revithalize-blue shadow-lg">
+                        <Crown className="h-6 w-6 text-white" />
                       </div>
-                      <span className="text-xs text-gray-400 text-center">{method.name}</span>
+                      {plans[0].name}
+                    </CardTitle>
+                    <div className="bg-revithalize-green/20 text-revithalize-green px-4 py-2 rounded-full text-sm font-bold border border-revithalize-green/30">
+                      Active
                     </div>
-                  ))}
+                  </div>
+                  <CardDescription className="text-gray-300 text-lg">
+                    {plans[0].description}
+                  </CardDescription>
+                  <div className="mt-6">
+                    <div className="flex items-baseline space-x-2">
+                      <span className="text-5xl font-bold text-white">
+                        {billingCycle === 'yearly' ? plans[0].yearlyPrice : plans[0].price}
+                      </span>
+                      <span className="text-2xl text-gray-400">
+                        {billingCycle === 'yearly' ? '/year' : plans[0].period}
+                      </span>
+                    </div>
+                    {billingCycle === 'yearly' && (
+                      <div className="mt-2 inline-flex items-center space-x-2 bg-green-500/20 px-3 py-1 rounded-full">
+                        <Star className="h-4 w-4 text-green-400" />
+                        <span className="text-green-400 font-medium">Save ₹889 annually</span>
+                      </div>
+                    )}
+                  </div>
+                </CardHeader>
+                
+                <CardContent className="relative z-10 pt-0">
+                  <ul className="space-y-4 mb-8">
+                    {plans[0].features.map((feature, featureIndex) => (
+                      <li key={featureIndex} className="flex items-start space-x-3">
+                        <Check className="h-5 w-5 text-revithalize-green mt-1 flex-shrink-0" />
+                        <span className="text-gray-200 text-base leading-relaxed">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  
+                  <Button 
+                    className="w-full bg-gradient-to-r from-revithalize-green to-revithalize-blue hover:opacity-90 text-black font-bold py-4 text-lg shadow-xl transition-all duration-300"
+                    disabled={billingCycle === 'monthly'}
+                  >
+                    {billingCycle === 'monthly' ? (
+                      <>
+                        <CheckCircle className="h-5 w-5 mr-2" />
+                        Current Plan
+                      </>
+                    ) : (
+                      <>
+                        <ArrowRight className="h-5 w-5 mr-2" />
+                        Upgrade to Annual
+                      </>
+                    )}
+                  </Button>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </div>
+
+          {/* Features Showcase */}
+          <Card className="bg-gradient-to-br from-gray-800/90 to-gray-900/90 border border-gray-700/50 shadow-2xl backdrop-blur-sm">
+            <CardHeader className="pb-6">
+              <CardTitle className="text-3xl text-white flex items-center">
+                <Star className="h-8 w-8 mr-4 text-yellow-400" />
+                Premium Features Included
+              </CardTitle>
+              <CardDescription className="text-xl text-gray-300">
+                Everything you need for comprehensive EV management
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="space-y-6">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-3 bg-yellow-500/20 rounded-lg">
+                      <Zap className="h-6 w-6 text-yellow-400" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-white">Core Features</h3>
+                  </div>
+                  <ul className="space-y-3 text-gray-300">
+                    <li className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                      <span>Real-time monitoring</span>
+                    </li>
+                    <li className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                      <span>Mobile app access</span>
+                    </li>
+                    <li className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                      <span>Basic analytics</span>
+                    </li>
+                    <li className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                      <span>Range prediction</span>
+                    </li>
+                  </ul>
+                </div>
+                
+                <div className="space-y-6">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-3 bg-green-500/20 rounded-lg">
+                      <TrendingUp className="h-6 w-6 text-green-400" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-white">Advanced Analytics</h3>
+                  </div>
+                  <ul className="space-y-3 text-gray-300">
+                    <li className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                      <span>Predictive maintenance</span>
+                    </li>
+                    <li className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                      <span>Energy optimization</span>
+                    </li>
+                    <li className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                      <span>Custom reports</span>
+                    </li>
+                    <li className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                      <span>Performance insights</span>
+                    </li>
+                  </ul>
+                </div>
+                
+                <div className="space-y-6">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-3 bg-blue-500/20 rounded-lg">
+                      <Cpu className="h-6 w-6 text-blue-400" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-white">AI Features</h3>
+                  </div>
+                  <ul className="space-y-3 text-gray-300">
+                    <li className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                      <span>Smart alerts</span>
+                    </li>
+                    <li className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                      <span>Usage optimization</span>
+                    </li>
+                    <li className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                      <span>Health predictions</span>
+                    </li>
+                    <li className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                      <span>Route planning</span>
+                    </li>
+                  </ul>
+                </div>
+                
+                <div className="space-y-6">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-3 bg-purple-500/20 rounded-lg">
+                      <Shield className="h-6 w-6 text-purple-400" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-white">Support & Security</h3>
+                  </div>
+                  <ul className="space-y-3 text-gray-300">
+                    <li className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+                      <span>Priority support</span>
+                    </li>
+                    <li className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+                      <span>Data security</span>
+                    </li>
+                    <li className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+                      <span>Regular updates</span>
+                    </li>
+                    <li className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-purple-400 rounded-full"></div>
+                      <span>24/7 monitoring</span>
+                    </li>
+                  </ul>
                 </div>
               </div>
-              
-              <div className="flex justify-center items-center space-x-6 pt-4">
-                <div className="flex items-center space-x-2 text-sm text-gray-400">
-                  <Shield className="h-4 w-4 text-green-400" />
-                  <span>SSL Secured</span>
+            </CardContent>
+          </Card>
+
+          {/* Payment Security */}
+          <Card className="bg-gradient-to-br from-gray-800/90 to-gray-900/90 border border-gray-700/50 shadow-2xl backdrop-blur-sm">
+            <CardContent className="pt-8">
+              <div className="text-center space-y-8">
+                <div className="flex items-center justify-center space-x-4 mb-6">
+                  <div className="p-4 bg-revithalize-green/20 rounded-full">
+                    <Shield className="h-12 w-12 text-revithalize-green" />
+                  </div>
+                  <div className="text-left">
+                    <h3 className="text-3xl font-bold text-white">Bank-Level Security</h3>
+                    <p className="text-gray-300 text-lg">256-bit SSL encryption & PCI compliance</p>
+                  </div>
                 </div>
-                <div className="flex items-center space-x-2 text-sm text-gray-400">
-                  <Check className="h-4 w-4 text-green-400" />
-                  <span>PCI Compliant</span>
+                
+                <p className="text-gray-300 max-w-3xl mx-auto text-lg leading-relaxed">
+                  Your payment information is protected with industry-leading security measures. 
+                  We support all major payment methods across India for maximum convenience.
+                </p>
+                
+                <div className="space-y-6">
+                  <div className="text-lg font-semibold text-white">Accepted Payment Methods</div>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+                    {paymentMethods.map((method, index) => (
+                      <div key={index} className="group">
+                        <div className="bg-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-105 border border-gray-200">
+                          <div className="h-12 flex items-center justify-center">
+                            <img 
+                              src={method.logo} 
+                              alt={method.name}
+                              className="max-h-8 max-w-full object-contain"
+                              onError={(e) => {
+                                e.currentTarget.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>';
+                              }}
+                            />
+                          </div>
+                        </div>
+                        <span className="text-sm text-gray-400 text-center block mt-2 group-hover:text-white transition-colors">
+                          {method.name}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <div className="flex items-center space-x-2 text-sm text-gray-400">
-                  <Shield className="h-4 w-4 text-green-400" />
-                  <span>Bank Grade Security</span>
+                
+                <div className="flex justify-center items-center space-x-8 pt-6 border-t border-gray-700/50">
+                  <div className="flex items-center space-x-2 text-gray-300">
+                    <Shield className="h-5 w-5 text-green-400" />
+                    <span className="font-medium">SSL Secured</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-gray-300">
+                    <Check className="h-5 w-5 text-green-400" />
+                    <span className="font-medium">PCI Compliant</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-gray-300">
+                    <Shield className="h-5 w-5 text-green-400" />
+                    <span className="font-medium">Zero Storage</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </DashboardLayout>
   );
