@@ -1,6 +1,7 @@
+
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, Battery, MapPin, BarChart2, User, Settings, Menu, X, LogOut, Bike, HelpCircle, Info, Shield, Leaf, ScanLine, Cpu, Building2, Activity, Wrench, Users, Truck, TrendingUp, Monitor, Zap, Brain, Plug, FileCheck, BatteryCharging, Bell, UserCheck, Lock, FileBarChart, Lightbulb } from 'lucide-react';
+import { Home, Battery, MapPin, BarChart2, User, Settings, Menu, X, LogOut, Bike, HelpCircle, Info, Shield, Leaf, ScanLine, Cpu, Building2, Activity, Wrench, Users, Truck, TrendingUp, Monitor, Zap, Brain, Plug, FileCheck, BatteryCharging, Bell, UserCheck, Lock, FileBarChart, Lightbulb, Crown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useState, useEffect } from 'react';
 import { useScreenSize } from '@/hooks/use-mobile';
@@ -66,14 +67,25 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { isMobile } = useScreenSize();
   const [userName, setUserName] = useState('');
+  const [batteryData, setBatteryData] = useState({ level: 82, range: 118 });
 
-  // Get user data on mount
+  // Sync battery data from localStorage
   useEffect(() => {
-    const userData = localStorage.getItem('user');
-    if (userData) {
-      const user = JSON.parse(userData);
-      setUserName(user.fullName || user.name || '');
-    }
+    const syncBatteryData = () => {
+      const storedBatteryData = localStorage.getItem('batteryData');
+      if (storedBatteryData) {
+        const data = JSON.parse(storedBatteryData);
+        setBatteryData({ level: data.level || 82, range: data.range || 118 });
+      }
+    };
+
+    // Initial sync
+    syncBatteryData();
+
+    // Set up interval to sync every 3 seconds
+    const interval = setInterval(syncBatteryData, 3000);
+
+    return () => clearInterval(interval);
   }, []);
 
   // Close sidebar when route changes on mobile
@@ -133,6 +145,7 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
 
   const secondaryNavItems = [
     { icon: User, label: "Profile", to: "/profile" },
+    { icon: Crown, label: "Subscription", to: "/subscription" },
     { icon: HelpCircle, label: "Support", to: "/support" },
     { icon: Info, label: "About", to: "/about" },
     { icon: Settings, label: "Settings", to: "/settings" },
@@ -294,11 +307,14 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
             </h3>
             <div className="flex items-center gap-3">
               <div className="relative w-full h-2 bg-gray-800 rounded-full overflow-hidden">
-                <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-revithalize-green to-revithalize-blue rounded-full transition-all duration-1000" style={{ width: '75%' }} />
+                <div 
+                  className="absolute top-0 left-0 h-full bg-gradient-to-r from-revithalize-green to-revithalize-blue rounded-full transition-all duration-1000" 
+                  style={{ width: `${batteryData.level}%` }} 
+                />
               </div>
-              <span className="text-white font-medium font-poppins">75%</span>
+              <span className="text-white font-medium font-poppins">{Math.round(batteryData.level)}%</span>
             </div>
-            <p className="text-xs text-gray-400 mt-2 font-poppins">Estimated Range: 110 km</p>
+            <p className="text-xs text-gray-400 mt-2 font-poppins">Estimated Range: {Math.round(batteryData.range)} km</p>
           </div>
           
           {userName && (

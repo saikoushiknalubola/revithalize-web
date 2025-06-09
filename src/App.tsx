@@ -24,6 +24,7 @@ import CompanyVisionPage from "./pages/CompanyVision";
 import CarbonTracker from "./pages/CarbonTracker";
 import MaintenanceAI from "./pages/MaintenanceAI";
 import EnergyNetwork from "./pages/EnergyNetwork";
+import Subscription from "./pages/Subscription";
 
 // Professional Feature Pages
 import FleetManagement from "./pages/FleetManagement";
@@ -69,6 +70,7 @@ const App = () => (
           <Route path="/map" element={<ProtectedRoute><MapView /></ProtectedRoute>} />
           <Route path="/analytics" element={<ProtectedRoute><BatteryAnalytics /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/subscription" element={<ProtectedRoute><Subscription /></ProtectedRoute>} />
           <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
           <Route path="/support" element={<ProtectedRoute><Support /></ProtectedRoute>} />
           <Route path="/about" element={<ProtectedRoute><About /></ProtectedRoute>} />
