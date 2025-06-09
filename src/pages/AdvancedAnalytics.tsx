@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { AdvancedAnalytics as AdvancedAnalyticsComponent } from '@/components/professional/AdvancedAnalytics';
@@ -35,7 +36,7 @@ export default function AdvancedAnalytics() {
             </p>
           </div>
           <div className="flex space-x-2">
-            <Card className="bg-gradient-to-r from-green-500/10 to-blue-500/10 border-green-500/20">
+            <Card className="bg-gray-900/80 border-green-500/30 backdrop-blur-sm">
               <CardContent className="p-4">
                 <div className="flex items-center space-x-2">
                   <Award className="h-5 w-5 text-green-400" />
@@ -48,7 +49,7 @@ export default function AdvancedAnalytics() {
 
         {/* Key Performance Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700">
+          <Card className="bg-gray-900/80 border-gray-700/50 backdrop-blur-sm">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-gray-400 flex items-center">
                 <TrendingUp className="h-4 w-4 mr-2 text-green-400" />
@@ -61,7 +62,7 @@ export default function AdvancedAnalytics() {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700">
+          <Card className="bg-gray-900/80 border-gray-700/50 backdrop-blur-sm">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-gray-400 flex items-center">
                 <Battery className="h-4 w-4 mr-2 text-blue-400" />
@@ -74,7 +75,7 @@ export default function AdvancedAnalytics() {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700">
+          <Card className="bg-gray-900/80 border-gray-700/50 backdrop-blur-sm">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-gray-400 flex items-center">
                 <Zap className="h-4 w-4 mr-2 text-yellow-400" />
@@ -87,7 +88,7 @@ export default function AdvancedAnalytics() {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700">
+          <Card className="bg-gray-900/80 border-gray-700/50 backdrop-blur-sm">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-gray-400 flex items-center">
                 <Target className="h-4 w-4 mr-2 text-purple-400" />
@@ -103,7 +104,7 @@ export default function AdvancedAnalytics() {
 
         {/* Performance Trends */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700">
+          <Card className="bg-gray-900/80 border-gray-700/50 backdrop-blur-sm">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <LineChart className="h-5 w-5 mr-2 text-green-400" />
@@ -133,7 +134,7 @@ export default function AdvancedAnalytics() {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700">
+          <Card className="bg-gray-900/80 border-gray-700/50 backdrop-blur-sm">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <PieChart className="h-5 w-5 mr-2 text-blue-400" />
@@ -185,7 +186,7 @@ export default function AdvancedAnalytics() {
 
         {/* Additional Insights */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700">
+          <Card className="bg-gray-900/80 border-gray-700/50 backdrop-blur-sm">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Activity className="h-5 w-5 mr-2 text-green-400" />
@@ -201,7 +202,7 @@ export default function AdvancedAnalytics() {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700">
+          <Card className="bg-gray-900/80 border-gray-700/50 backdrop-blur-sm">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Calendar className="h-5 w-5 mr-2 text-blue-400" />
@@ -217,7 +218,7 @@ export default function AdvancedAnalytics() {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700">
+          <Card className="bg-gray-900/80 border-gray-700/50 backdrop-blur-sm">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <AlertCircle className="h-5 w-5 mr-2 text-yellow-400" />
