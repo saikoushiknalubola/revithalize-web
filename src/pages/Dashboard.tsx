@@ -25,8 +25,8 @@ export default function Dashboard() {
   const [activeFeature, setActiveFeature] = useState<string | null>(null);
   const [showBottomSheet, setShowBottomSheet] = useState(false);
   
-  // Enhanced real-time data states with professional metrics
-  const [batteryLevel, setBatteryLevel] = useState(78);
+  // Enhanced real-time data states with synchronized values
+  const [batteryLevel, setBatteryLevel] = useState(82);
   const [voltage, setVoltage] = useState(51.2);
   const [temperature, setTemperature] = useState(32);
   const [health, setHealth] = useState(98);
@@ -41,6 +41,20 @@ export default function Dashboard() {
   const [totalDistance, setTotalDistance] = useState(2847);
   const [carbonSaved, setCarbonSaved] = useState(234.5);
   const [energyCost, setEnergyCost] = useState(3745.50); // Converted to INR
+
+  // Sync battery data with localStorage for consistency across components
+  useEffect(() => {
+    localStorage.setItem('batteryData', JSON.stringify({
+      level: batteryLevel,
+      voltage,
+      temperature,
+      health,
+      range,
+      powerConsumption,
+      chargingStatus,
+      lastUpdated: lastUpdated.getTime()
+    }));
+  }, [batteryLevel, voltage, temperature, health, range, powerConsumption, chargingStatus, lastUpdated]);
 
   // Check for authentication and get user data
   useEffect(() => {
@@ -166,19 +180,21 @@ export default function Dashboard() {
             </div>
             <div className="flex items-center space-x-2">
               <div className={cn(
-                "flex items-center space-x-2 px-3 py-1.5 rounded-full text-xs font-medium",
-                connectionStatus === 'Connected' ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"
+                "flex items-center space-x-2 px-3 py-1.5 rounded-full text-xs font-medium backdrop-blur-sm border",
+                connectionStatus === 'Connected' 
+                  ? "bg-green-500/20 text-green-400 border-green-500/30" 
+                  : "bg-red-500/20 text-red-400 border-red-500/30"
               )}>
                 <Wifi className="h-3 w-3" />
                 <span>{connectionStatus}</span>
               </div>
-              <div className="bg-revithalize-dark/50 px-3 py-1.5 rounded-full">
+              <div className="bg-revithalize-dark/50 px-3 py-1.5 rounded-full border border-revithalize-green/30 backdrop-blur-sm">
                 <span className="text-xs font-medium text-revithalize-green">Pro Plan</span>
               </div>
               {isMobile && (
                 <button
                   onClick={() => setShowBottomSheet(true)}
-                  className="p-2 rounded-full bg-revithalize-green/20 hover:bg-revithalize-green/30 transition-colors"
+                  className="p-2 rounded-full bg-revithalize-green/20 hover:bg-revithalize-green/30 transition-colors border border-revithalize-green/30"
                 >
                   <ChevronRight className="h-4 w-4 text-revithalize-green" />
                 </button>
@@ -254,10 +270,10 @@ export default function Dashboard() {
             </h2>
             <button
               onClick={() => navigate('/fleet-management')}
-              className="text-sm text-gray-400 hover:text-revithalize-green transition-colors flex items-center"
+              className="text-sm text-gray-400 hover:text-revithalize-green transition-colors flex items-center group"
             >
               View All Tools
-              <ArrowRight className="ml-1 h-4 w-4" />
+              <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
           
@@ -287,20 +303,25 @@ export default function Dashboard() {
                   <div className="relative z-10">
                     <div className="flex items-center justify-between mb-3">
                       <div className={cn(
-                        "bg-black/40 p-3 rounded-xl group-hover:bg-black/50 transition-all duration-300",
+                        "bg-black/40 p-3 rounded-xl group-hover:bg-black/50 transition-all duration-300 border border-white/10",
                         "group-hover:scale-110"
                       )}>
                         <Icon className={`h-5 w-5 ${feature.iconColor} group-hover:animate-pulse`} />
                       </div>
-                      <ArrowRight className="h-4 w-4 text-gray-400 group-hover:text-white transition-colors" />
+                      <ArrowRight className="h-4 w-4 text-gray-400 group-hover:text-white transition-colors group-hover:translate-x-1 transform duration-300" />
                     </div>
                     
                     <h3 className="text-white font-bold text-sm mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-300 transition-all duration-300">
                       {feature.title}
                     </h3>
-                    <p className="text-gray-400 text-xs leading-relaxed mb-2">{feature.description}</p>
+                    <p className="text-gray-400 text-xs leading-relaxed mb-3">{feature.description}</p>
                     
-                    <div className="text-xs text-gray-500">{feature.stats}</div>
+                    <div className="flex items-center justify-between">
+                      <div className="text-xs text-gray-500 bg-black/20 px-2 py-1 rounded-full backdrop-blur-sm border border-white/10">
+                        {feature.stats}
+                      </div>
+                      <div className="h-1 w-12 bg-gradient-to-r from-gray-600 to-gray-700 rounded-full group-hover:from-white/30 group-hover:to-white/10 transition-all duration-300"></div>
+                    </div>
                   </div>
                 </motion.div>
               );
