@@ -67,7 +67,7 @@ export const generateInvoicePDF = (invoiceData: InvoiceData): Blob => {
     doc.text(invoiceData.email, 20, 112);
     
     // Company Information
-    doc.setFontSize12);
+    doc.setFontSize(12);
     doc.setTextColor(40, 40, 40);
     doc.setFont('helvetica', 'bold');
     doc.text('From:', pageWidth - 70, 95);
@@ -75,19 +75,20 @@ export const generateInvoicePDF = (invoiceData: InvoiceData): Blob => {
     doc.setFontSize(11);
     doc.setTextColor(60, 60, 60);
     doc.setFont('helvetica', 'bold');
-    doc.text('Revithalize Technologies Pvt Ltd', pageWidth - 20, 105, { align: 'right' });
+    doc.text('Revithalize Technologies Inc', pageWidth - 20, 105, { align: 'right' });
     doc.setFont('helvetica', 'normal');
-    doc.text('Electronic City, Bangalore - 560100', pageWidth - 20, 112, { align: 'right' });
-    doc.text('Karnataka, India', pageWidth - 20, 119, { align: 'right' });
-    doc.text('GST: 29AABCS1681C1ZP', pageWidth - 20, 126, { align: 'right' });
+    doc.text('1234 Innovation Drive, Suite 567', pageWidth - 20, 112, { align: 'right' });
+    doc.text('San Francisco, CA 94105', pageWidth - 20, 119, { align: 'right' });
+    doc.text('United States', pageWidth - 20, 126, { align: 'right' });
+    doc.text('Tax ID: 12-3456789', pageWidth - 20, 133, { align: 'right' });
     
-    // Services Table with better width distribution
+    // Services Table with proper spacing
     autoTable(doc, {
-      startY: 135,
+      startY: 145,
       head: [['Description', 'Period', 'Qty', 'Rate', 'Amount']],
       body: [
         [
-          'Revithalize EV Management Premium Subscription\nAdvanced Analytics, AI Insights, Fleet Management',
+          'Revithalize EV Management\nPremium Subscription',
           invoiceData.billingPeriod,
           '1',
           invoiceData.amount,
@@ -96,40 +97,40 @@ export const generateInvoicePDF = (invoiceData: InvoiceData): Blob => {
       ],
       theme: 'grid',
       styles: { 
-        fontSize: 9, 
-        cellPadding: 4,
+        fontSize: 10, 
+        cellPadding: 6,
         textColor: [60, 60, 60],
         overflow: 'linebreak',
         halign: 'left'
       },
       headStyles: { 
         fillColor: [0, 200, 120], 
-        textColor: [0, 0, 0],
-        fontSize: 10,
+        textColor: [255, 255, 255],
+        fontSize: 11,
         fontStyle: 'bold',
         halign: 'center'
       },
       columnStyles: {
-        0: { cellWidth: 85, halign: 'left' },
-        1: { cellWidth: 35, halign: 'center' },
-        2: { cellWidth: 15, halign: 'center' },
-        3: { cellWidth: 25, halign: 'right' },
-        4: { cellWidth: 25, halign: 'right', fontStyle: 'bold' }
+        0: { cellWidth: 80, halign: 'left' },
+        1: { cellWidth: 40, halign: 'center' },
+        2: { cellWidth: 20, halign: 'center' },
+        3: { cellWidth: 30, halign: 'right' },
+        4: { cellWidth: 30, halign: 'right', fontStyle: 'bold' }
       },
       margin: { left: 15, right: 15 }
     });
     
     // Calculate totals
-    const finalY = (doc as any).lastAutoTable.finalY + 10;
+    const finalY = (doc as any).lastAutoTable.finalY + 15;
     const baseAmount = parseFloat(invoiceData.amount.replace('₹', ''));
     const gstAmount = baseAmount * 0.18;
     const totalAmount = baseAmount + gstAmount;
     
     // Financial Summary - properly positioned
-    const summaryX = pageWidth - 65;
+    const summaryX = pageWidth - 75;
     const summaryY = finalY;
-    const summaryWidth = 50;
-    const summaryHeight = 35;
+    const summaryWidth = 60;
+    const summaryHeight = 40;
     
     doc.setDrawColor(200, 200, 200);
     doc.setLineWidth(0.5);
@@ -140,39 +141,39 @@ export const generateInvoicePDF = (invoiceData: InvoiceData): Blob => {
     doc.setTextColor(80, 80, 80);
     doc.setFont('helvetica', 'normal');
     
-    doc.text('Subtotal:', summaryX + 5, summaryY + 8);
-    doc.text(`₹${baseAmount.toFixed(2)}`, summaryX + summaryWidth - 5, summaryY + 8, { align: 'right' });
+    doc.text('Subtotal:', summaryX + 5, summaryY + 10);
+    doc.text(`₹${baseAmount.toFixed(2)}`, summaryX + summaryWidth - 5, summaryY + 10, { align: 'right' });
     
-    doc.text('GST (18%):', summaryX + 5, summaryY + 16);
-    doc.text(`₹${gstAmount.toFixed(2)}`, summaryX + summaryWidth - 5, summaryY + 16, { align: 'right' });
+    doc.text('Tax (18%):', summaryX + 5, summaryY + 20);
+    doc.text(`₹${gstAmount.toFixed(2)}`, summaryX + summaryWidth - 5, summaryY + 20, { align: 'right' });
     
     // Total line
-    doc.setLineWidth(0.5);
+    doc.setLineWidth(0.8);
     doc.setDrawColor(0, 200, 120);
-    doc.line(summaryX + 5, summaryY + 20, summaryX + summaryWidth - 5, summaryY + 20);
+    doc.line(summaryX + 5, summaryY + 25, summaryX + summaryWidth - 5, summaryY + 25);
     
     doc.setFontSize(12);
     doc.setTextColor(0, 150, 0);
     doc.setFont('helvetica', 'bold');
-    doc.text('Total:', summaryX + 5, summaryY + 28);
-    doc.text(`₹${totalAmount.toFixed(2)}`, summaryX + summaryWidth - 5, summaryY + 28, { align: 'right' });
+    doc.text('Total:', summaryX + 5, summaryY + 33);
+    doc.text(`₹${totalAmount.toFixed(2)}`, summaryX + summaryWidth - 5, summaryY + 33, { align: 'right' });
     
     // Payment Information
     doc.setFontSize(10);
     doc.setTextColor(80, 80, 80);
     doc.setFont('helvetica', 'normal');
-    doc.text('Payment Information:', 20, finalY + 35);
-    doc.text(`Transaction ID: RVT${Date.now().toString().slice(-8)}`, 20, finalY + 43);
-    doc.text(`Payment Method: Online Payment`, 20, finalY + 51);
-    doc.text(`Next Billing Date: ${invoiceData.nextBilling}`, 20, finalY + 59);
+    doc.text('Payment Information:', 20, finalY + 50);
+    doc.text(`Transaction ID: RVT${Date.now().toString().slice(-8)}`, 20, finalY + 58);
+    doc.text(`Payment Method: Online Payment`, 20, finalY + 66);
+    doc.text(`Next Billing Date: ${invoiceData.nextBilling}`, 20, finalY + 74);
     
     // Terms and Conditions
     doc.setFontSize(8);
     doc.setTextColor(100, 100, 100);
-    doc.text('Terms & Conditions:', 20, finalY + 75);
-    doc.text('• Payment is processed automatically on the billing date', 20, finalY + 82);
-    doc.text('• All prices are inclusive of applicable taxes', 20, finalY + 88);
-    doc.text('• For support queries, contact: support@revithalize.com', 20, finalY + 94);
+    doc.text('Terms & Conditions:', 20, finalY + 90);
+    doc.text('• Payment is processed automatically on the billing date', 20, finalY + 97);
+    doc.text('• All prices are inclusive of applicable taxes', 20, finalY + 103);
+    doc.text('• For support queries, contact: support@revithalize.com', 20, finalY + 109);
     
     // Footer
     doc.setFillColor(245, 245, 245);
@@ -182,7 +183,7 @@ export const generateInvoicePDF = (invoiceData: InvoiceData): Blob => {
     doc.setTextColor(120, 120, 120);
     doc.setFont('helvetica', 'normal');
     doc.text('Thank you for choosing Revithalize - Powering the Future of Electric Mobility', pageWidth / 2, 275, { align: 'center' });
-    doc.text(`Generated on: ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`, pageWidth / 2, 285, { align: 'center' });
+    doc.text(`Generated on: ${new Date().toLocaleString()}`, pageWidth / 2, 285, { align: 'center' });
     
     return doc.output('blob');
   } catch (error) {
