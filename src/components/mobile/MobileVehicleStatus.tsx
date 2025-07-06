@@ -6,25 +6,25 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 interface MobileVehicleStatusProps {
-  batteryLevel: number;
-  voltage: number;
-  temperature: number;
-  health: number;
-  range: number;
-  powerConsumption: number;
-  chargingStatus: string;
-  efficiencyScore: number;
+  batteryLevel?: number;
+  voltage?: number;
+  temperature?: number;
+  health?: number;
+  range?: number;
+  powerConsumption?: number;
+  chargingStatus?: string;
+  efficiencyScore?: number;
 }
 
 export function MobileVehicleStatus({
-  batteryLevel,
-  voltage,
-  temperature,
-  health,
-  range,
-  powerConsumption,
-  chargingStatus,
-  efficiencyScore
+  batteryLevel = 82,
+  voltage = 51.2,
+  temperature = 32,
+  health = 98,
+  range = 118,
+  powerConsumption = 42,
+  chargingStatus = 'Not Charging',
+  efficiencyScore = 87
 }: MobileVehicleStatusProps) {
   const [currentCard, setCurrentCard] = useState(0);
 
@@ -37,7 +37,8 @@ export function MobileVehicleStatus({
       status: chargingStatus,
       color: "text-revithalize-green",
       progress: batteryLevel,
-      gradient: "from-revithalize-green/20 to-revithalize-blue/10"
+      gradient: "from-revithalize-green/30 to-revithalize-blue/20",
+      bgGradient: "from-gray-900/95 to-gray-800/95"
     },
     {
       icon: Bolt,
@@ -46,7 +47,8 @@ export function MobileVehicleStatus({
       subtext: `${powerConsumption.toFixed(0)} Ah consumption`,
       status: "Active",
       color: "text-blue-400",
-      gradient: "from-blue-400/20 to-blue-600/10"
+      gradient: "from-blue-400/30 to-blue-600/20",
+      bgGradient: "from-blue-900/80 to-gray-800/95"
     },
     {
       icon: Gauge,
@@ -56,7 +58,8 @@ export function MobileVehicleStatus({
       status: "Optimal",
       color: "text-amber-400",
       progress: health,
-      gradient: "from-amber-400/20 to-yellow-500/10"
+      gradient: "from-amber-400/30 to-yellow-500/20",
+      bgGradient: "from-amber-900/60 to-gray-800/95"
     },
     {
       icon: TrendingUp,
@@ -66,7 +69,8 @@ export function MobileVehicleStatus({
       status: "Excellent",
       color: "text-emerald-400",
       progress: efficiencyScore,
-      gradient: "from-emerald-400/20 to-green-500/10"
+      gradient: "from-emerald-400/30 to-green-500/20",
+      bgGradient: "from-emerald-900/60 to-gray-800/95"
     }
   ];
 
@@ -83,29 +87,37 @@ export function MobileVehicleStatus({
 
   return (
     <div className="space-y-4">
-      {/* Main Status Card with Swipe Functionality */}
+      {/* Main Status Card with Enhanced Colors */}
       <Card className={cn(
-        "bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700 shadow-xl overflow-hidden relative",
-        `bg-gradient-to-br ${currentCardData.gradient}`
+        "bg-gradient-to-br shadow-2xl overflow-hidden relative border-2",
+        currentCardData.bgGradient,
+        "border-gray-600/50 backdrop-blur-sm"
       )}>
-        <CardContent className="p-6">
+        <div className={cn(
+          "absolute inset-0 bg-gradient-to-br opacity-20",
+          currentCardData.gradient
+        )} />
+        
+        <CardContent className="p-6 relative z-10">
           {/* Card Navigation */}
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-6">
             <motion.button
               onClick={prevCard}
-              className="p-2 rounded-full bg-black/30 hover:bg-black/50 transition-colors"
+              className="p-3 rounded-full bg-black/50 hover:bg-black/70 transition-colors shadow-lg border border-gray-600/30"
               whileTap={{ scale: 0.95 }}
             >
-              <ChevronLeft className="h-4 w-4 text-gray-300" />
+              <ChevronLeft className="h-5 w-5 text-white" />
             </motion.button>
             
-            <div className="flex space-x-2">
+            <div className="flex space-x-3">
               {statusCards.map((_, index) => (
                 <div
                   key={index}
                   className={cn(
-                    "w-2 h-2 rounded-full transition-all duration-300",
-                    index === currentCard ? "bg-white" : "bg-gray-500"
+                    "w-3 h-3 rounded-full transition-all duration-300 shadow-sm",
+                    index === currentCard 
+                      ? "bg-white shadow-lg" 
+                      : "bg-gray-500/60 hover:bg-gray-400/80"
                   )}
                 />
               ))}
@@ -113,10 +125,10 @@ export function MobileVehicleStatus({
 
             <motion.button
               onClick={nextCard}
-              className="p-2 rounded-full bg-black/30 hover:bg-black/50 transition-colors"
+              className="p-3 rounded-full bg-black/50 hover:bg-black/70 transition-colors shadow-lg border border-gray-600/30"
               whileTap={{ scale: 0.95 }}
             >
-              <ChevronRight className="h-4 w-4 text-gray-300" />
+              <ChevronRight className="h-5 w-5 text-white" />
             </motion.button>
           </div>
 
@@ -130,29 +142,29 @@ export function MobileVehicleStatus({
               transition={{ duration: 0.3 }}
               className="text-center"
             >
-              <div className="flex items-center justify-center mb-4">
-                <div className="bg-black/30 p-4 rounded-2xl">
-                  <Icon className={cn("h-8 w-8", currentCardData.color)} />
+              <div className="flex items-center justify-center mb-6">
+                <div className="bg-black/40 p-5 rounded-3xl shadow-xl border border-gray-600/30 backdrop-blur-sm">
+                  <Icon className={cn("h-10 w-10", currentCardData.color)} />
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <div className="text-sm text-gray-400 uppercase tracking-wider font-medium">
+              <div className="space-y-3">
+                <div className="text-sm text-gray-300 uppercase tracking-wider font-medium">
                   {currentCardData.label}
                 </div>
-                <div className="text-3xl font-bold text-white">
+                <div className="text-4xl font-bold text-white drop-shadow-lg">
                   {currentCardData.value}
                 </div>
-                <div className="text-sm text-gray-400">
+                <div className="text-base text-gray-200 font-medium">
                   {currentCardData.subtext}
                 </div>
                 
-                {/* Progress Bar for applicable cards */}
+                {/* Enhanced Progress Bar */}
                 {currentCardData.progress && (
-                  <div className="mt-4">
-                    <div className="w-full h-2 bg-gray-800 rounded-full overflow-hidden">
+                  <div className="mt-6">
+                    <div className="w-full h-3 bg-gray-800/80 rounded-full overflow-hidden shadow-inner border border-gray-700/50">
                       <motion.div 
-                        className={cn("h-full rounded-full bg-gradient-to-r", 
+                        className={cn("h-full rounded-full bg-gradient-to-r shadow-sm", 
                           currentCardData.progress > 80 ? "from-revithalize-green to-revithalize-blue" :
                           currentCardData.progress > 60 ? "from-yellow-500 to-orange-500" :
                           "from-red-500 to-red-600"
@@ -165,12 +177,12 @@ export function MobileVehicleStatus({
                   </div>
                 )}
 
-                {/* Status Badge */}
+                {/* Enhanced Status Badge */}
                 <div className={cn(
-                  "inline-flex items-center px-3 py-1 rounded-full text-xs font-medium mt-3",
-                  "bg-black/30 text-gray-300"
+                  "inline-flex items-center px-4 py-2 rounded-full text-sm font-medium mt-4 shadow-lg",
+                  "bg-black/50 text-white border border-gray-600/30 backdrop-blur-sm"
                 )}>
-                  <div className={cn("w-2 h-2 rounded-full mr-2", 
+                  <div className={cn("w-3 h-3 rounded-full mr-3 shadow-sm", 
                     currentCardData.status === 'Charging...' ? "bg-yellow-400 animate-pulse" :
                     currentCardData.status === 'Charging' ? "bg-green-400 animate-pulse" :
                     "bg-green-400"
@@ -183,26 +195,26 @@ export function MobileVehicleStatus({
         </CardContent>
       </Card>
 
-      {/* Quick Stats Grid */}
-      <div className="grid grid-cols-2 gap-3">
-        <div className="bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700 rounded-xl p-4">
-          <div className="flex items-center justify-between mb-2">
-            <ThermometerSnowflake className="h-5 w-5 text-purple-400" />
-            <span className="text-xs text-gray-400">TEMP</span>
+      {/* Enhanced Quick Stats Grid */}
+      <div className="grid grid-cols-2 gap-4">
+        <div className="bg-gradient-to-br from-gray-900/95 to-gray-800/95 border-2 border-gray-600/50 rounded-2xl p-5 shadow-xl backdrop-blur-sm">
+          <div className="flex items-center justify-between mb-3">
+            <ThermometerSnowflake className="h-6 w-6 text-purple-400" />
+            <span className="text-sm text-gray-300 font-medium">TEMP</span>
           </div>
-          <div className="text-lg font-bold text-white">{temperature.toFixed(0)}°C</div>
-          <div className="text-xs text-gray-400">
+          <div className="text-2xl font-bold text-white drop-shadow-sm">{temperature.toFixed(0)}°C</div>
+          <div className="text-sm text-gray-300 font-medium">
             {temperature > 40 ? 'Hot' : temperature > 35 ? 'Warm' : 'Optimal'}
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700 rounded-xl p-4">
-          <div className="flex items-center justify-between mb-2">
-            <Bolt className="h-5 w-5 text-blue-400" />
-            <span className="text-xs text-gray-400">POWER</span>
+        <div className="bg-gradient-to-br from-gray-900/95 to-gray-800/95 border-2 border-gray-600/50 rounded-2xl p-5 shadow-xl backdrop-blur-sm">
+          <div className="flex items-center justify-between mb-3">
+            <Bolt className="h-6 w-6 text-blue-400" />
+            <span className="text-sm text-gray-300 font-medium">POWER</span>
           </div>
-          <div className="text-lg font-bold text-white">{powerConsumption.toFixed(0)} Ah</div>
-          <div className="text-xs text-gray-400">Consumption</div>
+          <div className="text-2xl font-bold text-white drop-shadow-sm">{powerConsumption.toFixed(0)} Ah</div>
+          <div className="text-sm text-gray-300 font-medium">Consumption</div>
         </div>
       </div>
     </div>

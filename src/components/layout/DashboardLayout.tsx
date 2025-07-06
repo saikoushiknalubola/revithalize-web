@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Home, Battery, MapPin, BarChart2, User, Settings, Menu, X, LogOut, Bike, HelpCircle, Info, Shield, Leaf, ScanLine, Cpu, Building2, Activity, Wrench, Users, Truck, TrendingUp, Monitor, Zap, Brain, Plug, FileCheck, BatteryCharging, Bell, UserCheck, Lock, FileBarChart, Lightbulb, Crown } from 'lucide-react';
@@ -67,26 +66,9 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { isMobile } = useScreenSize();
   const [userName, setUserName] = useState('');
-  const [batteryData, setBatteryData] = useState({ level: 82, range: 118 });
-
-  // Sync battery data from localStorage
-  useEffect(() => {
-    const syncBatteryData = () => {
-      const storedBatteryData = localStorage.getItem('batteryData');
-      if (storedBatteryData) {
-        const data = JSON.parse(storedBatteryData);
-        setBatteryData({ level: data.level || 82, range: data.range || 118 });
-      }
-    };
-
-    // Initial sync
-    syncBatteryData();
-
-    // Set up interval to sync every 3 seconds
-    const interval = setInterval(syncBatteryData, 3000);
-
-    return () => clearInterval(interval);
-  }, []);
+  
+  // Static battery data for consistency
+  const batteryData = { level: 82, range: 118 };
 
   // Close sidebar when route changes on mobile
   useEffect(() => {
@@ -94,6 +76,15 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
       setSidebarOpen(false);
     }
   }, [location.pathname, isMobile]);
+
+  // Get user data
+  useEffect(() => {
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      const user = JSON.parse(userData);
+      setUserName(user.fullName || user.name || 'User');
+    }
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('isAuthenticated');
@@ -109,7 +100,6 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
     { icon: BarChart2, label: "Analytics", to: "/analytics" },
   ];
 
-  // Professional Tools - Main management features
   const professionalTools = [
     { icon: Truck, label: "Fleet Management", to: "/fleet-management" },
     { icon: TrendingUp, label: "Advanced Analytics", to: "/advanced-analytics" },
@@ -127,7 +117,6 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
     { icon: Lightbulb, label: "AI Insights", to: "/ai-insights" },
   ];
 
-  // Innovative features for direct activation
   const innovativeFeatures = [
     { icon: Shield, label: "Battery Twin", to: "/battery-twin" },
     { icon: Leaf, label: "Eco Program", to: "/eco-program" },
@@ -135,7 +124,6 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
     { icon: Cpu, label: "Smart Grid", to: "/smart-grid" },
   ];
 
-  // Dashboard features
   const dashboardFeatures = [
     { icon: Building2, label: "Company Vision", to: "/company-vision" },
     { icon: Activity, label: "Carbon Tracker", to: "/carbon-tracker" },
@@ -151,7 +139,6 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
     { icon: Settings, label: "Settings", to: "/settings" },
   ];
 
-  // Combined nav items for mobile bottom navigation (limit to 5)
   const mobileNavItems = [
     { icon: Home, label: "Dashboard", to: "/dashboard" },
     { icon: Bike, label: "Vehicle", to: "/vehicle" },
@@ -161,7 +148,6 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
       label: "Features", 
       action: () => {
         setSidebarOpen(true);
-        // Scroll to innovative features section
         setTimeout(() => {
           document.querySelector('.innovative-features-section')?.scrollIntoView({ behavior: 'smooth' });
         }, 100);
@@ -172,7 +158,7 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
 
   return (
     <div className="flex min-h-screen bg-black font-poppins overflow-hidden">
-      {/* Mobile sidebar toggle - Fixed positioning with higher z-index */}
+      {/* Mobile sidebar toggle */}
       <button
         className="fixed top-4 left-4 z-[70] p-2 bg-gradient-to-r from-revithalize-dark to-gray-800 rounded-lg text-white md:hidden shadow-lg"
         onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -181,7 +167,7 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
         {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
       </button>
 
-      {/* Sidebar - Updated for better mobile experience with improved scrollability */}
+      {/* Enhanced Sidebar */}
       <aside
         className={cn(
           "fixed inset-y-0 left-0 z-[60] bg-black/95 backdrop-blur-sm border-r border-gray-800 w-64 transform transition-all duration-300 ease-in-out md:translate-x-0 shadow-xl flex flex-col",
@@ -192,11 +178,11 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
           <h1 className="text-2xl font-poppins font-bold text-transparent bg-clip-text bg-gradient-to-r from-revithalize-green to-revithalize-blue pl-8 md:pl-0">
             ReVithalize
           </h1>
-          {/* Close button for mobile - improved positioning */}
+          {/* Single close button for mobile - only show when sidebar is open */}
           {isMobile && sidebarOpen && (
             <button 
               onClick={() => setSidebarOpen(false)}
-              className="p-1.5 rounded-md text-gray-400 hover:bg-gray-800 hover:text-white transition-colors"
+              className="p-2 rounded-md text-gray-400 hover:bg-gray-800 hover:text-white transition-colors"
               aria-label="Close sidebar"
             >
               <X size={20} />
@@ -204,7 +190,7 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
           )}
         </div>
 
-        {/* Made sidebar content scrollable with flex-1 and overflow-y-auto */}
+        {/* Scrollable content */}
         <div className="flex-1 overflow-y-auto py-4 px-4">
           <nav className="flex flex-col gap-2">
             <div className="mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
@@ -261,7 +247,7 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
               </div>
             ))}
             
-            <div className="mt-6 mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            <div className="mt-6 mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider innovative-features-section">
               Smart Features
             </div>
             {innovativeFeatures.map((item, index) => (
@@ -299,26 +285,27 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
           </nav>
         </div>
 
+        {/* Enhanced Footer */}
         <div className="flex-shrink-0 p-4 border-t border-gray-800/50">
-          <div className="bg-gradient-to-br from-gray-900 to-revithalize-dark rounded-lg p-4 mb-4 transition-all duration-300 hover:shadow-lg hover:from-gray-800">
+          <div className="bg-gradient-to-br from-gray-900 to-revithalize-dark rounded-xl p-4 mb-4 transition-all duration-300 hover:shadow-lg hover:from-gray-800 border border-gray-800/50">
             <h3 className="text-sm font-medium text-gray-300 mb-2 font-poppins flex items-center">
               <Bike className="h-4 w-4 mr-2 text-revithalize-green" />
               Hero Honda Passion
             </h3>
             <div className="flex items-center gap-3">
-              <div className="relative w-full h-2 bg-gray-800 rounded-full overflow-hidden">
+              <div className="relative w-full h-2 bg-gray-800 rounded-full overflow-hidden shadow-inner">
                 <div 
-                  className="absolute top-0 left-0 h-full bg-gradient-to-r from-revithalize-green to-revithalize-blue rounded-full transition-all duration-1000" 
+                  className="absolute top-0 left-0 h-full bg-gradient-to-r from-revithalize-green to-revithalize-blue rounded-full shadow-sm" 
                   style={{ width: `${batteryData.level}%` }} 
                 />
               </div>
-              <span className="text-white font-medium font-poppins">{Math.round(batteryData.level)}%</span>
+              <span className="text-white font-medium font-poppins">{batteryData.level}%</span>
             </div>
-            <p className="text-xs text-gray-400 mt-2 font-poppins">Estimated Range: {Math.round(batteryData.range)} km</p>
+            <p className="text-xs text-gray-400 mt-2 font-poppins">Estimated Range: {batteryData.range} km</p>
           </div>
           
           {userName && (
-            <div className="bg-gray-900 rounded-lg p-3 mb-4 animate-fade-in">
+            <div className="bg-gray-900/80 rounded-lg p-3 mb-4 animate-fade-in border border-gray-800/50">
               <p className="text-sm text-gray-300">Logged in as</p>
               <p className="text-white font-medium truncate">{userName}</p>
             </div>
@@ -326,7 +313,7 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
           
           <button 
             onClick={handleLogout}
-            className="w-full flex items-center gap-2 px-3 py-2 text-red-400 hover:bg-gray-800 rounded-lg transition-all duration-200 hover:shadow-md"
+            className="w-full flex items-center gap-2 px-3 py-2 text-red-400 hover:bg-gray-800/70 rounded-lg transition-all duration-200 hover:shadow-md border border-gray-800/30"
           >
             <LogOut size={18} />
             <span className="font-poppins">Logout</span>
@@ -334,7 +321,7 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
         </div>
       </aside>
 
-      {/* Overlay - Higher z-index to ensure it's above the content but below the menu button */}
+      {/* Overlay */}
       {sidebarOpen && isMobile && (
         <div 
           className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[55] md:hidden animate-fade-in" 
@@ -355,14 +342,13 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
           </div>
         </div>
         
-        {/* Improved Mobile bottom navigation */}
-        <div className="fixed inset-x-0 bottom-0 bg-black/90 backdrop-blur-md border-t border-gray-800 md:hidden z-30 shadow-lg">
-          <div className="flex justify-around items-center py-2">
+        {/* Enhanced Mobile bottom navigation */}
+        <div className="fixed inset-x-0 bottom-0 bg-black/95 backdrop-blur-md border-t border-gray-800 md:hidden z-30 shadow-2xl">
+          <div className="flex justify-around items-center py-3">
             {mobileNavItems.map((item, index) => {
               const Icon = item.icon;
               const active = item.to ? location.pathname === item.to : false;
               
-              // Handle items with action instead of navigation
               if ('action' in item) {
                 return (
                   <button 
@@ -377,7 +363,7 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
                     style={{ animationDelay: `${index * 100}ms` }}
                   >
                     <div className={cn(
-                      "flex items-center justify-center h-10 w-10 rounded-full mb-1", // Increased touch target
+                      "flex items-center justify-center h-10 w-10 rounded-full mb-1",
                       active && "bg-revithalize-green/10"
                     )}>
                       <Icon size={22} className="text-revithalize-green animate-pulse" />
@@ -400,7 +386,7 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <div className={cn(
-                    "flex items-center justify-center h-10 w-10 rounded-full mb-1", // Increased touch target
+                    "flex items-center justify-center h-10 w-10 rounded-full mb-1",
                     active && "bg-revithalize-green/10"
                   )}>
                     <Icon size={22} className={active ? "animate-pulse" : ""} />

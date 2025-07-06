@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Battery, Bolt, Gauge, ThermometerSnowflake, MapPin, Bell, Building2, Activity, Wrench, Users, TrendingUp, Zap, Leaf, Shield, ChevronRight, Wifi, AlertTriangle, CheckCircle, Clock, Truck, Monitor, Brain, ArrowRight } from 'lucide-react';
@@ -25,36 +24,22 @@ export default function Dashboard() {
   const [activeFeature, setActiveFeature] = useState<string | null>(null);
   const [showBottomSheet, setShowBottomSheet] = useState(false);
   
-  // Enhanced real-time data states with synchronized values
-  const [batteryLevel, setBatteryLevel] = useState(82);
-  const [voltage, setVoltage] = useState(51.2);
-  const [temperature, setTemperature] = useState(32);
-  const [health, setHealth] = useState(98);
-  const [range, setRange] = useState(118);
-  const [powerConsumption, setPowerConsumption] = useState(42);
-  const [chargingStatus, setChargingStatus] = useState('Not Charging');
-  const [connectionStatus, setConnectionStatus] = useState('Connected');
-  const [lastUpdated, setLastUpdated] = useState(new Date());
+  // Static data for consistent professional experience
+  const batteryLevel = 82;
+  const voltage = 51.2;
+  const temperature = 32;
+  const health = 98;
+  const range = 118;
+  const powerConsumption = 42;
+  const chargingStatus = 'Not Charging';
+  const connectionStatus = 'Connected';
+  const lastUpdated = new Date();
   
-  // Professional metrics (converted to INR)
-  const [efficiencyScore, setEfficiencyScore] = useState(87);
-  const [totalDistance, setTotalDistance] = useState(2847);
-  const [carbonSaved, setCarbonSaved] = useState(234.5);
-  const [energyCost, setEnergyCost] = useState(3745.50); // Converted to INR
-
-  // Sync battery data with localStorage for consistency across components
-  useEffect(() => {
-    localStorage.setItem('batteryData', JSON.stringify({
-      level: batteryLevel,
-      voltage,
-      temperature,
-      health,
-      range,
-      powerConsumption,
-      chargingStatus,
-      lastUpdated: lastUpdated.getTime()
-    }));
-  }, [batteryLevel, voltage, temperature, health, range, powerConsumption, chargingStatus, lastUpdated]);
+  // Professional metrics (static for consistency)
+  const efficiencyScore = 87;
+  const totalDistance = 2847;
+  const carbonSaved = 234.5;
+  const energyCost = 3745.50;
 
   // Check for authentication and get user data
   useEffect(() => {
@@ -69,22 +54,6 @@ export default function Dashboard() {
       }
     }
   }, [navigate]);
-
-  // Enhanced real-time data simulation with professional metrics
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setBatteryLevel(prev => Math.max(0, Math.min(100, prev + (Math.random() - 0.5) * 1.5)));
-      setVoltage(prev => Math.max(48, Math.min(54, prev + (Math.random() - 0.5) * 0.3)));
-      setTemperature(prev => Math.max(25, Math.min(45, prev + (Math.random() - 0.5) * 1.5)));
-      setHealth(prev => Math.max(95, Math.min(100, prev + (Math.random() - 0.5) * 0.05)));
-      setRange(prev => Math.max(50, Math.min(150, prev + (Math.random() - 0.5) * 3)));
-      setPowerConsumption(prev => Math.max(30, Math.min(60, prev + (Math.random() - 0.5) * 2)));
-      setEfficiencyScore(prev => Math.max(70, Math.min(100, prev + (Math.random() - 0.5) * 0.5)));
-      setLastUpdated(new Date());
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, []);
 
   // Set active feature from URL parameter if present
   useEffect(() => {
@@ -203,7 +172,7 @@ export default function Dashboard() {
           </div>
         </motion.header>
 
-        {/* Mobile-Optimized Vehicle Status */}
+        {/* Mobile-Optimized Vehicle Status with Static Data */}
         {isMobile ? (
           <MobileVehicleStatus 
             batteryLevel={batteryLevel}
@@ -360,11 +329,9 @@ export default function Dashboard() {
               navigate('/map');
             }}
             onRemoteCharging={() => {
-              setChargingStatus('Charging...');
               toast.success('Remote charging initiated', {
                 description: 'Your vehicle will begin charging shortly'
               });
-              setTimeout(() => setChargingStatus('Charging'), 2000);
             }}
             onSetChargeAlert={() => {
               toast.success('Smart charge alert configured', {
