@@ -43,42 +43,42 @@ const currentPlan = {
 const paymentMethods = [
   { 
     name: 'Visa', 
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg',
+    logo: 'https://cdn.worldvectorlogo.com/logos/visa-2.svg',
     type: 'card'
   },
   { 
     name: 'Mastercard', 
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg',
+    logo: 'https://cdn.worldvectorlogo.com/logos/mastercard-2.svg',
     type: 'card'
   },
   { 
     name: 'RuPay', 
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/d/d1/RuPay.svg',
+    logo: 'https://cdn.worldvectorlogo.com/logos/rupay.svg',
     type: 'card'
   },
   { 
     name: 'UPI', 
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo-vector.svg',
+    logo: 'https://seeklogo.com/images/U/upi-logo-7F411E1363-seeklogo.com.png',
     type: 'digital'
   },
   { 
     name: 'Google Pay', 
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/c/c7/Google_Pay_Logo.svg',
+    logo: 'https://seeklogo.com/images/G/google-pay-logo-8A0A5FCC88-seeklogo.com.png',
     type: 'digital'
   },
   { 
     name: 'PhonePe', 
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/0/09/PhonePe_Logo.svg',
+    logo: 'https://seeklogo.com/images/P/phonepe-logo-E0E8E9D7EC-seeklogo.com.png',
     type: 'digital'
   },
   { 
     name: 'Paytm', 
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/2/24/Paytm_Logo_%28standalone%29.svg',
+    logo: 'https://seeklogo.com/images/P/paytm-logo-6B0786E962-seeklogo.com.png',
     type: 'digital'
   },
   { 
     name: 'Net Banking', 
-    logo: 'https://cdn-icons-png.flaticon.com/512/4968/4968705.png',
+    logo: 'https://cdn-icons-png.flaticon.com/512/2830/2830284.png',
     type: 'banking'
   }
 ];
