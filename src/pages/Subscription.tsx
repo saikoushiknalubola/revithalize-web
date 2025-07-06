@@ -43,42 +43,42 @@ const currentPlan = {
 const paymentMethods = [
   { 
     name: 'Visa', 
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png',
+    logo: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="%23ffffff" d="M4 8h40v32H4z"/><path fill="%231565c0" d="M18.5 11h-4l-6 26h4l1.2-5h7.6l1.2 5h4L18.5 11zm-2 17l2.5-10 2.5 10H16.5zm12-17h3l2 13 5-13h4l-8 26h-4l-2-26zm12-1h3.5l-1.5 6h4l-1 4h-4l-1.5 6c-.3 1.2 0 2 1.5 2h3l-1 4h-4c-3 0-4.5-2-4-5l2-7h-2l1-4h2l1.5-6z"/></svg>',
     type: 'card'
   },
   { 
     name: 'Mastercard', 
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/b/b7/MasterCard_Logo.svg',
+    logo: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><circle cx="15" cy="24" r="12" fill="%23eb001b"/><circle cx="33" cy="24" r="12" fill="%23f79e1b"/><path fill="%23ff5f00" d="M24 12c-3.3 2.8-5.4 7-5.4 12s2.1 9.2 5.4 12c3.3-2.8 5.4-7 5.4-12s-2.1-9.2-5.4-12z"/></svg>',
     type: 'card'
   },
   { 
     name: 'RuPay', 
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/d/d1/RuPay.svg',
+    logo: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><rect width="48" height="32" y="8" fill="%23ffffff" rx="4"/><path fill="%23005cb9" d="M8 16h32v4H8z"/><path fill="%23ff6600" d="M8 24h32v4H8z"/><text x="24" y="20" text-anchor="middle" font-family="Arial" font-size="6" fill="%23005cb9" font-weight="bold">RuPay</text></svg>',
     type: 'card'
   },
   { 
     name: 'UPI', 
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo-vector.svg',
+    logo: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><rect width="40" height="24" x="4" y="12" fill="%23ffffff" rx="4"/><path fill="%23ff6600" d="M8 16h8v4H8zm0 8h8v4H8z"/><path fill="%23005cb9" d="M20 16h8v4h-8zm0 8h8v4h-8z"/><text x="36" y="20" font-family="Arial" font-size="4" fill="%23005cb9" font-weight="bold">UPI</text><text x="36" y="28" font-family="Arial" font-size="3" fill="%23666">India</text></svg>',
     type: 'digital'
   },
   { 
     name: 'Google Pay', 
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/c/c7/Google_Pay_Logo_%282020%29.svg',
+    logo: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path fill="%234285f4" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="%2334a853" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="%23fbbc05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="%23ea4335" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>',
     type: 'digital'
   },
   { 
     name: 'PhonePe', 
-    logo: 'https://logoeps.com/wp-content/uploads/2021/06/phonepe-vector-logo.png',
+    logo: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><rect width="48" height="48" fill="%235f259f" rx="8"/><path fill="%23ffffff" d="M12 16h24c2.2 0 4 1.8 4 4v8c0 2.2-1.8 4-4 4H12c-2.2 0-4-1.8-4-4v-8c0-2.2 1.8-4 4-4z"/><path fill="%235f259f" d="M18 20v8h3l3-4-3-4h-3zm6 0l3 4-3 4h3l3-4-3-4h-3z"/></svg>',
     type: 'digital'
   },
   { 
     name: 'Paytm', 
-    logo: 'https://logoeps.com/wp-content/uploads/2013/03/paytm-vector-logo.png',
+    logo: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><rect width="48" height="48" fill="%2300baf2" rx="8"/><path fill="%23ffffff" d="M12 16h6v16h-6zm8-4h6v20h-6zm8 8h6v12h-6z"/><text x="24" y="42" text-anchor="middle" font-family="Arial" font-size="6" fill="%23ffffff" font-weight="bold">Paytm</text></svg>',
     type: 'digital'
   },
   { 
     name: 'Net Banking', 
-    logo: 'https://cdn-icons-png.flaticon.com/512/4208/4208479.png',
+    logo: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><rect width="40" height="28" x="4" y="10" fill="%23ffffff" stroke="%23333" stroke-width="2" rx="4"/><path fill="%23007acc" d="M8 18h32v2H8zm0 4h32v2H8zm0 4h24v2H8z"/><circle cx="36" cy="30" r="3" fill="%23ff6b35"/><text x="24" y="16" text-anchor="middle" font-family="Arial" font-size="4" fill="%23333" font-weight="bold">Net Banking</text></svg>',
     type: 'banking'
   }
 ];
@@ -94,8 +94,8 @@ export default function Subscription() {
     const invoiceData = {
       invoiceNumber: `INV-${Date.now().toString().slice(-6)}`,
       date: new Date().toLocaleDateString('en-GB'),
-      customer: user?.fullName || user?.name || 'John Doe',
-      email: user?.email || 'user@example.com',
+      customer: user?.fullName || user?.name || 'Customer',
+      email: user?.email || 'customer@example.com',
       plan: 'Monthly Subscription Plan',
       amount: currentPlan.amount,
       nextBilling: new Date(currentPlan.nextBilling).toLocaleDateString('en-GB'),
@@ -468,9 +468,6 @@ export default function Subscription() {
                               src={method.logo} 
                               alt={method.name}
                               className="max-h-10 max-w-full object-contain"
-                              onError={(e) => {
-                                e.currentTarget.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>';
-                              }}
                             />
                           </div>
                         </div>

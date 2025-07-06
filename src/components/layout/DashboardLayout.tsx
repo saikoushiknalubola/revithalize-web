@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Home, Battery, MapPin, BarChart2, User, Settings, Menu, X, LogOut, Bike, HelpCircle, Info, Shield, Leaf, ScanLine, Cpu, Building2, Activity, Wrench, Users, Truck, TrendingUp, Monitor, Zap, Brain, Plug, FileCheck, BatteryCharging, Bell, UserCheck, Lock, FileBarChart, Lightbulb, Crown } from 'lucide-react';
@@ -158,14 +159,16 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
 
   return (
     <div className="flex min-h-screen bg-black font-poppins overflow-hidden">
-      {/* Mobile sidebar toggle */}
-      <button
-        className="fixed top-4 left-4 z-[70] p-2 bg-gradient-to-r from-revithalize-dark to-gray-800 rounded-lg text-white md:hidden shadow-lg"
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-        aria-label="Toggle sidebar"
-      >
-        {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
-      </button>
+      {/* Mobile sidebar toggle - only show when sidebar is closed */}
+      {!sidebarOpen && (
+        <button
+          className="fixed top-4 left-4 z-[70] p-2 bg-gradient-to-r from-revithalize-dark to-gray-800 rounded-lg text-white md:hidden shadow-lg"
+          onClick={() => setSidebarOpen(true)}
+          aria-label="Open sidebar"
+        >
+          <Menu size={20} />
+        </button>
+      )}
 
       {/* Enhanced Sidebar */}
       <aside
@@ -175,11 +178,11 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
         )}
       >
         <div className="flex-shrink-0 flex items-center justify-between p-4 border-b border-gray-800/50">
-          <h1 className="text-2xl font-poppins font-bold text-transparent bg-clip-text bg-gradient-to-r from-revithalize-green to-revithalize-blue pl-8 md:pl-0">
+          <h1 className="text-2xl font-poppins font-bold text-transparent bg-clip-text bg-gradient-to-r from-revithalize-green to-revithalize-blue">
             ReVithalize
           </h1>
           {/* Single close button for mobile - only show when sidebar is open */}
-          {isMobile && sidebarOpen && (
+          {isMobile && (
             <button 
               onClick={() => setSidebarOpen(false)}
               className="p-2 rounded-md text-gray-400 hover:bg-gray-800 hover:text-white transition-colors"
