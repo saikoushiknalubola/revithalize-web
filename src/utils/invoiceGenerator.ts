@@ -157,63 +157,106 @@ export const generateInvoicePDF = (invoiceData: InvoiceData): Blob => {
       tableWidth: pageWidth - 40
     });
     
-    // Calculate amounts
-    const finalY = (doc as any).lastAutoTable.finalY + 15;
+    // Calculate amounts with proper GST
+    const finalY = (doc as any).lastAutoTable.finalY + 20;
     const baseAmount = parseFloat(invoiceData.amount.replace('₹', ''));
-    const cgstAmount = baseAmount * 0.09;
-    const sgstAmount = baseAmount * 0.09;
-    const totalAmount = baseAmount + cgstAmount + sgstAmount;
+    const cgstAmount = baseAmount * 0.09; // 9% CGST
+    const sgstAmount = baseAmount * 0.09; // 9% SGST
+    const gstAmount = cgstAmount + sgstAmount; // Total GST 18%
+    const totalAmount = baseAmount + gstAmount;
     
-    // Summary Section
-    const summaryStartX = pageWidth - 100;
-    const summaryWidth = 80;
+    // Professional Summary Section
+    const summaryStartX = pageWidth - 110;
+    const summaryWidth = 90;
     const summaryStartY = finalY;
     
-    // Summary Box
-    doc.setFillColor(248, 249, 250);
-    doc.setDrawColor(200, 200, 200);
-    doc.setLineWidth(0.5);
-    doc.rect(summaryStartX, summaryStartY, summaryWidth, 55, 'FD');
+    // Summary Box with professional styling
+    doc.setFillColor(250, 252, 255);
+    doc.setDrawColor(0, 200, 120);
+    doc.setLineWidth(1);
+    doc.rect(summaryStartX, summaryStartY, summaryWidth, 70, 'FD');
+    
+    // Summary Header
+    doc.setFillColor(0, 200, 120);
+    doc.rect(summaryStartX, summaryStartY, summaryWidth, 15, 'F');
+    
+    doc.setFontSize(11);
+    doc.setTextColor(255, 255, 255);
+    doc.setFont('helvetica', 'bold');
+    doc.text('AMOUNT SUMMARY', summaryStartX + summaryWidth/2, summaryStartY + 10, { align: 'center' });
     
     // Summary Content
     doc.setFontSize(10);
     doc.setTextColor(60, 60, 60);
     doc.setFont('helvetica', 'normal');
     
-    doc.text('Subtotal:', summaryStartX + 8, summaryStartY + 12);
-    doc.text(`₹${baseAmount.toFixed(2)}`, summaryStartX + summaryWidth - 8, summaryStartY + 12, { align: 'right' });
+    let yPos = summaryStartY + 25;
     
-    doc.text('CGST (9%):', summaryStartX + 8, summaryStartY + 22);
-    doc.text(`₹${cgstAmount.toFixed(2)}`, summaryStartX + summaryWidth - 8, summaryStartY + 22, { align: 'right' });
+    // Subtotal
+    doc.text('Subtotal:', summaryStartX + 8, yPos);
+    doc.text(`₹${baseAmount.toFixed(2)}`, summaryStartX + summaryWidth - 8, yPos, { align: 'right' });
+    yPos += 10;
     
-    doc.text('SGST (9%):', summaryStartX + 8, summaryStartY + 32);
-    doc.text(`₹${sgstAmount.toFixed(2)}`, summaryStartX + summaryWidth - 8, summaryStartY + 32, { align: 'right' });
+    // CGST
+    doc.text('CGST @ 9%:', summaryStartX + 8, yPos);
+    doc.text(`₹${cgstAmount.toFixed(2)}`, summaryStartX + summaryWidth - 8, yPos, { align: 'right' });
+    yPos += 10;
     
-    // Total line
-    doc.setLineWidth(1);
+    // SGST
+    doc.text('SGST @ 9%:', summaryStartX + 8, yPos);
+    doc.text(`₹${sgstAmount.toFixed(2)}`, summaryStartX + summaryWidth - 8, yPos, { align: 'right' });
+    yPos += 10;
+    
+    // GST Info line
+    doc.setFontSize(8);
+    doc.setTextColor(120, 120, 120);
+    doc.text('(GST Registration: 29AABCR1234Q1Z5)', summaryStartX + 8, yPos);
+    yPos += 8;
+    
+    // Total line separator
+    doc.setLineWidth(1.5);
     doc.setDrawColor(0, 200, 120);
-    doc.line(summaryStartX + 8, summaryStartY + 38, summaryStartX + summaryWidth - 8, summaryStartY + 38);
+    doc.line(summaryStartX + 8, yPos, summaryStartX + summaryWidth - 8, yPos);
+    yPos += 8;
+    
+    // Total Amount
+    doc.setFontSize(12);
+    doc.setTextColor(0, 120, 80);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Total Amount:', summaryStartX + 8, yPos);
+    doc.text(`₹${totalAmount.toFixed(2)}`, summaryStartX + summaryWidth - 8, yPos, { align: 'right' });
+    
+    // Payment Information Section
+    const paymentInfoY = summaryStartY + 85;
+    
+    // Payment Info Box
+    doc.setFillColor(248, 250, 252);
+    doc.setDrawColor(200, 200, 200);
+    doc.setLineWidth(0.5);
+    doc.rect(20, paymentInfoY - 5, pageWidth - 40, 50, 'FD');
     
     doc.setFontSize(12);
-    doc.setTextColor(0, 150, 0);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Total Amount:', summaryStartX + 8, summaryStartY + 48);
-    doc.text(`₹${totalAmount.toFixed(2)}`, summaryStartX + summaryWidth - 8, summaryStartY + 48, { align: 'right' });
-    
-    // Payment Information
-    const paymentInfoY = summaryStartY + 70;
-    doc.setFontSize(11);
     doc.setTextColor(40, 40, 40);
     doc.setFont('helvetica', 'bold');
-    doc.text('Payment Information:', 20, paymentInfoY);
+    doc.text('PAYMENT INFORMATION', 25, paymentInfoY + 5);
     
     doc.setFontSize(10);
     doc.setTextColor(60, 60, 60);
     doc.setFont('helvetica', 'normal');
-    doc.text(`Transaction ID: RVT${Date.now().toString().slice(-8)}`, 20, paymentInfoY + 10);
-    doc.text(`Payment Method: Online Payment`, 20, paymentInfoY + 20);
-    doc.text(`Payment Date: ${invoiceData.date}`, 20, paymentInfoY + 30);
-    doc.text(`Next Billing: ${invoiceData.nextBilling}`, 20, paymentInfoY + 40);
+    
+    // Left column
+    doc.text(`Transaction ID: RVT${Date.now().toString().slice(-8)}`, 25, paymentInfoY + 18);
+    doc.text(`Payment Method: Online Payment (UPI/Card)`, 25, paymentInfoY + 28);
+    
+    // Right column
+    doc.text(`Payment Date: ${invoiceData.date}`, pageWidth/2 + 10, paymentInfoY + 18);
+    doc.text(`Next Billing: ${invoiceData.nextBilling}`, pageWidth/2 + 10, paymentInfoY + 28);
+    
+    // Payment status
+    doc.setFontSize(11);
+    doc.setTextColor(0, 150, 0);
+    doc.setFont('helvetica', 'bold');
+    doc.text('✓ Payment Confirmed', 25, paymentInfoY + 38);
     
     // Terms and Conditions
     const termsY = paymentInfoY + 55;
