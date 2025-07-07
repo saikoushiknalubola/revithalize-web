@@ -68,18 +68,13 @@ const paymentMethods = [
   },
   { 
     name: 'PhonePe', 
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/6/68/PhonePe_Logo.svg',
+    logo: 'https://logos-world.net/wp-content/uploads/2020/11/PhonePe-Logo.png',
     type: 'digital'
   },
   { 
     name: 'Paytm', 
     logo: 'https://upload.wikimedia.org/wikipedia/commons/2/24/Paytm_Logo_%28standalone%29.svg',
     type: 'digital'
-  },
-  { 
-    name: 'Net Banking', 
-    logo: 'https://upload.wikimedia.org/wikipedia/commons/8/8b/Online_banking_icon.svg',
-    type: 'banking'
   }
 ];
 

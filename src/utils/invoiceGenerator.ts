@@ -77,40 +77,60 @@ export const generateInvoicePDF = (invoiceData: InvoiceData): Blob => {
     doc.text('29AABCR1234Q1Z5', pageWidth - 45, 78);
     doc.text('AABCR1234Q', pageWidth - 45, 84);
     
-    // Bill To Section
+    // Bill To Section with enhanced user details
+    doc.setFillColor(250, 252, 255);
+    doc.setDrawColor(220, 220, 220);
+    doc.setLineWidth(0.5);
+    doc.rect(15, 100, (pageWidth - 40) / 2, 70, 'FD');
+    
     doc.setFontSize(12);
     doc.setTextColor(40, 40, 40);
     doc.setFont('helvetica', 'bold');
-    doc.text('BILL TO:', 20, 105);
+    doc.text('BILL TO:', 20, 110);
     
-    doc.setFontSize(10);
+    doc.setFontSize(11);
     doc.setTextColor(60, 60, 60);
     doc.setFont('helvetica', 'bold');
-    doc.text(invoiceData.customer, 20, 115);
-    doc.setFont('helvetica', 'normal');
-    doc.text(invoiceData.email, 20, 122);
+    doc.text(invoiceData.customer, 20, 125);
     
-    // Bill From Section
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`Email: ${invoiceData.email}`, 20, 135);
+    doc.text(`Customer ID: CUS${Date.now().toString().slice(-6)}`, 20, 145);
+    doc.text(`Plan: ${invoiceData.plan}`, 20, 155);
+    doc.text(`Billing Period: ${invoiceData.billingPeriod}`, 20, 165);
+    
+    // Bill From Section with enhanced company details
+    const billFromX = pageWidth / 2 + 10;
+    doc.setFillColor(250, 252, 255);
+    doc.setDrawColor(220, 220, 220);
+    doc.setLineWidth(0.5);
+    doc.rect(billFromX, 100, (pageWidth - 40) / 2, 70, 'FD');
+    
     doc.setFontSize(12);
     doc.setTextColor(40, 40, 40);
     doc.setFont('helvetica', 'bold');
-    doc.text('BILL FROM:', pageWidth - 80, 105);
+    doc.text('BILL FROM:', billFromX + 5, 110);
     
-    doc.setFontSize(10);
+    doc.setFontSize(11);
     doc.setTextColor(60, 60, 60);
     doc.setFont('helvetica', 'bold');
-    doc.text('Revithalize Mobility', pageWidth - 20, 115, { align: 'right' });
+    doc.text('Revithalize Mobility', billFromX + 5, 125);
+    
+    doc.setFontSize(9);
     doc.setFont('helvetica', 'normal');
-    doc.text('ReVithalize Innovations', pageWidth - 20, 122, { align: 'right' });
-    doc.text('plt no 54/5-6 Nakkalagutta', pageWidth - 20, 129, { align: 'right' });
-    doc.text('Hanamakonda, Telangana 506001', pageWidth - 20, 136, { align: 'right' });
-    doc.text('Bharat (India)', pageWidth - 20, 143, { align: 'right' });
-    doc.text('Tel: +91 7671030069', pageWidth - 20, 150, { align: 'right' });
-    doc.text('Email: support@revithalize.com', pageWidth - 20, 157, { align: 'right' });
-    doc.text('Web: revithalize.oddo.com', pageWidth - 20, 164, { align: 'right' });
+    doc.text('ReVithalize Innovations', billFromX + 5, 135);
+    doc.text('Corporate Headquarters', billFromX + 5, 142);
+    doc.text('plt no 54/5-6 Nakkalagutta', billFromX + 5, 149);
+    doc.text('Hanamakonda, Telangana 506001', billFromX + 5, 156);
+    doc.text('Bharat (India)', billFromX + 5, 163);
+    
+    doc.setFontSize(8);
+    doc.setTextColor(80, 80, 80);
+    doc.text('Tel: +91 7671030069 | Email: support@revithalize.com', billFromX + 5, 167);
     
     // Services Table
-    const tableStartY = 180;
+    const tableStartY = 185;
     
     autoTable(doc, {
       startY: tableStartY,
@@ -258,17 +278,31 @@ export const generateInvoicePDF = (invoiceData: InvoiceData): Blob => {
     doc.setFont('helvetica', 'bold');
     doc.text('✓ Payment Confirmed', 25, paymentInfoY + 38);
     
+    // Customer Satisfaction & Terms Section
+    const termsY = paymentInfoY + 60;
+    
+    // Customer satisfaction box
+    doc.setFillColor(240, 253, 244);
+    doc.setDrawColor(34, 197, 94);
+    doc.setLineWidth(0.5);
+    doc.rect(20, termsY - 5, pageWidth - 40, 25, 'FD');
+    
+    doc.setFontSize(10);
+    doc.setTextColor(34, 197, 94);
+    doc.setFont('helvetica', 'bold');
+    doc.text('✓ Thank you for choosing Revithalize - Your EV Management Partner', 25, termsY + 5);
+    doc.setFont('helvetica', 'normal');
+    doc.text('Experience premium EV analytics, predictive maintenance, and energy optimization', 25, termsY + 15);
+    
     // Terms and Conditions
-    const termsY = paymentInfoY + 55;
+    const finalTermsY = termsY + 35;
     doc.setFontSize(9);
     doc.setTextColor(100, 100, 100);
     doc.setFont('helvetica', 'bold');
-    doc.text('Terms & Conditions:', 20, termsY);
+    doc.text('TERMS & CONDITIONS:', 20, finalTermsY);
     doc.setFont('helvetica', 'normal');
-    doc.text('• Payment is processed automatically on the billing date', 20, termsY + 10);
-    doc.text('• All prices are inclusive of applicable taxes as per Indian GST regulations', 20, termsY + 18);
-    doc.text('• For support queries, contact: support@revithalize.com | +91 7671030069', 20, termsY + 26);
-    doc.text('• This is a computer generated invoice and does not require physical signature', 20, termsY + 34);
+    doc.text('• Payment processed automatically on billing date • GST included as per Indian regulations', 20, finalTermsY + 8);
+    doc.text('• 24/7 Support: support@revithalize.com | +91 7671030069 • Computer generated invoice', 20, finalTermsY + 16);
     
     // Footer
     doc.setFillColor(245, 245, 245);
