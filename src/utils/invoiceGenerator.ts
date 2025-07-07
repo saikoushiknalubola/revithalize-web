@@ -110,7 +110,7 @@ export const generateInvoicePDF = (invoiceData: InvoiceData): Blob => {
     doc.text('Web: revithalize.oddo.com', pageWidth - 20, 164, { align: 'right' });
     
     // Services Table
-    const tableStartY = 175;
+    const tableStartY = 180;
     
     autoTable(doc, {
       startY: tableStartY,
@@ -118,105 +118,114 @@ export const generateInvoicePDF = (invoiceData: InvoiceData): Blob => {
       body: [
         [
           '1',
-          'Revithalize EV Management\nPremium Subscription',
+          'Revithalize EV Management Premium Subscription',
           invoiceData.billingPeriod,
           '1',
           invoiceData.amount.replace('₹', ''),
           invoiceData.amount.replace('₹', '')
         ],
       ],
-      theme: 'grid',
+      theme: 'striped',
       styles: { 
-        fontSize: 9,
-        cellPadding: 4,
-        textColor: [60, 60, 60],
+        fontSize: 10,
+        cellPadding: 8,
+        textColor: [40, 40, 40],
         halign: 'center',
-        valign: 'middle'
+        valign: 'middle',
+        lineColor: [220, 220, 220],
+        lineWidth: 0.5
       },
       headStyles: { 
         fillColor: [0, 200, 120],
         textColor: [255, 255, 255],
-        fontSize: 10,
+        fontSize: 11,
         fontStyle: 'bold',
         halign: 'center'
       },
-      columnStyles: {
-        0: { cellWidth: 15, halign: 'center' },
-        1: { cellWidth: 60, halign: 'left' },
-        2: { cellWidth: 35, halign: 'center' },
-        3: { cellWidth: 15, halign: 'center' },
-        4: { cellWidth: 25, halign: 'right' },
-        5: { cellWidth: 30, halign: 'right', fontStyle: 'bold' }
+      alternateRowStyles: {
+        fillColor: [248, 249, 250]
       },
-      margin: { left: 15, right: 15 },
-      tableWidth: pageWidth - 30
+      columnStyles: {
+        0: { cellWidth: 20, halign: 'center' },
+        1: { cellWidth: 70, halign: 'left' },
+        2: { cellWidth: 30, halign: 'center' },
+        3: { cellWidth: 20, halign: 'center' },
+        4: { cellWidth: 25, halign: 'right' },
+        5: { cellWidth: 25, halign: 'right', fontStyle: 'bold' }
+      },
+      margin: { left: 20, right: 20 },
+      tableWidth: pageWidth - 40
     });
     
     // Calculate amounts
-    const finalY = (doc as any).lastAutoTable.finalY + 10;
+    const finalY = (doc as any).lastAutoTable.finalY + 15;
     const baseAmount = parseFloat(invoiceData.amount.replace('₹', ''));
     const cgstAmount = baseAmount * 0.09;
     const sgstAmount = baseAmount * 0.09;
     const totalAmount = baseAmount + cgstAmount + sgstAmount;
     
     // Summary Section
-    const summaryStartX = pageWidth - 90;
-    const summaryWidth = 75;
+    const summaryStartX = pageWidth - 100;
+    const summaryWidth = 80;
+    const summaryStartY = finalY;
     
     // Summary Box
     doc.setFillColor(248, 249, 250);
-    doc.setDrawColor(220, 220, 220);
-    doc.rect(summaryStartX, finalY, summaryWidth, 50, 'FD');
+    doc.setDrawColor(200, 200, 200);
+    doc.setLineWidth(0.5);
+    doc.rect(summaryStartX, summaryStartY, summaryWidth, 55, 'FD');
     
     // Summary Content
-    doc.setFontSize(9);
+    doc.setFontSize(10);
     doc.setTextColor(60, 60, 60);
     doc.setFont('helvetica', 'normal');
     
-    doc.text('Subtotal:', summaryStartX + 5, finalY + 8);
-    doc.text(`₹${baseAmount.toFixed(2)}`, summaryStartX + summaryWidth - 5, finalY + 8, { align: 'right' });
+    doc.text('Subtotal:', summaryStartX + 8, summaryStartY + 12);
+    doc.text(`₹${baseAmount.toFixed(2)}`, summaryStartX + summaryWidth - 8, summaryStartY + 12, { align: 'right' });
     
-    doc.text('CGST (9%):', summaryStartX + 5, finalY + 16);
-    doc.text(`₹${cgstAmount.toFixed(2)}`, summaryStartX + summaryWidth - 5, finalY + 16, { align: 'right' });
+    doc.text('CGST (9%):', summaryStartX + 8, summaryStartY + 22);
+    doc.text(`₹${cgstAmount.toFixed(2)}`, summaryStartX + summaryWidth - 8, summaryStartY + 22, { align: 'right' });
     
-    doc.text('SGST (9%):', summaryStartX + 5, finalY + 24);
-    doc.text(`₹${sgstAmount.toFixed(2)}`, summaryStartX + summaryWidth - 5, finalY + 24, { align: 'right' });
+    doc.text('SGST (9%):', summaryStartX + 8, summaryStartY + 32);
+    doc.text(`₹${sgstAmount.toFixed(2)}`, summaryStartX + summaryWidth - 8, summaryStartY + 32, { align: 'right' });
     
     // Total line
     doc.setLineWidth(1);
     doc.setDrawColor(0, 200, 120);
-    doc.line(summaryStartX + 5, finalY + 30, summaryStartX + summaryWidth - 5, finalY + 30);
+    doc.line(summaryStartX + 8, summaryStartY + 38, summaryStartX + summaryWidth - 8, summaryStartY + 38);
     
-    doc.setFontSize(11);
+    doc.setFontSize(12);
     doc.setTextColor(0, 150, 0);
     doc.setFont('helvetica', 'bold');
-    doc.text('Total Amount:', summaryStartX + 5, finalY + 38);
-    doc.text(`₹${totalAmount.toFixed(2)}`, summaryStartX + summaryWidth - 5, finalY + 38, { align: 'right' });
+    doc.text('Total Amount:', summaryStartX + 8, summaryStartY + 48);
+    doc.text(`₹${totalAmount.toFixed(2)}`, summaryStartX + summaryWidth - 8, summaryStartY + 48, { align: 'right' });
     
     // Payment Information
-    doc.setFontSize(10);
+    const paymentInfoY = summaryStartY + 70;
+    doc.setFontSize(11);
     doc.setTextColor(40, 40, 40);
     doc.setFont('helvetica', 'bold');
-    doc.text('Payment Information:', 20, finalY + 65);
+    doc.text('Payment Information:', 20, paymentInfoY);
     
-    doc.setFontSize(9);
+    doc.setFontSize(10);
     doc.setTextColor(60, 60, 60);
     doc.setFont('helvetica', 'normal');
-    doc.text(`Transaction ID: RVT${Date.now().toString().slice(-8)}`, 20, finalY + 73);
-    doc.text(`Payment Method: Online Payment`, 20, finalY + 80);
-    doc.text(`Payment Date: ${invoiceData.date}`, 20, finalY + 87);
-    doc.text(`Next Billing: ${invoiceData.nextBilling}`, 20, finalY + 94);
+    doc.text(`Transaction ID: RVT${Date.now().toString().slice(-8)}`, 20, paymentInfoY + 10);
+    doc.text(`Payment Method: Online Payment`, 20, paymentInfoY + 20);
+    doc.text(`Payment Date: ${invoiceData.date}`, 20, paymentInfoY + 30);
+    doc.text(`Next Billing: ${invoiceData.nextBilling}`, 20, paymentInfoY + 40);
     
     // Terms and Conditions
-    doc.setFontSize(8);
+    const termsY = paymentInfoY + 55;
+    doc.setFontSize(9);
     doc.setTextColor(100, 100, 100);
     doc.setFont('helvetica', 'bold');
-    doc.text('Terms & Conditions:', 20, finalY + 108);
+    doc.text('Terms & Conditions:', 20, termsY);
     doc.setFont('helvetica', 'normal');
-    doc.text('• Payment is processed automatically on the billing date', 20, finalY + 115);
-    doc.text('• All prices are inclusive of applicable taxes as per Indian GST regulations', 20, finalY + 121);
-    doc.text('• For support queries, contact: support@revithalize.com | +91 7671030069', 20, finalY + 127);
-    doc.text('• This is a computer generated invoice and does not require physical signature', 20, finalY + 133);
+    doc.text('• Payment is processed automatically on the billing date', 20, termsY + 10);
+    doc.text('• All prices are inclusive of applicable taxes as per Indian GST regulations', 20, termsY + 18);
+    doc.text('• For support queries, contact: support@revithalize.com | +91 7671030069', 20, termsY + 26);
+    doc.text('• This is a computer generated invoice and does not require physical signature', 20, termsY + 34);
     
     // Footer
     doc.setFillColor(245, 245, 245);
