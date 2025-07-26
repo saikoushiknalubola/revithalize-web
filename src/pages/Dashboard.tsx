@@ -6,6 +6,7 @@ import { BatteryMetrics } from '@/components/features/BatteryMetrics';
 import { ChargingScheduler } from '@/components/features/ChargingScheduler';
 import { IoTInsights } from '@/components/features/IoTInsights';
 import { EcoScore } from '@/components/features/EcoScore';
+import { FleetOverview } from '@/components/features/FleetOverview';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useScreenSize } from '@/hooks/use-mobile';
 import { toast } from 'sonner';
@@ -307,9 +308,13 @@ export default function Dashboard() {
           <ChargingScheduler />
         </motion.div>
 
-        {/* Enhanced EcoScore Component */}
-        <motion.div variants={itemVariants}>
+        {/* Performance Metrics and Fleet Overview */}
+        <motion.div 
+          className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6" 
+          variants={itemVariants}
+        >
           <EcoScore score={efficiencyScore} scoreChange={3} />
+          <FleetOverview />
         </motion.div>
 
         {/* Professional Quick Actions and Analytics */}

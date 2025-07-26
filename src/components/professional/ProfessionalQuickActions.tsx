@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { MapPin, Bolt, Bell, TrendingUp, DollarSign, Route, Zap } from 'lucide-react';
+import { MapPin, Bolt, Bell, TrendingUp, DollarSign, Route, Zap, Settings, Activity, FileText } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface ProfessionalQuickActionsProps {
@@ -22,23 +22,30 @@ export function ProfessionalQuickActions({
   const actionItems = [
     {
       icon: MapPin,
-      label: "Smart Charging Stations",
-      subtitle: "AI-optimized locations",
+      label: "Charging Network",
+      subtitle: "Find optimal stations",
       action: onFindChargingStations,
-      color: "text-revithalize-green"
+      color: "text-blue-400"
     },
     {
       icon: Bolt,
-      label: "Remote Charging",
-      subtitle: "Start/schedule charging",
+      label: "Remote Control",
+      subtitle: "Manage charging remotely",
       action: onRemoteCharging,
-      color: "text-revithalize-blue"
+      color: "text-green-400"
     },
     {
-      icon: Bell,
-      label: "Smart Alerts",
-      subtitle: "AI-powered notifications",
+      icon: Activity,
+      label: "System Diagnostics",
+      subtitle: "Real-time health check",
       action: onSetChargeAlert,
+      color: "text-purple-400"
+    },
+    {
+      icon: FileText,
+      label: "Fleet Reports",
+      subtitle: "Performance analytics",
+      action: () => {},
       color: "text-amber-400"
     }
   ];
@@ -48,11 +55,11 @@ export function ProfessionalQuickActions({
       <CardHeader className="pb-4 pt-5 px-5">
         <CardTitle className="text-white text-lg flex items-center justify-between">
           <div className="flex items-center">
-            <Zap className="mr-2 h-5 w-5 text-revithalize-green" />
-            <span>Professional Dashboard</span>
+            <Settings className="mr-2 h-5 w-5 text-blue-400" />
+            <span>Fleet Operations</span>
           </div>
-          <div className="bg-revithalize-green/20 px-2 py-1 rounded text-xs text-revithalize-green font-medium">
-            PRO
+          <div className="bg-blue-500/20 px-2 py-1 rounded text-xs text-blue-400 font-medium">
+            ENTERPRISE
           </div>
         </CardTitle>
       </CardHeader>
@@ -79,28 +86,23 @@ export function ProfessionalQuickActions({
         </div>
 
         {/* Professional Quick Actions */}
-        <div className="space-y-3">
+        <div className="grid grid-cols-2 gap-3">
           {actionItems.map((item, index) => {
             const Icon = item.icon;
             return (
               <motion.button 
                 key={index}
                 onClick={item.action}
-                className="w-full bg-gradient-to-r from-gray-800/70 to-gray-700/70 hover:from-gray-700/70 hover:to-gray-600/70 text-white font-medium py-3 px-4 rounded-xl flex items-center justify-between group transition-all duration-300 shadow-lg hover:shadow-xl border border-gray-600/30"
-                whileHover={{ scale: 1.02, x: 3 }}
+                className="bg-gradient-to-r from-gray-800/70 to-gray-700/70 hover:from-gray-700/70 hover:to-gray-600/70 text-white font-medium py-3 px-3 rounded-xl flex flex-col items-center justify-center group transition-all duration-300 shadow-lg hover:shadow-xl border border-gray-600/30 min-h-[80px]"
+                whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <div className="flex items-center">
-                  <div className="bg-black/30 p-2 rounded-lg mr-3 group-hover:bg-black/40 transition-colors">
-                    <Icon className={`h-4 w-4 ${item.color}`} />
-                  </div>
-                  <div className="text-left">
-                    <div className="text-sm font-medium">{item.label}</div>
-                    <div className="text-xs text-gray-400">{item.subtitle}</div>
-                  </div>
+                <div className="bg-black/30 p-2 rounded-lg mb-2 group-hover:bg-black/40 transition-colors">
+                  <Icon className={`h-4 w-4 ${item.color}`} />
                 </div>
-                <div className="flex items-center">
-                  <TrendingUp className={`h-3 w-3 ${item.color} opacity-60`} />
+                <div className="text-center">
+                  <div className="text-xs font-medium">{item.label}</div>
+                  <div className="text-[10px] text-gray-400">{item.subtitle}</div>
                 </div>
               </motion.button>
             );
