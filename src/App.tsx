@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
+import { DashboardRouter } from "./components/auth/DashboardRouter";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import VehicleDetails from "./pages/VehicleDetails";
@@ -63,9 +64,9 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/welcome" element={<Index />} />
           
-          {/* Protected routes */}
-          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="/dashboard/:feature" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          {/* Protected routes - Dashboard Router handles user type routing */}
+          <Route path="/dashboard" element={<ProtectedRoute><DashboardRouter /></ProtectedRoute>} />
+          <Route path="/dashboard/:feature" element={<ProtectedRoute><DashboardRouter /></ProtectedRoute>} />
           <Route path="/vehicle" element={<ProtectedRoute><VehicleDetails /></ProtectedRoute>} />
           <Route path="/map" element={<ProtectedRoute><MapView /></ProtectedRoute>} />
           <Route path="/analytics" element={<ProtectedRoute><BatteryAnalytics /></ProtectedRoute>} />
