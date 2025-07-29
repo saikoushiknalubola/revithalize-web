@@ -184,6 +184,37 @@ export default function Auth() {
     
     // Simulate authentication
     setTimeout(() => {
+      // Fleet test account
+      if (values.email === 'revithalize' && values.password === 'revithalize123') {
+        const fleetUser = {
+          email: 'fleet@revithalize.com',
+          password: 'revithalize123',
+          name: 'Fleet Manager',
+          firstName: 'Fleet',
+          lastName: 'Manager',
+          phone: '+91 9876543210',
+          address: 'Fleet Operations Center',
+          city: 'Bangalore',
+          occupation: 'Fleet Operations Manager',
+          company: 'Enterprise Fleet Solutions',
+          joinDate: new Date().toISOString().split('T')[0],
+          userType: 'fleet' as const,
+          organizationName: 'Enterprise Fleet Solutions',
+          fleetSize: 150,
+          organizationRole: 'Fleet Operations Manager',
+          industry: 'Transportation & Logistics'
+        };
+        
+        localStorage.setItem('isAuthenticated', 'true');
+        localStorage.setItem('user', JSON.stringify(fleetUser));
+        toast.success('Welcome to Fleet Operations!', {
+          description: 'Fleet Dashboard loaded successfully'
+        });
+        navigate('/dashboard');
+        setIsLoading(false);
+        return;
+      }
+
       // Get existing user data if available
       const existingUsers = JSON.parse(localStorage.getItem('users') || '[]');
       const user = existingUsers.find((u: any) => u.email === values.email);
@@ -191,13 +222,13 @@ export default function Auth() {
       if (user && user.password === values.password) {
         localStorage.setItem('isAuthenticated', 'true');
         localStorage.setItem('user', JSON.stringify(user));
-        toast.success(`Successfully logged in as ${user.userType === 'fleet' ? 'Fleet Manager' : 'Individual User'}!`, {
-          description: user.userType === 'fleet' ? 'Welcome to Fleet Dashboard' : 'Welcome back'
+        toast.success(`Hey there! Welcome back 🎉`, {
+          description: user.userType === 'fleet' ? 'Fleet Dashboard ready' : 'Your EV is waiting for you'
         });
         navigate('/dashboard');
       } else {
-        toast.error('Login failed', {
-          description: 'Invalid email or password'
+        toast.error('Oops! Something went wrong', {
+          description: 'Please check your email and password'
         });
       }
       setIsLoading(false);

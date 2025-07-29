@@ -105,7 +105,6 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
   ];
 
   const individualFeatures = [
-    { icon: Shield, label: "Battery Twin", to: "/battery-twin" },
     { icon: Leaf, label: "Eco Program", to: "/eco-program" },
     { icon: ScanLine, label: "Range Prediction", to: "/range-prediction" },
     { icon: Activity, label: "Carbon Tracker", to: "/carbon-tracker" },
