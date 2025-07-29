@@ -5,7 +5,7 @@ import {
   CheckCircle, Clock, DollarSign, Activity, 
   BarChart3, PieChart, MapPin, Settings, Shield,
   Battery, Fuel, Wrench, Calendar, FileText,
-  ChevronRight, ArrowUpRight, Loader2
+  ChevronRight, ArrowUpRight, Loader2, Brain
 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -100,7 +100,7 @@ export default function FleetDashboard() {
 
   const fleetKPIs: FleetKPI[] = [
     {
-      label: 'Total Vehicles',
+      label: 'Total Fleet Size',
       value: '150',
       change: 5.2,
       trend: 'up',
@@ -108,7 +108,7 @@ export default function FleetDashboard() {
       color: 'text-blue-400'
     },
     {
-      label: 'Active Now',
+      label: 'Operational Vehicles',
       value: '127',
       change: 12.3,
       trend: 'up',
@@ -116,20 +116,20 @@ export default function FleetDashboard() {
       color: 'text-green-400'
     },
     {
-      label: 'Efficiency Score',
+      label: 'Fleet Efficiency',
       value: '89.2%',
       change: 2.1,
       trend: 'up',
       icon: TrendingUp,
-      color: 'text-purple-400'
+      color: 'text-blue-400'
     },
     {
-      label: 'Cost per km',
+      label: 'Operating Cost/km',
       value: '₹2.45',
       change: -8.7,
       trend: 'down',
       icon: DollarSign,
-      color: 'text-orange-400'
+      color: 'text-green-400'
     }
   ];
 
@@ -181,26 +181,27 @@ export default function FleetDashboard() {
         >
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-revithalize-green to-revithalize-blue">
-                Fleet Command Center
+              <h1 className="text-2xl sm:text-3xl font-bold text-white">
+                Fleet Operations Dashboard
               </h1>
               <p className="text-gray-400 mt-1 flex items-center gap-2">
                 <Building2 className="h-4 w-4" />
-                {organizationName} • Welcome back, {userName}
+                {organizationName} • {userName}
               </p>
             </div>
             <div className="flex items-center space-x-3">
-              <Badge variant="outline" className="bg-revithalize-green/20 text-revithalize-green border-revithalize-green/30">
+              <Badge variant="outline" className="bg-blue-500/20 text-blue-400 border-blue-500/30">
                 <Shield className="h-3 w-3 mr-1" />
-                Fleet Manager
+                Fleet Operations
               </Badge>
               <Button 
                 size="sm" 
-                className="bg-gradient-to-r from-revithalize-green to-revithalize-blue hover:from-revithalize-green/80 hover:to-revithalize-blue/80 text-black"
+                variant="outline"
+                className="border-gray-700 hover:border-blue-500 hover:text-blue-400"
                 onClick={() => navigate('/fleet-management')}
               >
                 <Settings className="h-4 w-4 mr-2" />
-                Fleet Settings
+                Manage Fleet
               </Button>
             </div>
           </div>
@@ -252,10 +253,10 @@ export default function FleetDashboard() {
             <Card className="bg-gray-900/80 border-gray-800">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-white">
-                  <Truck className="h-5 w-5 text-revithalize-green" />
-                  Active Fleet Status
+                  <Truck className="h-5 w-5 text-blue-400" />
+                  Fleet Vehicle Status
                 </CardTitle>
-                <CardDescription>Real-time monitoring of all fleet vehicles</CardDescription>
+                <CardDescription>Real-time operational status and vehicle health monitoring</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
@@ -270,8 +271,8 @@ export default function FleetDashboard() {
                     >
                       <div className="flex items-center gap-3">
                         <div className="relative">
-                          <div className="w-10 h-10 bg-gradient-to-br from-revithalize-green/20 to-revithalize-blue/20 rounded-lg flex items-center justify-center">
-                            <Truck className="h-5 w-5 text-revithalize-green" />
+                          <div className="w-10 h-10 bg-gradient-to-br from-blue-500/20 to-gray-700/20 rounded-lg flex items-center justify-center">
+                            <Truck className="h-5 w-5 text-blue-400" />
                           </div>
                           <div className={cn(
                             "absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-gray-900",
@@ -299,10 +300,10 @@ export default function FleetDashboard() {
                 </div>
                 <Button 
                   variant="outline" 
-                  className="w-full mt-4 border-gray-700 hover:border-revithalize-green hover:text-revithalize-green"
+                  className="w-full mt-4 border-gray-700 hover:border-blue-500 hover:text-blue-400"
                   onClick={() => navigate('/fleet-management')}
                 >
-                  View Full Fleet
+                  Full Fleet Management
                   <ChevronRight className="h-4 w-4 ml-2" />
                 </Button>
               </CardContent>
@@ -337,12 +338,12 @@ export default function FleetDashboard() {
               </CardContent>
             </Card>
 
-            {/* Fleet Quick Actions */}
+            {/* Fleet Operations */}
             <Card className="bg-gray-900/80 border-gray-800">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-white">
-                  <Zap className="h-5 w-5 text-revithalize-blue" />
-                  Quick Actions
+                  <Settings className="h-5 w-5 text-blue-400" />
+                  Fleet Operations
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
@@ -350,41 +351,41 @@ export default function FleetDashboard() {
                   variant="outline" 
                   className="w-full justify-start border-gray-700 hover:border-blue-500 hover:text-blue-400"
                   onClick={() => {
-                    toast.info('Generating fleet report...');
+                    toast.info('Generating operational report...');
                     navigate('/reports');
                   }}
                 >
                   <FileText className="h-4 w-4 mr-2" />
-                  Generate Fleet Report
+                  Operations Report
                 </Button>
                 <Button 
                   variant="outline" 
-                  className="w-full justify-start border-gray-700 hover:border-green-500 hover:text-green-400"
+                  className="w-full justify-start border-gray-700 hover:border-blue-500 hover:text-blue-400"
                   onClick={() => {
-                    toast.info('Opening fleet map view...');
+                    toast.info('Opening fleet tracking...');
                     navigate('/map');
                   }}
                 >
                   <MapPin className="h-4 w-4 mr-2" />
-                  Fleet Map View
+                  Vehicle Tracking
                 </Button>
                 <Button 
                   variant="outline" 
-                  className="w-full justify-start border-gray-700 hover:border-purple-500 hover:text-purple-400"
+                  className="w-full justify-start border-gray-700 hover:border-blue-500 hover:text-blue-400"
                   onClick={() => {
-                    toast.info('Scheduling maintenance...');
+                    toast.info('Opening maintenance scheduler...');
                     navigate('/maintenance-ai');
                   }}
                 >
                   <Calendar className="h-4 w-4 mr-2" />
-                  Schedule Maintenance
+                  Maintenance Scheduler
                 </Button>
               </CardContent>
             </Card>
           </div>
         </motion.div>
 
-        {/* Professional Analytics Summary */}
+        {/* Business Intelligence Dashboard */}
         <motion.div 
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           initial={{ y: 20, opacity: 0 }}
@@ -395,19 +396,19 @@ export default function FleetDashboard() {
             <CardHeader className="pb-2">
               <CardTitle className="flex items-center gap-2 text-white text-lg">
                 <BarChart3 className="h-5 w-5 text-blue-400" />
-                Performance Analytics
+                Fleet Performance
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-400">Fleet Efficiency</span>
+                  <span className="text-sm text-gray-400">Operational Efficiency</span>
                   <span className="text-lg font-bold text-white">89.2%</span>
                 </div>
                 <Progress value={89.2} className="h-2" />
                 <div className="flex justify-between text-xs text-gray-500">
-                  <span>Target: 85%</span>
-                  <span className="text-green-400">+4.2% above target</span>
+                  <span>Industry Average: 75%</span>
+                  <span className="text-blue-400">+14.2% above average</span>
                 </div>
               </div>
             </CardContent>
@@ -416,8 +417,8 @@ export default function FleetDashboard() {
           <Card className="bg-gray-900/80 border-gray-800 hover:border-gray-700 transition-colors cursor-pointer" onClick={() => navigate('/energy-optimization')}>
             <CardHeader className="pb-2">
               <CardTitle className="flex items-center gap-2 text-white text-lg">
-                <Zap className="h-5 w-5 text-green-400" />
-                Energy Optimization
+                <DollarSign className="h-5 w-5 text-green-400" />
+                Cost Management
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -437,18 +438,18 @@ export default function FleetDashboard() {
           <Card className="bg-gray-900/80 border-gray-800 hover:border-gray-700 transition-colors cursor-pointer" onClick={() => navigate('/predictive-analytics')}>
             <CardHeader className="pb-2">
               <CardTitle className="flex items-center gap-2 text-white text-lg">
-                <PieChart className="h-5 w-5 text-purple-400" />
-                Predictive Insights
+                <Brain className="h-5 w-5 text-blue-400" />
+                Predictive Intelligence
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-400">Maintenance Prediction</span>
-                  <span className="text-sm font-bold text-purple-400">5 vehicles</span>
+                  <span className="text-sm text-gray-400">Maintenance Alerts</span>
+                  <span className="text-sm font-bold text-blue-400">5 vehicles</span>
                 </div>
                 <div className="text-xs text-gray-500">
-                  AI predicts maintenance needs for next 30 days
+                  Predictive maintenance recommendations for next 30 days
                 </div>
               </div>
             </CardContent>

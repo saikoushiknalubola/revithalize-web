@@ -67,6 +67,7 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { isMobile } = useScreenSize();
   const [userName, setUserName] = useState('');
+  const [userType, setUserType] = useState<'individual' | 'fleet'>('individual');
   
   // Static battery data for consistency
   const batteryData = { level: 82, range: 118 };
@@ -84,6 +85,7 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
     if (userData) {
       const user = JSON.parse(userData);
       setUserName(user.fullName || user.name || 'User');
+      setUserType(user.userType || 'individual');
     }
   }, []);
 
@@ -94,68 +96,85 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
     navigate('/auth');
   };
 
-  const mainNavItems = [
+  // Individual User Navigation
+  const individualNavItems = [
     { icon: Home, label: "Dashboard", to: "/dashboard" },
     { icon: Bike, label: "Vehicle", to: "/vehicle" },
     { icon: MapPin, label: "Map", to: "/map" },
     { icon: BarChart2, label: "Analytics", to: "/analytics" },
   ];
 
-  const professionalTools = [
-    { icon: Truck, label: "Fleet Management", to: "/fleet-management" },
-    { icon: TrendingUp, label: "Advanced Analytics", to: "/advanced-analytics" },
-    { icon: Monitor, label: "System Monitoring", to: "/system-monitoring" },
-    { icon: Zap, label: "Energy Optimization", to: "/energy-optimization" },
-    { icon: Brain, label: "Predictive Analytics", to: "/predictive-analytics" },
-    { icon: Settings, label: "Performance Optimization", to: "/performance-optimization" },
-    { icon: Plug, label: "Integration Hub", to: "/integration-hub" },
-    { icon: FileCheck, label: "Compliance Manager", to: "/compliance-manager" },
-    { icon: BatteryCharging, label: "Charging Intelligence", to: "/charging-intelligence" },
-    { icon: Bell, label: "Notifications", to: "/notifications" },
-    { icon: UserCheck, label: "Customer Management", to: "/customer-management" },
-    { icon: Lock, label: "Security", to: "/security" },
-    { icon: FileBarChart, label: "Reports", to: "/reports" },
-    { icon: Lightbulb, label: "AI Insights", to: "/ai-insights" },
-  ];
-
-  const innovativeFeatures = [
+  const individualFeatures = [
     { icon: Shield, label: "Battery Twin", to: "/battery-twin" },
     { icon: Leaf, label: "Eco Program", to: "/eco-program" },
-    { icon: ScanLine, label: "AI Range", to: "/range-prediction" },
-    { icon: Cpu, label: "Smart Grid", to: "/smart-grid" },
-  ];
-
-  const dashboardFeatures = [
-    { icon: Building2, label: "Company Vision", to: "/company-vision" },
+    { icon: ScanLine, label: "Range Prediction", to: "/range-prediction" },
     { icon: Activity, label: "Carbon Tracker", to: "/carbon-tracker" },
     { icon: Wrench, label: "Maintenance AI", to: "/maintenance-ai" },
     { icon: Users, label: "Energy Network", to: "/energy-network" },
+    { icon: Cpu, label: "Smart Grid", to: "/smart-grid" },
   ];
 
-  const secondaryNavItems = [
+  // Fleet Manager Navigation
+  const fleetNavItems = [
+    { icon: Home, label: "Fleet Command", to: "/dashboard" },
+    { icon: Truck, label: "Fleet Management", to: "/fleet-management" },
+    { icon: MapPin, label: "Fleet Map", to: "/map" },
+    { icon: Monitor, label: "System Monitor", to: "/system-monitoring" },
+  ];
+
+  const fleetOperations = [
+    { icon: TrendingUp, label: "Advanced Analytics", to: "/advanced-analytics" },
+    { icon: Zap, label: "Energy Optimization", to: "/energy-optimization" },
+    { icon: Brain, label: "Predictive Analytics", to: "/predictive-analytics" },
+    { icon: Settings, label: "Performance Optimization", to: "/performance-optimization" },
+    { icon: BatteryCharging, label: "Charging Intelligence", to: "/charging-intelligence" },
+    { icon: Wrench, label: "Maintenance AI", to: "/maintenance-ai" },
+  ];
+
+  const fleetManagement = [
+    { icon: UserCheck, label: "Customer Management", to: "/customer-management" },
+    { icon: FileCheck, label: "Compliance Manager", to: "/compliance-manager" },
+    { icon: Lock, label: "Security Manager", to: "/security" },
+    { icon: Bell, label: "Notifications", to: "/notifications" },
+    { icon: FileBarChart, label: "Reports & Export", to: "/reports" },
+    { icon: Plug, label: "Integration Hub", to: "/integration-hub" },
+    { icon: Lightbulb, label: "AI Insights", to: "/ai-insights" },
+  ];
+
+  const commonNavItems = [
     { icon: User, label: "Profile", to: "/profile" },
-    { icon: Crown, label: "Subscription", to: "/subscription" },
     { icon: HelpCircle, label: "Support", to: "/support" },
-    { icon: Info, label: "About", to: "/about" },
     { icon: Settings, label: "Settings", to: "/settings" },
   ];
 
-  const mobileNavItems = [
-    { icon: Home, label: "Dashboard", to: "/dashboard" },
-    { icon: Bike, label: "Vehicle", to: "/vehicle" },
-    { icon: MapPin, label: "Map", to: "/map" },
-    { 
-      icon: Shield, 
-      label: "Features", 
-      action: () => {
-        setSidebarOpen(true);
-        setTimeout(() => {
-          document.querySelector('.innovative-features-section')?.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
-      }
-    },
-    { icon: User, label: "Profile", to: "/profile" },
-  ];
+  const getMobileNavItems = () => {
+    if (userType === 'fleet') {
+      return [
+        { icon: Home, label: "Command", to: "/dashboard" },
+        { icon: Truck, label: "Fleet", to: "/fleet-management" },
+        { icon: MapPin, label: "Map", to: "/map" },
+        { icon: Monitor, label: "Monitor", to: "/system-monitoring" },
+        { icon: User, label: "Profile", to: "/profile" },
+      ];
+    } else {
+      return [
+        { icon: Home, label: "Dashboard", to: "/dashboard" },
+        { icon: Bike, label: "Vehicle", to: "/vehicle" },
+        { icon: MapPin, label: "Map", to: "/map" },
+        { 
+          icon: Shield, 
+          label: "Features", 
+          action: () => {
+            setSidebarOpen(true);
+            setTimeout(() => {
+              document.querySelector('.innovative-features-section')?.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+          }
+        },
+        { icon: User, label: "Profile", to: "/profile" },
+      ];
+    }
+  };
 
   return (
     <div className="flex min-h-screen bg-black font-poppins overflow-hidden">
@@ -196,86 +215,112 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
         {/* Scrollable content */}
         <div className="flex-1 overflow-y-auto py-4 px-4">
           <nav className="flex flex-col gap-2">
-            <div className="mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-              Main
-            </div>
-            {mainNavItems.map((item, index) => (
-              <div 
-                key={item.to}
-                className="animate-fade-in"
-                style={{ animationDelay: `${index * 50}ms` }}
-              >
-                <NavItem
-                  icon={item.icon}
-                  label={item.label}
-                  to={item.to}
-                  active={location.pathname === item.to}
-                />
-              </div>
-            ))}
-            
-            <div className="mt-6 mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-              Professional Tools
-            </div>
-            {professionalTools.map((item, index) => (
-              <div 
-                key={item.to}
-                className="animate-fade-in"
-                style={{ animationDelay: `${(index + mainNavItems.length) * 50}ms` }}
-              >
-                <NavItem
-                  icon={item.icon}
-                  label={item.label}
-                  to={item.to}
-                  active={location.pathname === item.to}
-                />
-              </div>
-            ))}
-            
-            <div className="mt-6 mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-              Dashboard Features
-            </div>
-            {dashboardFeatures.map((item, index) => (
-              <div 
-                key={item.to}
-                className="animate-fade-in"
-                style={{ animationDelay: `${(index + mainNavItems.length + professionalTools.length) * 50}ms` }}
-              >
-                <NavItem
-                  icon={item.icon}
-                  label={item.label}
-                  to={item.to}
-                  active={location.pathname === item.to}
-                />
-              </div>
-            ))}
-            
-            <div className="mt-6 mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider innovative-features-section">
-              Smart Features
-            </div>
-            {innovativeFeatures.map((item, index) => (
-              <div 
-                key={item.to}
-                className="animate-fade-in"
-                style={{ animationDelay: `${(index + mainNavItems.length + professionalTools.length + dashboardFeatures.length) * 50}ms` }}
-              >
-                <NavItem
-                  icon={item.icon}
-                  label={item.label}
-                  to={item.to}
-                  active={location.pathname === item.to}
-                />
-              </div>
-            ))}
+            {userType === 'fleet' ? (
+              <>
+                {/* Fleet Navigation */}
+                <div className="mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  Fleet Command
+                </div>
+                {fleetNavItems.map((item, index) => (
+                  <div 
+                    key={item.to}
+                    className="animate-fade-in"
+                    style={{ animationDelay: `${index * 50}ms` }}
+                  >
+                    <NavItem
+                      icon={item.icon}
+                      label={item.label}
+                      to={item.to}
+                      active={location.pathname === item.to}
+                    />
+                  </div>
+                ))}
+                
+                <div className="mt-6 mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  Operations
+                </div>
+                {fleetOperations.map((item, index) => (
+                  <div 
+                    key={item.to}
+                    className="animate-fade-in"
+                    style={{ animationDelay: `${(index + fleetNavItems.length) * 50}ms` }}
+                  >
+                    <NavItem
+                      icon={item.icon}
+                      label={item.label}
+                      to={item.to}
+                      active={location.pathname === item.to}
+                    />
+                  </div>
+                ))}
+                
+                <div className="mt-6 mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  Management
+                </div>
+                {fleetManagement.map((item, index) => (
+                  <div 
+                    key={item.to}
+                    className="animate-fade-in"
+                    style={{ animationDelay: `${(index + fleetNavItems.length + fleetOperations.length) * 50}ms` }}
+                  >
+                    <NavItem
+                      icon={item.icon}
+                      label={item.label}
+                      to={item.to}
+                      active={location.pathname === item.to}
+                    />
+                  </div>
+                ))}
+              </>
+            ) : (
+              <>
+                {/* Individual User Navigation */}
+                <div className="mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  Main
+                </div>
+                {individualNavItems.map((item, index) => (
+                  <div 
+                    key={item.to}
+                    className="animate-fade-in"
+                    style={{ animationDelay: `${index * 50}ms` }}
+                  >
+                    <NavItem
+                      icon={item.icon}
+                      label={item.label}
+                      to={item.to}
+                      active={location.pathname === item.to}
+                    />
+                  </div>
+                ))}
+                
+                <div className="mt-6 mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  Smart Features
+                </div>
+                {individualFeatures.map((item, index) => (
+                  <div 
+                    key={item.to}
+                    className="animate-fade-in"
+                    style={{ animationDelay: `${(index + individualNavItems.length) * 50}ms` }}
+                  >
+                    <NavItem
+                      icon={item.icon}
+                      label={item.label}
+                      to={item.to}
+                      active={location.pathname === item.to}
+                    />
+                  </div>
+                ))}
+              </>
+            )}
             
             <div className="mt-6 mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
               Account
             </div>
-            {secondaryNavItems.map((item, index) => (
+            {commonNavItems.map((item, index) => (
               <div 
                 key={item.to}
                 className="animate-fade-in"
-                style={{ animationDelay: `${(index + mainNavItems.length + professionalTools.length + dashboardFeatures.length + innovativeFeatures.length) * 50}ms` }}
+                style={{ animationDelay: `${200 + (index * 50)}ms` }}
               >
                 <NavItem
                   icon={item.icon}
@@ -348,7 +393,7 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
         {/* Enhanced Mobile bottom navigation */}
         <div className="fixed inset-x-0 bottom-0 bg-black/95 backdrop-blur-md border-t border-gray-800 md:hidden z-30 shadow-2xl">
           <div className="flex justify-around items-center py-3">
-            {mobileNavItems.map((item, index) => {
+            {getMobileNavItems().map((item, index) => {
               const Icon = item.icon;
               const active = item.to ? location.pathname === item.to : false;
               
