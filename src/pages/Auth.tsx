@@ -15,11 +15,10 @@ import { Progress } from '@/components/ui/progress';
 import { 
   AtSign, Key, User, Loader2, Shield, MapPin, Phone, 
   Briefcase, Building, Lock, Fingerprint, UserCheck, 
-  Mail, Home, Bike, Truck, Users, Building2, CheckCircle
+  Mail, Home, Bike
 } from 'lucide-react';
 import { cn } from "@/lib/utils";
 import { useScreenSize } from '@/hooks/use-mobile';
-import { motion } from 'framer-motion';
 
 // Login form schema
 const loginSchema = z.object({
@@ -27,37 +26,21 @@ const loginSchema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
-// Enhanced registration form schema with user type selection
+// Enhanced registration form schema with more details
 const registerSchema = z.object({
-  userType: z.enum(['individual', 'fleet'], {
-    required_error: 'Please select an account type',
-  }),
   firstName: z.string().min(2, 'First name must be at least 2 characters'),
   lastName: z.string().min(1, 'Please enter your last name'),
   email: z.string().email('Please enter a valid email'),
-  phone: z.string().min(10, 'Please enter a valid phone number'),
+  phone: z.string().min(10, 'Please enter a valid Indian phone number'),
   address: z.string().min(5, 'Please enter your full address'),
   city: z.string().min(2, 'Please enter your city'),
   occupation: z.string().min(2, 'Please enter your occupation'),
   company: z.string().optional(),
-  // Fleet-specific fields
-  organizationName: z.string().optional(),
-  organizationRole: z.string().optional(),
-  fleetSize: z.coerce.number().optional(),
-  industry: z.string().optional(),
   password: z.string().min(6, 'Password must be at least 6 characters'),
   confirmPassword: z.string(),
 }).refine(data => data.password === data.confirmPassword, {
   message: 'Passwords do not match',
   path: ['confirmPassword'],
-}).refine(data => {
-  if (data.userType === 'fleet') {
-    return data.organizationName && data.organizationRole && data.fleetSize && data.industry;
-  }
-  return true;
-}, {
-  message: 'All organization fields are required for fleet accounts',
-  path: ['organizationName'],
 });
 
 export default function Auth() {
@@ -81,7 +64,6 @@ export default function Auth() {
   const registerForm = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      userType: 'individual',
       firstName: '',
       lastName: '',
       email: '',
@@ -90,17 +72,10 @@ export default function Auth() {
       city: '',
       occupation: '',
       company: '',
-      organizationName: '',
-      organizationRole: '',
-      fleetSize: undefined,
-      industry: '',
       password: '',
       confirmPassword: '',
     },
   });
-
-  // Watch user type to show/hide fleet fields
-  const watchedUserType = registerForm.watch('userType');
 
   // Check if already authenticated
   useEffect(() => {
@@ -110,50 +85,27 @@ export default function Auth() {
     }
   }, [navigate]);
 
-  // Set up default users in localStorage if they don't exist
+  // Set up default user in localStorage if it doesn't exist
   useEffect(() => {
-    const defaultUsers = [
-      {
-        email: 'saikoushiknalubola@gmail.com',
-        password: 'Saikoushik@456',
-        name: 'Saikoushik Nalubola',
-        firstName: 'Saikoushik',
-        lastName: 'Nalubola',
-        phone: '9876543210',
-        address: 'Hyderabad',
-        city: 'Hyderabad',
-        occupation: 'CEO',
-        company: 'ReVithalize',
-        userType: 'individual',
-        joinDate: new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long' })
-      },
-      {
-        email: 'fleet@revithalize.com',
-        password: 'Fleet@123',
-        name: 'Fleet Manager',
-        firstName: 'Fleet',
-        lastName: 'Manager',
-        phone: '9876543211',
-        address: 'Bangalore',
-        city: 'Bangalore',
-        occupation: 'Fleet Operations Manager',
-        company: 'Enterprise Fleet Solutions',
-        userType: 'fleet',
-        organizationName: 'Enterprise Fleet Solutions',
-        organizationRole: 'Fleet Operations Manager',
-        fleetSize: 150,
-        industry: 'Transportation & Logistics',
-        joinDate: new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long' })
-      }
-    ];
+    const defaultUser = {
+      email: 'saikoushiknalubola@gmail.com',
+      password: 'Saikoushik@456',
+      name: 'Saikoushik Nalubola',
+      firstName: 'Saikoushik',
+      lastName: 'Nalubola',
+      phone: '9876543210',
+      address: 'Hyderabad',
+      city: 'Hyderabad',
+      occupation: 'CEO',
+      company: 'ReVithalize',
+      joinDate: new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long' })
+    };
     
     const existingUsers = JSON.parse(localStorage.getItem('users') || '[]');
-    defaultUsers.forEach(defaultUser => {
-      if (!existingUsers.some((user: any) => user.email === defaultUser.email)) {
-        existingUsers.push(defaultUser);
-      }
-    });
-    localStorage.setItem('users', JSON.stringify(existingUsers));
+    if (!existingUsers.some((user: any) => user.email === defaultUser.email)) {
+      existingUsers.push(defaultUser);
+      localStorage.setItem('users', JSON.stringify(existingUsers));
+    }
   }, []);
 
   // Calculate password strength
@@ -184,37 +136,6 @@ export default function Auth() {
     
     // Simulate authentication
     setTimeout(() => {
-      // Fleet test account
-      if (values.email === 'revithalize' && values.password === 'revithalize123') {
-        const fleetUser = {
-          email: 'fleet@revithalize.com',
-          password: 'revithalize123',
-          name: 'Fleet Manager',
-          firstName: 'Fleet',
-          lastName: 'Manager',
-          phone: '+91 9876543210',
-          address: 'Fleet Operations Center',
-          city: 'Bangalore',
-          occupation: 'Fleet Operations Manager',
-          company: 'Enterprise Fleet Solutions',
-          joinDate: new Date().toISOString().split('T')[0],
-          userType: 'fleet' as const,
-          organizationName: 'Enterprise Fleet Solutions',
-          fleetSize: 150,
-          organizationRole: 'Fleet Operations Manager',
-          industry: 'Transportation & Logistics'
-        };
-        
-        localStorage.setItem('isAuthenticated', 'true');
-        localStorage.setItem('user', JSON.stringify(fleetUser));
-        toast.success('Welcome to Fleet Operations!', {
-          description: 'Fleet Dashboard loaded successfully'
-        });
-        navigate('/dashboard');
-        setIsLoading(false);
-        return;
-      }
-
       // Get existing user data if available
       const existingUsers = JSON.parse(localStorage.getItem('users') || '[]');
       const user = existingUsers.find((u: any) => u.email === values.email);
@@ -222,13 +143,13 @@ export default function Auth() {
       if (user && user.password === values.password) {
         localStorage.setItem('isAuthenticated', 'true');
         localStorage.setItem('user', JSON.stringify(user));
-        toast.success(`Hey there! Welcome back 🎉`, {
-          description: user.userType === 'fleet' ? 'Fleet Dashboard ready' : 'Your EV is waiting for you'
+        toast.success('Successfully logged in!', {
+          description: 'Welcome back'
         });
         navigate('/dashboard');
       } else {
-        toast.error('Oops! Something went wrong', {
-          description: 'Please check your email and password'
+        toast.error('Login failed', {
+          description: 'Invalid email or password'
         });
       }
       setIsLoading(false);
@@ -252,12 +173,6 @@ export default function Auth() {
         city: values.city,
         occupation: values.occupation,
         company: values.company || 'Not specified',
-        userType: values.userType,
-        // Fleet-specific fields
-        organizationName: values.organizationName,
-        organizationRole: values.organizationRole,
-        fleetSize: values.fleetSize,
-        industry: values.industry,
         joinDate: new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long' })
       };
       
@@ -270,8 +185,8 @@ export default function Auth() {
       localStorage.setItem('isAuthenticated', 'true');
       localStorage.setItem('user', JSON.stringify(newUser));
       
-      toast.success(`${values.userType === 'fleet' ? 'Fleet' : 'Individual'} account created successfully!`, {
-        description: `Welcome, ${values.firstName}${values.userType === 'fleet' ? ' - Fleet Dashboard Ready' : ''}`
+      toast.success('Account created successfully!', {
+        description: 'Welcome, ' + values.firstName
       });
       navigate('/dashboard');
       setIsLoading(false);
@@ -434,75 +349,8 @@ export default function Auth() {
                     </CardDescription>
                   </CardHeader>
                   
-                   <CardContent className={cn("space-y-4", isMobile ? "px-3" : "")}>
-                     {/* User Type Selection */}
-                     <FormField
-                       control={registerForm.control}
-                       name="userType"
-                       render={({ field }) => (
-                         <FormItem className="space-y-3">
-                           <FormLabel className="text-white font-poppins">Account Type</FormLabel>
-                           <div className="grid grid-cols-2 gap-4">
-                             <div 
-                               className={cn(
-                                 "relative cursor-pointer rounded-lg border-2 p-4 transition-all",
-                                 field.value === 'individual' 
-                                   ? "border-revithalize-green bg-revithalize-green/10" 
-                                   : "border-gray-700 hover:border-gray-600"
-                               )}
-                               onClick={() => field.onChange('individual')}
-                             >
-                               <div className="flex flex-col items-center space-y-2">
-                                 <User className={cn(
-                                   "h-8 w-8",
-                                   field.value === 'individual' ? "text-revithalize-green" : "text-gray-400"
-                                 )} />
-                                 <div className="text-center">
-                                   <p className={cn(
-                                     "font-medium",
-                                     field.value === 'individual' ? "text-revithalize-green" : "text-white"
-                                   )}>Individual User</p>
-                                   <p className="text-xs text-gray-400">Personal EV management</p>
-                                 </div>
-                                 {field.value === 'individual' && (
-                                   <CheckCircle className="absolute top-2 right-2 h-5 w-5 text-revithalize-green" />
-                                 )}
-                               </div>
-                             </div>
-                             
-                             <div 
-                               className={cn(
-                                 "relative cursor-pointer rounded-lg border-2 p-4 transition-all",
-                                 field.value === 'fleet' 
-                                   ? "border-revithalize-blue bg-revithalize-blue/10" 
-                                   : "border-gray-700 hover:border-gray-600"
-                               )}
-                               onClick={() => field.onChange('fleet')}
-                             >
-                               <div className="flex flex-col items-center space-y-2">
-                                 <Truck className={cn(
-                                   "h-8 w-8",
-                                   field.value === 'fleet' ? "text-revithalize-blue" : "text-gray-400"
-                                 )} />
-                                 <div className="text-center">
-                                   <p className={cn(
-                                     "font-medium",
-                                     field.value === 'fleet' ? "text-revithalize-blue" : "text-white"
-                                   )}>Fleet Manager</p>
-                                   <p className="text-xs text-gray-400">Manage multiple vehicles</p>
-                                 </div>
-                                 {field.value === 'fleet' && (
-                                   <CheckCircle className="absolute top-2 right-2 h-5 w-5 text-revithalize-blue" />
-                                 )}
-                               </div>
-                             </div>
-                           </div>
-                           <FormMessage className="text-red-400" />
-                         </FormItem>
-                       )}
-                     />
-
-                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <CardContent className={cn("space-y-4", isMobile ? "px-3" : "")}>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <FormField
                         control={registerForm.control}
                         name="firstName"
@@ -685,114 +533,11 @@ export default function Auth() {
                           </FormItem>
                         )}
                       />
-                     </div>
-                     
-                     {/* Fleet-specific fields */}
-                     {watchedUserType === 'fleet' && (
-                       <motion.div 
-                         className="space-y-4 border-t border-gray-800 pt-4"
-                         initial={{ opacity: 0, height: 0 }}
-                         animate={{ opacity: 1, height: 'auto' }}
-                         exit={{ opacity: 0, height: 0 }}
-                         transition={{ duration: 0.3 }}
-                       >
-                         <div className="flex items-center gap-2 text-revithalize-blue">
-                           <Building2 className="h-4 w-4" />
-                           <span className="text-sm font-medium">Organization Details</span>
-                         </div>
-                         
-                         <FormField
-                           control={registerForm.control}
-                           name="organizationName"
-                           render={({ field }) => (
-                             <FormItem className="space-y-2">
-                               <FormLabel className="text-white font-poppins flex items-center">
-                                 <Building2 className="h-4 w-4 mr-2 text-revithalize-blue" />
-                                 Organization Name
-                               </FormLabel>
-                               <FormControl>
-                                 <Input 
-                                   {...field}
-                                   placeholder="Your company/organization name"
-                                   className="bg-gray-800/70 border-gray-700 text-white transition-all focus:border-revithalize-blue"
-                                 />
-                               </FormControl>
-                               <FormMessage className="text-red-400" />
-                             </FormItem>
-                           )}
-                         />
-                         
-                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                           <FormField
-                             control={registerForm.control}
-                             name="organizationRole"
-                             render={({ field }) => (
-                               <FormItem className="space-y-2">
-                                 <FormLabel className="text-white font-poppins flex items-center">
-                                   <Users className="h-4 w-4 mr-2 text-revithalize-blue" />
-                                   Your Role
-                                 </FormLabel>
-                                 <FormControl>
-                                   <Input 
-                                     {...field}
-                                     placeholder="Fleet Manager, Operations Lead, etc."
-                                     className="bg-gray-800/70 border-gray-700 text-white transition-all focus:border-revithalize-blue"
-                                   />
-                                 </FormControl>
-                                 <FormMessage className="text-red-400" />
-                               </FormItem>
-                             )}
-                           />
-                           
-                           <FormField
-                             control={registerForm.control}
-                             name="fleetSize"
-                             render={({ field }) => (
-                               <FormItem className="space-y-2">
-                                 <FormLabel className="text-white font-poppins flex items-center">
-                                   <Truck className="h-4 w-4 mr-2 text-revithalize-blue" />
-                                   Fleet Size
-                                 </FormLabel>
-                                 <FormControl>
-                                   <Input 
-                                     {...field}
-                                     type="number"
-                                     placeholder="Number of vehicles"
-                                     className="bg-gray-800/70 border-gray-700 text-white transition-all focus:border-revithalize-blue"
-                                   />
-                                 </FormControl>
-                                 <FormMessage className="text-red-400" />
-                               </FormItem>
-                             )}
-                           />
-                         </div>
-                         
-                         <FormField
-                           control={registerForm.control}
-                           name="industry"
-                           render={({ field }) => (
-                             <FormItem className="space-y-2">
-                               <FormLabel className="text-white font-poppins flex items-center">
-                                 <Briefcase className="h-4 w-4 mr-2 text-revithalize-blue" />
-                                 Industry
-                               </FormLabel>
-                               <FormControl>
-                                 <Input 
-                                   {...field}
-                                   placeholder="Transportation, Logistics, Delivery, etc."
-                                   className="bg-gray-800/70 border-gray-700 text-white transition-all focus:border-revithalize-blue"
-                                 />
-                               </FormControl>
-                               <FormMessage className="text-red-400" />
-                             </FormItem>
-                           )}
-                         />
-                       </motion.div>
-                     )}
-                     
-                     <FormField
-                       control={registerForm.control}
-                       name="password"
+                    </div>
+                    
+                    <FormField
+                      control={registerForm.control}
+                      name="password"
                       render={({ field }) => (
                         <FormItem className="space-y-2">
                           <FormLabel className="text-white font-poppins flex items-center">

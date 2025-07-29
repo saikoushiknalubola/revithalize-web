@@ -22,29 +22,29 @@ export function ProfessionalQuickActions({
   const actionItems = [
     {
       icon: MapPin,
-      label: "Find Charging",
-      subtitle: "Nearest stations",
+      label: "Charging Network",
+      subtitle: "Find optimal stations",
       action: onFindChargingStations,
       color: "text-blue-400"
     },
     {
       icon: Bolt,
-      label: "Start Charging",
-      subtitle: "Remote control",
+      label: "Remote Control",
+      subtitle: "Manage charging remotely",
       action: onRemoteCharging,
       color: "text-green-400"
     },
     {
       icon: Activity,
-      label: "Health Check",
-      subtitle: "System status",
+      label: "System Diagnostics",
+      subtitle: "Real-time health check",
       action: onSetChargeAlert,
       color: "text-purple-400"
     },
     {
-      icon: Bell,
-      label: "Smart Alerts",
-      subtitle: "Charge notifications",
+      icon: FileText,
+      label: "Fleet Reports",
+      subtitle: "Performance analytics",
       action: () => {},
       color: "text-amber-400"
     }
@@ -55,11 +55,11 @@ export function ProfessionalQuickActions({
       <CardHeader className="pb-4 pt-5 px-5">
         <CardTitle className="text-white text-lg flex items-center justify-between">
           <div className="flex items-center">
-            <Settings className="mr-2 h-5 w-5 text-green-400" />
-            <span>Quick Actions</span>
+            <Settings className="mr-2 h-5 w-5 text-blue-400" />
+            <span>Fleet Operations</span>
           </div>
-          <div className="bg-green-500/20 px-2 py-1 rounded text-xs text-green-400 font-medium">
-            PERSONAL
+          <div className="bg-blue-500/20 px-2 py-1 rounded text-xs text-blue-400 font-medium">
+            ENTERPRISE
           </div>
         </CardTitle>
       </CardHeader>

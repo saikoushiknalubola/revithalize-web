@@ -63,47 +63,47 @@ export default function Dashboard() {
     }
   }, [feature]);
 
-  // Personal EV Features for Individual Users
-  const personalFeatures = [
+  // Quick Access Cards for Professional Features
+  const quickAccessFeatures = [
     {
-      id: 'eco',
-      title: "Eco Program",
-      description: "Track your environmental impact and savings",
-      icon: Leaf,
-      route: "/eco-program",
-      color: "from-green-900/80 to-green-600/40",
-      iconColor: "text-green-300",
-      stats: "234kg CO₂ saved"
-    },
-    {
-      id: 'range',
-      title: "Smart Range",
-      description: "AI-powered range prediction and planning",
-      icon: TrendingUp,
-      route: "/range-prediction",
+      id: 'fleet',
+      title: "Fleet Management",
+      description: "Monitor and manage your entire vehicle fleet",
+      icon: Truck,
+      route: "/fleet-management",
       color: "from-blue-900/80 to-blue-600/40",
       iconColor: "text-blue-300",
-      stats: "118km remaining"
+      stats: "12 Vehicles"
     },
     {
-      id: 'maintenance',
-      title: "Maintenance AI",
-      description: "Intelligent maintenance scheduling and alerts",
-      icon: Wrench,
-      route: "/maintenance-ai",
-      color: "from-orange-900/80 to-orange-600/40",
-      iconColor: "text-orange-300",
-      stats: "Next: 2 weeks"
-    },
-    {
-      id: 'energy',
-      title: "Energy Network",
-      description: "Connect with other EV owners and share energy",
-      icon: Users,
-      route: "/energy-network",
+      id: 'analytics',
+      title: "Advanced Analytics",
+      description: "Deep insights and comprehensive data analysis",
+      icon: TrendingUp,
+      route: "/advanced-analytics",
       color: "from-purple-900/80 to-purple-600/40",
       iconColor: "text-purple-300",
-      stats: "Join 2.4k users"
+      stats: "24 Reports"
+    },
+    {
+      id: 'monitoring',
+      title: "System Monitoring",
+      description: "Real-time system health and performance",
+      icon: Monitor,
+      route: "/system-monitoring",
+      color: "from-green-900/80 to-green-600/40",
+      iconColor: "text-green-300",
+      stats: "All Systems OK"
+    },
+    {
+      id: 'ai-insights',
+      title: "AI Insights",
+      description: "AI-powered recommendations and predictions",
+      icon: Brain,
+      route: "/ai-insights",
+      color: "from-orange-900/80 to-orange-600/40",
+      iconColor: "text-orange-300",
+      stats: "5 New Insights"
     }
   ];
 
@@ -137,15 +137,15 @@ export default function Dashboard() {
         initial="hidden"
         animate="visible"
       >
-        {/* Enhanced Header with Natural Tone */}
+        {/* Enhanced Header with Professional Branding */}
         <motion.header variants={itemVariants} className="animate-fade-in">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
             <div>
               <h1 className="text-xl sm:text-2xl md:text-3xl font-heading font-bold text-transparent bg-clip-text bg-gradient-to-r from-revithalize-green to-revithalize-blue">
-                Hey {userName}! 👋
+                Welcome back, {userName}
               </h1>
               <p className="text-gray-400 mt-1 text-sm sm:text-base">
-                Your Hero Honda Passion Pro is doing great • Last sync: {lastUpdated.toLocaleTimeString()}
+                Hero Honda Passion Pro • Last updated: {lastUpdated.toLocaleTimeString()}
               </p>
             </div>
             <div className="flex items-center space-x-2">
@@ -159,7 +159,7 @@ export default function Dashboard() {
                 <span>{connectionStatus}</span>
               </div>
               <div className="bg-revithalize-dark/50 px-3 py-1.5 rounded-full border border-revithalize-green/30 backdrop-blur-sm">
-                <span className="text-xs font-medium text-revithalize-green">Individual Plan</span>
+                <span className="text-xs font-medium text-revithalize-green">Pro Plan</span>
               </div>
               {isMobile && (
                 <button
@@ -226,7 +226,7 @@ export default function Dashboard() {
           </motion.div>
         )}
 
-        {/* Personal EV Features */}
+        {/* Quick Access to Professional Features */}
         <motion.div 
           className="mt-8"
           initial={{ opacity: 0, y: 30 }}
@@ -235,20 +235,20 @@ export default function Dashboard() {
         >
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-revithalize-green to-revithalize-blue flex items-center">
-              <Leaf className="mr-3 h-5 w-5 sm:h-6 sm:w-6 text-revithalize-green" />
-              Your EV Features
+              <Shield className="mr-3 h-5 w-5 sm:h-6 sm:w-6 text-revithalize-green" />
+              Quick Access
             </h2>
             <button
-              onClick={() => navigate('/eco-program')}
+              onClick={() => navigate('/fleet-management')}
               className="text-sm text-gray-400 hover:text-revithalize-green transition-colors flex items-center group"
             >
-              Explore All
+              View All Tools
               <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            {personalFeatures.map((feature, index) => {
+            {quickAccessFeatures.map((feature, index) => {
               const Icon = feature.icon;
               return (
                 <motion.div
