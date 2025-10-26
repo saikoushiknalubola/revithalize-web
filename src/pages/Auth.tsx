@@ -1,24 +1,22 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { Progress } from '@/components/ui/progress';
 import { 
-  AtSign, Key, User, Loader2, Shield, MapPin, Phone, 
-  Briefcase, Building, Lock, Fingerprint, UserCheck, 
-  Mail, Home, Bike
+  Loader2, Lock, Fingerprint, UserCheck, Mail, Bike, User, Phone, MapPin, Building, Briefcase
 } from 'lucide-react';
 import { cn } from "@/lib/utils";
 import { useScreenSize } from '@/hooks/use-mobile';
+import { supabase } from '@/integrations/supabase/client';
 
 // Login form schema
 const loginSchema = z.object({
@@ -26,18 +24,17 @@ const loginSchema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
-// Enhanced registration form schema with more details
+// Enhanced registration form schema
 const registerSchema = z.object({
-  firstName: z.string().min(2, 'First name must be at least 2 characters'),
-  lastName: z.string().min(1, 'Please enter your last name'),
+  userType: z.enum(['individual', 'fleet'], {
+    required_error: 'Please select user type',
+  }),
+  fullName: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Please enter a valid email'),
-  phone: z.string().min(10, 'Please enter a valid Indian phone number'),
-  address: z.string().min(5, 'Please enter your full address'),
-  city: z.string().min(2, 'Please enter your city'),
-  occupation: z.string().min(2, 'Please enter your occupation'),
-  company: z.string().optional(),
   password: z.string().min(6, 'Password must be at least 6 characters'),
   confirmPassword: z.string(),
+  companyName: z.string().optional(),
+  fleetSize: z.string().optional(),
 }).refine(data => data.password === data.confirmPassword, {
   message: 'Passwords do not match',
   path: ['confirmPassword'],
@@ -45,11 +42,10 @@ const registerSchema = z.object({
 
 export default function Auth() {
   const navigate = useNavigate();
-  const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [activeTab, setActiveTab] = useState('login');
-  const { isMobile, width } = useScreenSize();
+  const { isMobile } = useScreenSize();
   
   // Login form
   const loginForm = useForm<z.infer<typeof loginSchema>>({
@@ -60,53 +56,42 @@ export default function Auth() {
     },
   });
 
-  // Register form with enhanced fields
+  // Register form
   const registerForm = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      firstName: '',
-      lastName: '',
+      userType: 'individual',
+      fullName: '',
       email: '',
-      phone: '',
-      address: '',
-      city: '',
-      occupation: '',
-      company: '',
       password: '',
       confirmPassword: '',
+      companyName: '',
+      fleetSize: '',
     },
   });
 
+  const watchUserType = registerForm.watch('userType');
+
   // Check if already authenticated
   useEffect(() => {
-    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-    if (isAuthenticated) {
-      navigate('/dashboard');
-    }
-  }, [navigate]);
-
-  // Set up default user in localStorage if it doesn't exist
-  useEffect(() => {
-    const defaultUser = {
-      email: 'saikoushiknalubola@gmail.com',
-      password: 'Saikoushik@456',
-      name: 'Saikoushik Nalubola',
-      firstName: 'Saikoushik',
-      lastName: 'Nalubola',
-      phone: '9876543210',
-      address: 'Hyderabad',
-      city: 'Hyderabad',
-      occupation: 'CEO',
-      company: 'ReVithalize',
-      joinDate: new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long' })
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('user_type')
+          .eq('id', session.user.id)
+          .single();
+        
+        if (profile?.user_type === 'fleet') {
+          navigate('/fleet-dashboard');
+        } else {
+          navigate('/dashboard');
+        }
+      }
     };
-    
-    const existingUsers = JSON.parse(localStorage.getItem('users') || '[]');
-    if (!existingUsers.some((user: any) => user.email === defaultUser.email)) {
-      existingUsers.push(defaultUser);
-      localStorage.setItem('users', JSON.stringify(existingUsers));
-    }
-  }, []);
+    checkAuth();
+  }, [navigate]);
 
   // Calculate password strength
   useEffect(() => {
@@ -131,66 +116,81 @@ export default function Auth() {
   }, [registerForm.watch('password')]);
 
   // Handle Login
-  const handleLogin = (values: z.infer<typeof loginSchema>) => {
+  const handleLogin = async (values: z.infer<typeof loginSchema>) => {
     setIsLoading(true);
     
-    // Simulate authentication
-    setTimeout(() => {
-      // Get existing user data if available
-      const existingUsers = JSON.parse(localStorage.getItem('users') || '[]');
-      const user = existingUsers.find((u: any) => u.email === values.email);
-      
-      if (user && user.password === values.password) {
-        localStorage.setItem('isAuthenticated', 'true');
-        localStorage.setItem('user', JSON.stringify(user));
-        toast.success('Successfully logged in!', {
-          description: 'Welcome back'
-        });
-        navigate('/dashboard');
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: values.email,
+        password: values.password,
+      });
+
+      if (error) throw error;
+
+      // Fetch user profile to determine redirect
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('user_type, full_name')
+        .eq('id', data.user.id)
+        .single();
+
+      toast.success('Successfully logged in!', {
+        description: `Welcome back, ${profile?.full_name || 'User'}`
+      });
+
+      // Navigate based on user type
+      if (profile?.user_type === 'fleet') {
+        navigate('/fleet-dashboard');
       } else {
-        toast.error('Login failed', {
-          description: 'Invalid email or password'
-        });
+        navigate('/dashboard');
       }
+    } catch (error: any) {
+      toast.error('Login failed', {
+        description: error.message || 'Invalid email or password'
+      });
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
-  // Handle Registration with enhanced data
-  const handleRegister = (values: z.infer<typeof registerSchema>) => {
+  // Handle Registration
+  const handleRegister = async (values: z.infer<typeof registerSchema>) => {
     setIsLoading(true);
     
-    // Simulate registration
-    setTimeout(() => {
-      const newUser = { 
+    try {
+      const { data, error } = await supabase.auth.signUp({
         email: values.email,
-        password: values.password, 
-        name: `${values.firstName} ${values.lastName}`,
-        firstName: values.firstName,
-        lastName: values.lastName,
-        phone: values.phone,
-        address: values.address,
-        city: values.city,
-        occupation: values.occupation,
-        company: values.company || 'Not specified',
-        joinDate: new Date().toLocaleDateString('en-IN', { year: 'numeric', month: 'long' })
-      };
-      
-      // Save to users collection in localStorage
-      const existingUsers = JSON.parse(localStorage.getItem('users') || '[]');
-      existingUsers.push(newUser);
-      localStorage.setItem('users', JSON.stringify(existingUsers));
-      
-      // Set as current user
-      localStorage.setItem('isAuthenticated', 'true');
-      localStorage.setItem('user', JSON.stringify(newUser));
-      
-      toast.success('Account created successfully!', {
-        description: 'Welcome, ' + values.firstName
+        password: values.password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/`,
+          data: {
+            full_name: values.fullName,
+            user_type: values.userType,
+            company_name: values.companyName || null,
+            fleet_size: values.fleetSize ? parseInt(values.fleetSize) : null,
+          }
+        }
       });
-      navigate('/dashboard');
+
+      if (error) throw error;
+
+      toast.success('Account created successfully!', {
+        description: `Welcome, ${values.fullName}`
+      });
+
+      // Navigate based on user type
+      if (values.userType === 'fleet') {
+        navigate('/fleet-dashboard');
+      } else {
+        navigate('/dashboard');
+      }
+    } catch (error: any) {
+      toast.error('Registration failed', {
+        description: error.message || 'Please try again'
+      });
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -279,7 +279,7 @@ export default function Auth() {
                       render={({ field }) => (
                         <FormItem className="space-y-2">
                           <FormLabel className="text-white font-poppins flex items-center">
-                            <Key className="h-4 w-4 mr-2 text-revithalize-green" />
+                            <Lock className="h-4 w-4 mr-2 text-revithalize-green" />
                             Password
                           </FormLabel>
                           <FormControl>
@@ -350,49 +350,51 @@ export default function Auth() {
                   </CardHeader>
                   
                   <CardContent className={cn("space-y-4", isMobile ? "px-3" : "")}>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <FormField
-                        control={registerForm.control}
-                        name="firstName"
-                        render={({ field }) => (
-                          <FormItem className="space-y-2">
-                            <FormLabel className="text-white font-poppins flex items-center">
-                              <User className="h-4 w-4 mr-2 text-revithalize-blue" />
-                              First name
-                            </FormLabel>
+                    <FormField
+                      control={registerForm.control}
+                      name="userType"
+                      render={({ field }) => (
+                        <FormItem className="space-y-2">
+                          <FormLabel className="text-white font-poppins flex items-center">
+                            <User className="h-4 w-4 mr-2 text-revithalize-blue" />
+                            Account Type
+                          </FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
-                              <Input 
-                                {...field}
-                                placeholder="First name"
-                                className="bg-gray-800/70 border-gray-700 text-white transition-all focus:border-revithalize-blue"
-                              />
+                              <SelectTrigger className="bg-gray-800/70 border-gray-700 text-white">
+                                <SelectValue placeholder="Select account type" />
+                              </SelectTrigger>
                             </FormControl>
-                            <FormMessage className="text-red-400" />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={registerForm.control}
-                        name="lastName"
-                        render={({ field }) => (
-                          <FormItem className="space-y-2">
-                            <FormLabel className="text-white font-poppins flex items-center">
-                              <User className="h-4 w-4 mr-2 text-revithalize-blue" />
-                              Last name
-                            </FormLabel>
-                            <FormControl>
-                              <Input 
-                                {...field}
-                                placeholder="Last name"
-                                className="bg-gray-800/70 border-gray-700 text-white transition-all focus:border-revithalize-blue"
-                              />
-                            </FormControl>
-                            <FormMessage className="text-red-400" />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
+                            <SelectContent>
+                              <SelectItem value="individual">Individual User</SelectItem>
+                              <SelectItem value="fleet">Fleet Manager</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage className="text-red-400" />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={registerForm.control}
+                      name="fullName"
+                      render={({ field }) => (
+                        <FormItem className="space-y-2">
+                          <FormLabel className="text-white font-poppins flex items-center">
+                            <User className="h-4 w-4 mr-2 text-revithalize-blue" />
+                            Full Name
+                          </FormLabel>
+                          <FormControl>
+                            <Input 
+                              {...field}
+                              placeholder="Enter your full name"
+                              className="bg-gray-800/70 border-gray-700 text-white transition-all focus:border-revithalize-blue"
+                            />
+                          </FormControl>
+                          <FormMessage className="text-red-400" />
+                        </FormItem>
+                      )}
+                    />
                     
                     <FormField
                       control={registerForm.control}
@@ -408,7 +410,7 @@ export default function Auth() {
                               <Input 
                                 {...field}
                                 type="email" 
-                                placeholder="Your email address"
+                                placeholder="your.email@example.com"
                                 className="bg-gray-800/70 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-blue"
                               />
                               <Mail className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
@@ -418,122 +420,53 @@ export default function Auth() {
                         </FormItem>
                       )}
                     />
-                    
-                    <FormField
-                      control={registerForm.control}
-                      name="phone"
-                      render={({ field }) => (
-                        <FormItem className="space-y-2">
-                          <FormLabel className="text-white font-poppins flex items-center">
-                            <Phone className="h-4 w-4 mr-2 text-revithalize-blue" />
-                            Phone Number
-                          </FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <Input 
-                                {...field}
-                                placeholder="10-digit mobile number" 
-                                className="bg-gray-800/70 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-blue"
-                              />
-                              <Phone className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
-                            </div>
-                          </FormControl>
-                          <FormMessage className="text-red-400" />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <FormField
-                      control={registerForm.control}
-                      name="address"
-                      render={({ field }) => (
-                        <FormItem className="space-y-2">
-                          <FormLabel className="text-white font-poppins flex items-center">
-                            <Home className="h-4 w-4 mr-2 text-revithalize-blue" />
-                            Address
-                          </FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <Input 
-                                {...field}
-                                placeholder="Your full address" 
-                                className="bg-gray-800/70 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-blue"
-                              />
-                              <Home className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
-                            </div>
-                          </FormControl>
-                          <FormMessage className="text-red-400" />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <FormField
-                      control={registerForm.control}
-                      name="city"
-                      render={({ field }) => (
-                        <FormItem className="space-y-2">
-                          <FormLabel className="text-white font-poppins flex items-center">
-                            <Building className="h-4 w-4 mr-2 text-revithalize-blue" />
-                            City
-                          </FormLabel>
-                          <FormControl>
-                            <div className="relative">
-                              <Input 
-                                {...field}
-                                placeholder="Your city" 
-                                className="bg-gray-800/70 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-blue"
-                              />
-                              <Building className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
-                            </div>
-                          </FormControl>
-                          <FormMessage className="text-red-400" />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <FormField
-                        control={registerForm.control}
-                        name="occupation"
-                        render={({ field }) => (
-                          <FormItem className="space-y-2">
-                            <FormLabel className="text-white font-poppins flex items-center">
-                              <Briefcase className="h-4 w-4 mr-2 text-revithalize-blue" />
-                              Occupation
-                            </FormLabel>
-                            <FormControl>
-                              <Input 
-                                {...field}
-                                placeholder="Your occupation"
-                                className="bg-gray-800/70 border-gray-700 text-white transition-all focus:border-revithalize-blue"
-                              />
-                            </FormControl>
-                            <FormMessage className="text-red-400" />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={registerForm.control}
-                        name="company"
-                        render={({ field }) => (
-                          <FormItem className="space-y-2">
-                            <FormLabel className="text-white font-poppins flex items-center">
-                              <Building className="h-4 w-4 mr-2 text-revithalize-blue" />
-                              Company
-                            </FormLabel>
-                            <FormControl>
-                              <Input 
-                                {...field}
-                                placeholder="Optional"
-                                className="bg-gray-800/70 border-gray-700 text-white transition-all focus:border-revithalize-blue"
-                              />
-                            </FormControl>
-                            <FormMessage className="text-red-400" />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
+
+                    {watchUserType === 'fleet' && (
+                      <>
+                        <FormField
+                          control={registerForm.control}
+                          name="companyName"
+                          render={({ field }) => (
+                            <FormItem className="space-y-2">
+                              <FormLabel className="text-white font-poppins flex items-center">
+                                <Building className="h-4 w-4 mr-2 text-revithalize-blue" />
+                                Company Name
+                              </FormLabel>
+                              <FormControl>
+                                <Input 
+                                  {...field}
+                                  placeholder="Your company name"
+                                  className="bg-gray-800/70 border-gray-700 text-white transition-all focus:border-revithalize-blue"
+                                />
+                              </FormControl>
+                              <FormMessage className="text-red-400" />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={registerForm.control}
+                          name="fleetSize"
+                          render={({ field }) => (
+                            <FormItem className="space-y-2">
+                              <FormLabel className="text-white font-poppins flex items-center">
+                                <Bike className="h-4 w-4 mr-2 text-revithalize-blue" />
+                                Fleet Size
+                              </FormLabel>
+                              <FormControl>
+                                <Input 
+                                  {...field}
+                                  type="number"
+                                  placeholder="Number of vehicles"
+                                  className="bg-gray-800/70 border-gray-700 text-white transition-all focus:border-revithalize-blue"
+                                />
+                              </FormControl>
+                              <FormMessage className="text-red-400" />
+                            </FormItem>
+                          )}
+                        />
+                      </>
+                    )}
                     
                     <FormField
                       control={registerForm.control}
@@ -592,7 +525,7 @@ export default function Auth() {
                       render={({ field }) => (
                         <FormItem className="space-y-2">
                           <FormLabel className="text-white font-poppins flex items-center">
-                            <Shield className="h-4 w-4 mr-2 text-revithalize-blue" />
+                            <Lock className="h-4 w-4 mr-2 text-revithalize-blue" />
                             Confirm Password
                           </FormLabel>
                           <FormControl>
@@ -603,7 +536,7 @@ export default function Auth() {
                                 placeholder="Confirm your password"
                                 className="bg-gray-800/70 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-blue"
                               />
-                              <Shield className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
+                              <Lock className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
                             </div>
                           </FormControl>
                           <FormMessage className="text-red-400" />

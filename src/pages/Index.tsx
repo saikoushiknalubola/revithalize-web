@@ -1,17 +1,30 @@
-
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { LoadingAnimation } from '@/components/animations/LoadingAnimation';
+import { supabase } from '@/integrations/supabase/client';
 
 const Index = () => {
   const navigate = useNavigate();
   
   // Check if user is already authenticated
   useEffect(() => {
-    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-    if (isAuthenticated) {
-      navigate('/dashboard');
-    }
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('user_type')
+          .eq('id', session.user.id)
+          .single();
+        
+        if (profile?.user_type === 'fleet') {
+          navigate('/fleet-dashboard');
+        } else {
+          navigate('/dashboard');
+        }
+      }
+    };
+    checkAuth();
   }, [navigate]);
 
   return (
@@ -46,13 +59,22 @@ const Index = () => {
           </div>
         </div>
 
-        <div className="mt-8 md:mt-12 text-center animate-fade-in" style={{ animationDelay: '400ms' }}>
+        <div className="mt-8 md:mt-12 flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in" style={{ animationDelay: '400ms' }}>
           <Link 
             to="/auth" 
             className="bg-gradient-to-r from-revithalize-green to-revithalize-blue hover:from-revithalize-green/90 hover:to-revithalize-blue/90 text-black font-bold py-2 sm:py-3 px-6 sm:px-8 rounded-full transition-all duration-300 inline-flex items-center justify-center shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-sm sm:text-base"
           >
             Get Started
           </Link>
+          
+          <a 
+            href="https://revithalize.tech/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="bg-gray-800 hover:bg-gray-700 border-2 border-revithalize-green text-revithalize-green font-bold py-2 sm:py-3 px-6 sm:px-8 rounded-full transition-all duration-300 inline-flex items-center justify-center shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-sm sm:text-base"
+          >
+            Visit Our Website
+          </a>
         </div>
       </div>
     </div>
