@@ -38,7 +38,7 @@ export function LoadingAnimation() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.8 }}
             >
-              ReVithalize
+              ReVithalize Mobilitric
             </motion.div>
             <motion.div 
               className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-revithalize-green/20 to-transparent"

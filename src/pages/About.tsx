@@ -24,7 +24,7 @@ export default function About() {
       <div className="space-y-6 pb-8">
         <header className="relative overflow-hidden rounded-lg bg-gradient-to-br from-revithalize-dark to-gray-900 p-8">
           <div className="relative z-10">
-            <h1 className="text-3xl md:text-4xl font-heading font-bold text-white mb-2 animate-fade-in">About ReVithalize</h1>
+            <h1 className="text-3xl md:text-4xl font-heading font-bold text-white mb-2 animate-fade-in">About ReVithalize Mobilitric</h1>
             <p className="text-gray-300 text-lg animate-fade-in delay-100">Revolutionizing sustainable mobility in India</p>
           </div>
           <div className="absolute top-0 right-0 w-1/2 h-full opacity-10">
@@ -43,7 +43,7 @@ export default function About() {
             <CardContent className="space-y-4 text-gray-300">
               <div className="p-4 bg-black/20 rounded-lg border border-gray-800">
                 <p className="mb-3">
-                  Founded in early 2024, ReVithalize emerged from a visionary conversation about transforming India's two-wheeler landscape. Our founder, Nalubola Saikoushik, recognized the urgent need to address urban pollution while making electric mobility accessible to all.
+                  Founded in early 2024, ReVithalize Mobilitric emerged from a visionary conversation about transforming India's two-wheeler landscape. Our founder, Nalubola Saikoushik, recognized the urgent need to address urban pollution while making electric mobility accessible to all.
                 </p>
                 <p>
                   We specialize in converting existing ICE two-wheelers into smart electric vehicles using our innovative AI-powered retrofit kits, making sustainable transportation affordable and practical for everyone.
@@ -62,7 +62,7 @@ export default function About() {
             <CardContent>
               <div className="space-y-4">
                 <p className="text-gray-300">
-                  ReVithalize aims to accelerate India's transition to sustainable mobility by making electric vehicle conversion accessible, affordable, and reliable for everyone.
+                  ReVithalize Mobilitric aims to accelerate India's transition to sustainable mobility by making electric vehicle conversion accessible, affordable, and reliable for everyone.
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="bg-black/20 p-4 rounded-lg border border-gray-800">
@@ -162,7 +162,7 @@ export default function About() {
                   <MapPin className="mr-3 h-5 w-5 text-revithalize-green flex-shrink-0" />
                   <div>
                     <p className="text-white font-medium">Corporate Headquarters</p>
-                    <p className="text-gray-400">ReVithalize Innovations</p>
+                    <p className="text-gray-400">ReVithalize Mobilitric Innovations</p>
                     <p className="text-gray-400">Warangal, Telangana 506001</p>
                     <p className="text-gray-400">Bharat (India)</p>
                   </div>

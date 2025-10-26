@@ -39,7 +39,7 @@ export function CompanyVision() {
         transition={{ duration: 0.6 }}
       >
         <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-revithalize-green to-revithalize-blue mb-4">
-          ReVithalize: Revolutionizing Mobility
+          ReVithalize Mobilitric: Revolutionizing Mobility
         </h2>
         <p className="text-gray-300 text-lg max-w-4xl mx-auto leading-relaxed">
           We're pioneering the future of sustainable transportation by transforming conventional vehicles into intelligent electric powerhouses. 

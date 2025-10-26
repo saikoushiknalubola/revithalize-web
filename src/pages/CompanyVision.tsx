@@ -40,7 +40,7 @@ export default function CompanyVisionPage() {
             Company Vision & Mission
           </h1>
           <p className="text-gray-400 text-lg">
-            Discover ReVithalize's commitment to sustainable transportation and electric mobility
+            Discover ReVithalize Mobilitric's commitment to sustainable transportation and electric mobility
           </p>
         </motion.header>
 

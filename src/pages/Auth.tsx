@@ -209,7 +209,7 @@ export default function Auth() {
             </div>
           </div>
           <h1 className="text-4xl font-poppins font-bold text-transparent bg-clip-text bg-gradient-to-r from-revithalize-green to-revithalize-blue mb-2 animate-scale-in">
-            ReVithalize
+            ReVithalize Mobilitric
           </h1>
           <p className="text-gray-400 animate-fade-in">Smart Retrofitting Solutions for India</p>
         </div>
@@ -345,7 +345,7 @@ export default function Auth() {
                       Create an account
                     </CardTitle>
                     <CardDescription className="text-gray-400 font-poppins">
-                      Enter your details to create your ReVithalize account
+                      Enter your details to create your ReVithalize Mobilitric account
                     </CardDescription>
                   </CardHeader>
                   
