@@ -33,18 +33,23 @@ const Index = () => {
       
       <div className="container mx-auto max-w-4xl">
         <header className="text-center mb-8 md:mb-12 animate-fade-in">
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <span className="text-xs sm:text-sm px-3 py-1 bg-orange-500/20 border border-orange-500/40 rounded-full text-orange-400 font-semibold">
-              🇮🇳 Made in India
-            </span>
+          <div className="flex items-center justify-center gap-2 mb-4 md:mb-6 animate-scale-in" style={{ animationDelay: '100ms' }}>
+            <div className="group relative inline-flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 bg-gradient-to-r from-orange-500/10 via-white/5 to-green-500/10 rounded-full border border-orange-500/30 shadow-lg hover:shadow-xl hover:border-orange-500/50 transition-all duration-500 hover:scale-105">
+              <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-green-500/5 rounded-full blur-xl group-hover:blur-2xl transition-all duration-500"></div>
+              <span className="relative text-xl sm:text-2xl animate-pulse">🇮🇳</span>
+              <span className="relative text-xs sm:text-sm font-bold bg-gradient-to-r from-orange-400 via-white to-green-400 bg-clip-text text-transparent tracking-wider uppercase">
+                Made in India
+              </span>
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-orange-500/20 to-green-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            </div>
           </div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-revithalize-green mb-3 md:mb-4 leading-tight px-4">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-heading font-bold bg-gradient-to-r from-revithalize-green via-revithalize-blue to-revithalize-green bg-clip-text text-transparent mb-3 md:mb-4 leading-tight px-4 animate-fade-in hover:scale-105 transition-transform duration-300" style={{ animationDelay: '200ms' }}>
             ReVithalize Mobilitric
           </h1>
-          <p className="text-sm sm:text-base md:text-lg text-revithalize-blue font-semibold mb-2">
+          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-revithalize-blue font-semibold mb-2 animate-fade-in tracking-wide" style={{ animationDelay: '300ms' }}>
             Sustainable Mobility for the Future
           </p>
-          <p className="text-sm sm:text-base md:text-lg text-gray-300 max-w-2xl mx-auto px-4">
+          <p className="text-sm sm:text-base md:text-lg text-gray-300 max-w-2xl mx-auto px-4 animate-fade-in" style={{ animationDelay: '400ms' }}>
             Transforming conventional two-wheelers into smart electric vehicles
           </p>
         </header>
