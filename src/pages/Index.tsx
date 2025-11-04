@@ -38,7 +38,7 @@ const Index = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-green-500/5 rounded-full blur-xl group-hover:blur-2xl transition-all duration-500"></div>
               <span className="relative text-xl sm:text-2xl animate-pulse">🇮🇳</span>
               <span className="relative text-xs sm:text-sm font-bold bg-gradient-to-r from-orange-400 via-white to-green-400 bg-clip-text text-transparent tracking-wider uppercase">
-                Made India
+                Made in India
               </span>
               <div className="absolute inset-0 rounded-full bg-gradient-to-r from-orange-500/20 to-green-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             </div>
