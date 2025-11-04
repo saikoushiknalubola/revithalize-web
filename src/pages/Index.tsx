@@ -38,12 +38,12 @@ const Index = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-green-500/5 rounded-full blur-xl group-hover:blur-2xl transition-all duration-500"></div>
               <span className="relative text-xl sm:text-2xl animate-pulse">🇮🇳</span>
               <span className="relative text-xs sm:text-sm font-bold bg-gradient-to-r from-orange-400 via-white to-green-400 bg-clip-text text-transparent tracking-wider uppercase">
-                Made in India
+                Made India
               </span>
               <div className="absolute inset-0 rounded-full bg-gradient-to-r from-orange-500/20 to-green-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             </div>
           </div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-heading font-bold bg-gradient-to-r from-revithalize-green via-revithalize-blue to-revithalize-green bg-clip-text text-transparent mb-3 md:mb-4 leading-tight px-4 animate-fade-in hover:scale-105 transition-transform duration-300" style={{ animationDelay: '200ms' }}>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-heading font-bold text-revithalize-green mb-3 md:mb-4 leading-tight px-4 animate-fade-in hover:scale-105 transition-transform duration-300" style={{ animationDelay: '200ms' }}>
             ReVithalize Mobilitric
           </h1>
           <p className="text-sm sm:text-base md:text-lg lg:text-xl text-revithalize-blue font-semibold mb-2 animate-fade-in tracking-wide" style={{ animationDelay: '300ms' }}>
