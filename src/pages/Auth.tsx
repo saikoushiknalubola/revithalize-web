@@ -259,14 +259,11 @@ export default function Auth() {
                             Email
                           </FormLabel>
                           <FormControl>
-                            <div className="relative">
-                              <Input 
-                                {...field}
-                                placeholder="Enter your email" 
-                                className="bg-gray-800/70 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-green"
-                              />
-                              <Mail className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
-                            </div>
+                            <Input 
+                              {...field}
+                              placeholder="Enter your email" 
+                              className="bg-gray-800/70 border-gray-700 text-white transition-all focus:border-revithalize-green"
+                            />
                           </FormControl>
                           <FormMessage className="text-red-400" />
                         </FormItem>
@@ -283,15 +280,12 @@ export default function Auth() {
                             Password
                           </FormLabel>
                           <FormControl>
-                            <div className="relative">
-                              <Input 
-                                {...field}
-                                type="password" 
-                                placeholder="Enter your password"
-                                className="bg-gray-800/70 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-green"
-                              />
-                              <Lock className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
-                            </div>
+                            <Input 
+                              {...field}
+                              type="password" 
+                              placeholder="Enter your password"
+                              className="bg-gray-800/70 border-gray-700 text-white transition-all focus:border-revithalize-green"
+                            />
                           </FormControl>
                           <FormMessage className="text-red-400" />
                         </FormItem>
@@ -406,15 +400,12 @@ export default function Auth() {
                             Email
                           </FormLabel>
                           <FormControl>
-                            <div className="relative">
-                              <Input 
-                                {...field}
-                                type="email" 
-                                placeholder="your.email@example.com"
-                                className="bg-gray-800/70 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-blue"
-                              />
-                              <Mail className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
-                            </div>
+                            <Input 
+                              {...field}
+                              type="email" 
+                              placeholder="your.email@example.com"
+                              className="bg-gray-800/70 border-gray-700 text-white transition-all focus:border-revithalize-blue"
+                            />
                           </FormControl>
                           <FormMessage className="text-red-400" />
                         </FormItem>
@@ -478,15 +469,12 @@ export default function Auth() {
                             Password
                           </FormLabel>
                           <FormControl>
-                            <div className="relative">
-                              <Input 
-                                {...field}
-                                type="password"
-                                placeholder="Create a password"
-                                className="bg-gray-800/70 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-blue"
-                              />
-                              <Lock className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
-                            </div>
+                            <Input 
+                              {...field}
+                              type="password"
+                              placeholder="Create a password"
+                              className="bg-gray-800/70 border-gray-700 text-white transition-all focus:border-revithalize-blue"
+                            />
                           </FormControl>
                           <div className="mt-2 space-y-1">
                             <div className="flex justify-between items-center">
@@ -529,15 +517,12 @@ export default function Auth() {
                             Confirm Password
                           </FormLabel>
                           <FormControl>
-                            <div className="relative">
-                              <Input 
-                                {...field}
-                                type="password"
-                                placeholder="Confirm your password"
-                                className="bg-gray-800/70 border-gray-700 text-white pl-10 transition-all focus:border-revithalize-blue"
-                              />
-                              <Lock className="h-5 w-5 text-gray-500 absolute left-3 top-1/2 transform -translate-y-1/2" />
-                            </div>
+                            <Input 
+                              {...field}
+                              type="password"
+                              placeholder="Confirm your password"
+                              className="bg-gray-800/70 border-gray-700 text-white transition-all focus:border-revithalize-blue"
+                            />
                           </FormControl>
                           <FormMessage className="text-red-400" />
                         </FormItem>

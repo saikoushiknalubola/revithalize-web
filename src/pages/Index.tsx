@@ -33,10 +33,18 @@ const Index = () => {
       
       <div className="container mx-auto max-w-4xl">
         <header className="text-center mb-8 md:mb-12 animate-fade-in">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-heading font-bold text-revithalize-green mb-3 md:mb-4">
+          <div className="flex items-center justify-center gap-2 mb-3">
+            <span className="text-xs sm:text-sm px-3 py-1 bg-orange-500/20 border border-orange-500/40 rounded-full text-orange-400 font-semibold">
+              🇮🇳 Made in India
+            </span>
+          </div>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-revithalize-green mb-3 md:mb-4 leading-tight px-4">
             ReVithalize Mobilitric
           </h1>
-          <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
+          <p className="text-sm sm:text-base md:text-lg text-revithalize-blue font-semibold mb-2">
+            Sustainable Mobility for the Future
+          </p>
+          <p className="text-sm sm:text-base md:text-lg text-gray-300 max-w-2xl mx-auto px-4">
             Transforming conventional two-wheelers into smart electric vehicles
           </p>
         </header>
@@ -51,7 +59,7 @@ const Index = () => {
               ReVithalize Mobilitric is an EV retrofitting startup that transforms internal combustion engine (ICE) two-wheelers into affordable, smart electric vehicles, using modular AI-powered conversion kits. Our solution enables common users to shift to electric mobility without having to buy a new vehicle — saving costs, reducing e-waste, and cutting down carbon emissions.
             </p>
             <p className="text-gray-300 mb-4">
-              We aim to decentralize electrification by partnering with local mechanics, training EV technicians, and building a network of certified retrofit centers across India. We're backed by T-Hub & Mercedes-Benz R&D India (MBRDI) through their Climate Tech Incubator, and have been recognized by IIT Bombay, IIIT Tirupati iHub Navavishkar, and the IIT Madras Research Park.
+              We aim to decentralize electrification by partnering with local mechanics, training EV technicians, and building a network of certified retrofit centers across India. Incubated at SR Innovation Exchange and backed by T-Hub & Mercedes-Benz R&D India (MBRDI) through their Climate Tech Incubator, we have been recognized by IIT Bombay, IIIT Tirupati iHub Navavishkar, and the IIT Madras Research Park.
             </p>
             <p className="text-gray-300">
               At ReVithalize Mobilitric, our mission is to revive, reimagine, and revolutionize mobility for a cleaner tomorrow. We envision a future where every petrol bike has the potential to become electric — empowering communities, creating green jobs, and accelerating India's transition to net-zero transportation.
