@@ -12,10 +12,9 @@ import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { Progress } from '@/components/ui/progress';
 import { 
-  Loader2, Lock, Fingerprint, UserCheck, Mail, Bike, User, Phone, MapPin, Building, Briefcase
+  Loader2, Lock, Fingerprint, UserCheck, Mail, Bike, User, Building
 } from 'lucide-react';
 import { cn } from "@/lib/utils";
-import { useScreenSize } from '@/hooks/use-mobile';
 import { supabase } from '@/integrations/supabase/client';
 
 // Login form schema
@@ -45,7 +44,6 @@ export default function Auth() {
   const [isLoading, setIsLoading] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [activeTab, setActiveTab] = useState('login');
-  const { isMobile } = useScreenSize();
   
   // Login form
   const loginForm = useForm<z.infer<typeof loginSchema>>({
@@ -344,7 +342,7 @@ export default function Auth() {
                     </CardDescription>
                   </CardHeader>
                   
-                  <CardContent className={cn("space-y-4", isMobile ? "px-3" : "")}>
+                  <CardContent className="space-y-4">
                     <FormField
                       control={registerForm.control}
                       name="userType"
@@ -531,7 +529,7 @@ export default function Auth() {
                     />
                   </CardContent>
                   
-                  <CardFooter className={cn(isMobile ? "px-3 pb-6" : "")}>
+                  <CardFooter>
                     <Button 
                       type="submit" 
                       className="w-full bg-gradient-to-r from-revithalize-blue to-revithalize-blue/80 hover:to-revithalize-blue text-black font-medium font-poppins h-11 transition-all duration-300 shadow-lg"
