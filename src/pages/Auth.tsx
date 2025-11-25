@@ -94,26 +94,27 @@ export default function Auth() {
   }, [navigate]);
 
   // Calculate password strength
+  const watchPassword = registerForm.watch('password');
+  
   useEffect(() => {
-    const password = registerForm.watch('password');
-    if (!password) {
+    if (!watchPassword) {
       setPasswordStrength(0);
       return;
     }
     
     let strength = 0;
     // Length check
-    if (password.length >= 6) strength += 20;
-    if (password.length >= 10) strength += 10;
+    if (watchPassword.length >= 6) strength += 20;
+    if (watchPassword.length >= 10) strength += 10;
     
     // Character variety checks
-    if (/[A-Z]/.test(password)) strength += 20; // uppercase
-    if (/[a-z]/.test(password)) strength += 15; // lowercase
-    if (/[0-9]/.test(password)) strength += 15; // numbers
-    if (/[^A-Za-z0-9]/.test(password)) strength += 20; // special chars
+    if (/[A-Z]/.test(watchPassword)) strength += 20; // uppercase
+    if (/[a-z]/.test(watchPassword)) strength += 15; // lowercase
+    if (/[0-9]/.test(watchPassword)) strength += 15; // numbers
+    if (/[^A-Za-z0-9]/.test(watchPassword)) strength += 20; // special chars
     
     setPasswordStrength(strength);
-  }, [registerForm.watch('password')]);
+  }, [watchPassword]);
 
   // Handle Login
   const handleLogin = async (values: z.infer<typeof loginSchema>) => {
