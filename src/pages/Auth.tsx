@@ -70,26 +70,40 @@ export default function Auth() {
 
   const watchUserType = registerForm.watch('userType');
 
-  // Check if already authenticated
+  // Check if already authenticated - only run once
   useEffect(() => {
+    let mounted = true;
+    
     const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (!mounted || !session) return;
+        
         const { data: profile } = await supabase
           .from('profiles')
           .select('user_type')
           .eq('id', session.user.id)
-          .single();
+          .maybeSingle();
+        
+        if (!mounted) return;
         
         if (profile?.user_type === 'fleet') {
-          navigate('/fleet-dashboard');
+          navigate('/fleet-dashboard', { replace: true });
         } else {
-          navigate('/dashboard');
+          navigate('/dashboard', { replace: true });
         }
+      } catch (error) {
+        console.error('Auth check error:', error);
       }
     };
+    
     checkAuth();
-  }, [navigate]);
+    
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   // Calculate password strength
   const watchPassword = registerForm.watch('password');
