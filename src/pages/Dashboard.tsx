@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { Battery, Bolt, Gauge, ThermometerSnowflake, MapPin, Bell, Building2, Activity, Wrench, Users, TrendingUp, Zap, Leaf, Shield, ChevronRight, Wifi, AlertTriangle, CheckCircle, Clock, Truck, Monitor, Brain, ArrowRight } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Battery, Bolt, Gauge, ThermometerSnowflake, Wifi, ChevronRight, Shield, TrendingUp, Truck, Monitor, Brain, ArrowRight } from 'lucide-react';
 import { BatteryMetrics } from '@/components/features/BatteryMetrics';
 import { ChargingScheduler } from '@/components/features/ChargingScheduler';
 import { IoTInsights } from '@/components/features/IoTInsights';
 import { EcoScore } from '@/components/features/EcoScore';
 import { FleetOverview } from '@/components/features/FleetOverview';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useScreenSize } from '@/hooks/use-mobile';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
@@ -21,7 +19,7 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const { feature } = useParams<{ feature?: string }>();
   const [userName, setUserName] = useState('User');
-  const { isMobile, isTablet } = useScreenSize();
+  const [isMobile, setIsMobile] = useState(false);
   const [activeFeature, setActiveFeature] = useState<string | null>(null);
   const [showBottomSheet, setShowBottomSheet] = useState(false);
   
@@ -41,20 +39,14 @@ export default function Dashboard() {
   const totalDistance = 2847;
   const carbonSaved = 234.5;
   const energyCost = 3745.50;
-
-  // Check for authentication and get user data
+  
+  // Handle mobile detection
   useEffect(() => {
-    const isAuthenticated = localStorage.getItem('isAuthenticated');
-    if (!isAuthenticated || isAuthenticated !== 'true') {
-      navigate('/auth');
-    } else {
-      const userData = localStorage.getItem('user');
-      if (userData) {
-        const user = JSON.parse(userData);
-        setUserName(user.fullName || user.name || 'User');
-      }
-    }
-  }, [navigate]);
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Set active feature from URL parameter if present
   useEffect(() => {
