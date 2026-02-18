@@ -145,7 +145,7 @@ export default function Auth() {
         .from('profiles')
         .select('user_type, full_name')
         .eq('id', data.user.id)
-        .single();
+        .maybeSingle();
 
       toast.success('Successfully logged in!', {
         description: `Welcome back, ${profile?.full_name || 'User'}`
