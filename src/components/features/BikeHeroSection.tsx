@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-
+import bikeHero from '@/assets/electric-bike-hero.png';
 interface CircularProgressProps {
   value: number;
   size?: number;
@@ -99,13 +99,13 @@ export function BikeHeroSection({
           <div className="w-64 h-32 rounded-full bg-[#1E6BFF]/10 blur-2xl" />
         </div>
         <motion.img
-          src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&auto=format&fit=crop&q=80"
+          src={bikeHero}
           alt="Hero Honda Passion Pro"
-          className="relative z-10 w-72 h-40 object-contain drop-shadow-2xl"
+          className="relative z-10 w-72 h-44 object-contain drop-shadow-2xl"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
-          style={{ filter: 'drop-shadow(0 0 20px rgba(30, 107, 255, 0.3))' }}
+          style={{ filter: 'drop-shadow(0 0 24px rgba(34, 197, 94, 0.35))' }}
         />
       </div>
 

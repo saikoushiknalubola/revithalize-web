@@ -1,16 +1,17 @@
-
 import React, { useEffect, useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { 
-  User, Mail, Phone, MapPin, Calendar, Edit, 
-  LogOut, Battery, Bike, Briefcase, Building
+import {
+  Mail, Phone, MapPin, Calendar, Edit,
+  LogOut, Bike, Briefcase, Building
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import bikeHero from '@/assets/electric-bike-hero.png';
 
 interface UserData {
   name: string;
@@ -24,22 +25,19 @@ interface UserData {
   initials: string;
 }
 
+const getInitials = (name: string) =>
+  name
+    .split(' ')
+    .filter(Boolean)
+    .map((n) => n[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2) || 'U';
+
 export default function Profile() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState<UserData>({
-    name: 'Rajesh Sharma',
-    email: 'rajesh.sharma@example.com',
-    phone: '+91 98765 43210',
-    address: 'Delhi, India',
-    city: 'Delhi',
-    occupation: 'Software Engineer',
-    company: 'Tech Solutions Ltd',
-    joinDate: 'May 2023',
-    initials: 'RS'
-  });
-  
-  const [isEditing, setIsEditing] = useState(false);
-  const [editForm, setEditForm] = useState<Omit<UserData, 'initials'>>({
     name: '',
     email: '',
     phone: '',
@@ -47,399 +45,203 @@ export default function Profile() {
     city: '',
     occupation: '',
     company: '',
-    joinDate: ''
+    joinDate: '',
+    initials: 'U',
+  });
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [editForm, setEditForm] = useState<Omit<UserData, 'initials'>>({
+    name: '', email: '', phone: '', address: '', city: '', occupation: '', company: '', joinDate: ''
   });
 
   useEffect(() => {
-    // Try to get user data from localStorage
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      try {
-        const parsedUser = JSON.parse(storedUser);
-        const initials = parsedUser.name
-          ? parsedUser.name
-              .split(' ')
-              .map((n: string) => n[0])
-              .join('')
-              .toUpperCase()
-          : 'U';
-
-        setUserData({
-          name: parsedUser.name || 'Rajesh Sharma',
-          email: parsedUser.email || 'rajesh.sharma@example.com',
-          phone: parsedUser.phone || '+91 98765 43210',
-          address: parsedUser.address || 'Delhi, India',
-          city: parsedUser.city || 'Delhi',
-          occupation: parsedUser.occupation || 'Software Engineer',
-          company: parsedUser.company || 'Tech Solutions Ltd',
-          joinDate: parsedUser.joinDate || 'May 2023',
-          initials: initials
-        });
-        
-        // Initialize edit form with current data
-        setEditForm({
-          name: parsedUser.name || 'Rajesh Sharma',
-          email: parsedUser.email || 'rajesh.sharma@example.com',
-          phone: parsedUser.phone || '+91 98765 43210',
-          address: parsedUser.address || 'Delhi, India',
-          city: parsedUser.city || 'Delhi',
-          occupation: parsedUser.occupation || 'Software Engineer',
-          company: parsedUser.company || 'Tech Solutions Ltd',
-          joinDate: parsedUser.joinDate || 'May 2023'
-        });
-      } catch (error) {
-        console.error('Error parsing user data:', error);
+    (async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        navigate('/auth');
+        return;
       }
-    }
-  }, []);
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+      const p: any = profile || {};
+      const meta: any = user.user_metadata || {};
+      const name = p.full_name || meta.full_name || meta.name || user.email?.split('@')[0] || 'Rider';
+      const joinDate = new Date(user.created_at).toLocaleDateString('en-IN', { month: 'long', year: 'numeric' });
 
-  const handleEditProfile = () => {
-    setIsEditing(true);
-  };
-  
-  const handleCancelEdit = () => {
-    setIsEditing(false);
-    // Reset form to current user data
-    setEditForm({
-      name: userData.name,
-      email: userData.email,
-      phone: userData.phone,
-      address: userData.address,
-      city: userData.city,
-      occupation: userData.occupation,
-      company: userData.company,
-      joinDate: userData.joinDate
-    });
-  };
-  
-  const handleSaveProfile = () => {
-    // Update local state
-    const updatedUser = {
-      ...editForm,
-      initials: editForm.name
-        .split(' ')
-        .map((n: string) => n[0])
-        .join('')
-        .toUpperCase()
-    };
-    
-    setUserData(updatedUser);
-    
-    // Update localStorage
-    const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
-    const updatedStoredUser = {
-      ...storedUser,
-      name: editForm.name,
-      email: editForm.email,
-      phone: editForm.phone,
-      address: editForm.address,
-      city: editForm.city,
-      occupation: editForm.occupation,
-      company: editForm.company
-    };
-    
-    localStorage.setItem('user', JSON.stringify(updatedStoredUser));
-    
-    // Update in 'users' collection if it exists
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const updatedUsers = users.map((user: any) => {
-      if (user.email === storedUser.email) {
-        return updatedStoredUser;
-      }
-      return user;
-    });
-    
-    localStorage.setItem('users', JSON.stringify(updatedUsers));
-    
-    setIsEditing(false);
-    toast.success('Profile updated successfully!');
+      const data: UserData = {
+        name,
+        email: user.email || '',
+        phone: meta.phone || '',
+        address: '',
+        city: '',
+        occupation: '',
+        company: p.company_name || '',
+        joinDate,
+        initials: getInitials(name),
+      };
+      setUserData(data);
+      setEditForm({ ...data });
+      setLoading(false);
+    })();
+  }, [navigate]);
+
+  const handleSaveProfile = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+    const { error } = await supabase
+      .from('profiles')
+      .update({
+        full_name: editForm.name,
+        company_name: editForm.company,
+      } as any)
+      .eq('id', user.id);
+    toast.success('Profile updated');
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setEditForm(prev => ({ ...prev, [name]: value }));
+    setEditForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('isAuthenticated');
-    localStorage.removeItem('user');
-    toast.success('Logged out successfully');
-    window.location.href = '/auth';
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    toast.success('Signed out');
+    navigate('/auth');
   };
+
+  if (loading) {
+    return (
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-[60vh] text-gray-400">Loading profile…</div>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout>
-      <div className="space-y-6 animate-fade-in">
+      <div className="space-y-6 animate-fade-in max-w-5xl mx-auto px-2 sm:px-0">
         <header>
-          <h1 className="text-3xl font-heading font-bold text-white">My Profile</h1>
-          <p className="text-gray-400 mt-1">Manage your account and preferences</p>
+          <h1 className="text-2xl sm:text-3xl font-heading font-bold text-white">My Profile</h1>
+          <p className="text-gray-400 mt-1 text-sm">Manage your account and connected bike</p>
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Profile Card */}
-          <Card className="lg:col-span-1 bg-gray-900 border-gray-800 hover:border-gray-700 transition-all">
+          <Card className="lg:col-span-1 bg-[#121212] border-[#2A2A2E]">
             <CardHeader className="pb-2 text-center">
-              <div className="mx-auto mb-4 relative">
-                <div className="w-24 h-24 bg-gradient-to-br from-revithalize-green to-revithalize-blue rounded-full flex items-center justify-center text-black text-3xl font-bold animate-scale-in">
+              <div className="mx-auto mb-4 relative w-fit">
+                <div className="w-24 h-24 bg-gradient-to-br from-[#22C55E] to-[#1E6BFF] rounded-full flex items-center justify-center text-black text-3xl font-bold">
                   {userData.initials}
                 </div>
-                <button 
-                  className="absolute bottom-0 right-0 bg-gray-800 p-1.5 rounded-full border border-gray-700 hover:bg-gray-700 transition-colors hover:scale-105"
-                  onClick={handleEditProfile}
+                <button
+                  className="absolute bottom-0 right-0 bg-[#1C1C1E] p-1.5 rounded-full border border-[#2A2A2E] hover:bg-[#2A2A2E]"
+                  onClick={() => setIsEditing(true)}
                 >
                   <Edit size={14} className="text-white" />
                 </button>
               </div>
-              <CardTitle className="text-white text-xl">{userData.name}</CardTitle>
-              <p className="text-gray-400">{userData.occupation}</p>
+              <CardTitle className="text-white text-xl break-words">{userData.name}</CardTitle>
+              <p className="text-gray-400 text-sm break-all">{userData.email}</p>
             </CardHeader>
             <CardContent className="pt-4">
-              <div className="space-y-3">
-                <div className="flex items-center gap-3 text-gray-300">
-                  <Mail size={16} className="text-revithalize-green" />
-                  <span>{userData.email}</span>
-                </div>
-                <div className="flex items-center gap-3 text-gray-300">
-                  <Phone size={16} className="text-revithalize-green" />
-                  <span>{userData.phone}</span>
-                </div>
-                <div className="flex items-center gap-3 text-gray-300">
-                  <MapPin size={16} className="text-revithalize-green" />
-                  <span>{userData.address}</span>
-                </div>
-                <div className="flex items-center gap-3 text-gray-300">
-                  <Building size={16} className="text-revithalize-green" />
-                  <span>{userData.city}</span>
-                </div>
-                <div className="flex items-center gap-3 text-gray-300">
-                  <Briefcase size={16} className="text-revithalize-green" />
-                  <span>{userData.company}</span>
-                </div>
-                <div className="flex items-center gap-3 text-gray-300">
-                  <Calendar size={16} className="text-revithalize-green" />
-                  <span>Member since {userData.joinDate}</span>
-                </div>
+              <div className="space-y-3 text-sm">
+                <div className="flex items-center gap-3 text-gray-300"><Mail size={16} className="text-[#22C55E]" /><span className="break-all">{userData.email}</span></div>
+                {userData.phone && <div className="flex items-center gap-3 text-gray-300"><Phone size={16} className="text-[#22C55E]" />{userData.phone}</div>}
+                {userData.address && <div className="flex items-center gap-3 text-gray-300"><MapPin size={16} className="text-[#22C55E]" />{userData.address}</div>}
+                {userData.city && <div className="flex items-center gap-3 text-gray-300"><Building size={16} className="text-[#22C55E]" />{userData.city}</div>}
+                {userData.company && <div className="flex items-center gap-3 text-gray-300"><Briefcase size={16} className="text-[#22C55E]" />{userData.company}</div>}
+                <div className="flex items-center gap-3 text-gray-300"><Calendar size={16} className="text-[#22C55E]" />Member since {userData.joinDate}</div>
               </div>
             </CardContent>
-            <CardFooter className="pt-4 flex justify-center">
-              <Button 
-                variant="outline" 
-                className="w-full text-red-400 border-red-400/30 hover:bg-red-400/10 transition-all hover:scale-105"
-                onClick={handleLogout}
-              >
-                <LogOut size={16} className="mr-2" />
-                Sign Out
+            <CardFooter className="pt-4">
+              <Button variant="outline" className="w-full text-red-400 border-red-400/30 hover:bg-red-400/10" onClick={handleLogout}>
+                <LogOut size={16} className="mr-2" />Sign Out
               </Button>
             </CardFooter>
           </Card>
 
           <div className="lg:col-span-2 space-y-6">
-            {/* Edit Profile Form */}
             {isEditing ? (
-              <Card className="bg-gray-900 border-gray-800 hover:border-gray-700 transition-all">
+              <Card className="bg-[#121212] border-[#2A2A2E]">
                 <CardHeader>
                   <CardTitle className="text-white">Edit Profile</CardTitle>
-                  <CardDescription className="text-gray-400">
-                    Update your personal information
-                  </CardDescription>
+                  <CardDescription className="text-gray-400">Update your personal information</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {[
+                      { id: 'name', label: 'Full Name' },
+                      { id: 'phone', label: 'Phone Number' },
+                      { id: 'address', label: 'Address' },
+                      { id: 'city', label: 'City' },
+                      { id: 'occupation', label: 'Occupation' },
+                      { id: 'company', label: 'Company' },
+                    ].map((f) => (
+                      <div key={f.id} className="space-y-2">
+                        <Label htmlFor={f.id} className="text-white">{f.label}</Label>
+                        <Input
+                          id={f.id}
+                          name={f.id}
+                          value={(editForm as any)[f.id]}
+                          onChange={handleChange}
+                          className="bg-[#1C1C1E] border-[#2A2A2E] text-white"
+                        />
+                      </div>
+                    ))}
                     <div className="space-y-2">
-                      <Label htmlFor="name" className="text-white">Full Name</Label>
-                      <Input
-                        id="name"
-                        name="name"
-                        value={editForm.name}
-                        onChange={handleChange}
-                        className="bg-gray-800 border-gray-700 text-white"
-                      />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="email" className="text-white">Email</Label>
-                      <Input
-                        id="email"
-                        name="email"
-                        value={editForm.email}
-                        onChange={handleChange}
-                        className="bg-gray-800 border-gray-700 text-white"
-                        disabled
-                      />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="phone" className="text-white">Phone Number</Label>
-                      <Input
-                        id="phone"
-                        name="phone"
-                        value={editForm.phone}
-                        onChange={handleChange}
-                        className="bg-gray-800 border-gray-700 text-white"
-                      />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="address" className="text-white">Address</Label>
-                      <Input
-                        id="address"
-                        name="address"
-                        value={editForm.address}
-                        onChange={handleChange}
-                        className="bg-gray-800 border-gray-700 text-white"
-                      />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="city" className="text-white">City</Label>
-                      <Input
-                        id="city"
-                        name="city"
-                        value={editForm.city}
-                        onChange={handleChange}
-                        className="bg-gray-800 border-gray-700 text-white"
-                      />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="occupation" className="text-white">Occupation</Label>
-                      <Input
-                        id="occupation"
-                        name="occupation"
-                        value={editForm.occupation}
-                        onChange={handleChange}
-                        className="bg-gray-800 border-gray-700 text-white"
-                      />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="company" className="text-white">Company</Label>
-                      <Input
-                        id="company"
-                        name="company"
-                        value={editForm.company}
-                        onChange={handleChange}
-                        className="bg-gray-800 border-gray-700 text-white"
-                      />
+                      <Label className="text-white">Email</Label>
+                      <Input value={editForm.email} disabled className="bg-[#1C1C1E] border-[#2A2A2E] text-white/60" />
                     </div>
                   </div>
                 </CardContent>
                 <CardFooter className="flex justify-between">
-                  <Button
-                    variant="outline"
-                    onClick={handleCancelEdit}
-                    className="hover:bg-gray-800"
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    onClick={handleSaveProfile}
-                    className="bg-revithalize-green text-black hover:bg-revithalize-green/90"
-                  >
-                    Save Changes
-                  </Button>
+                  <Button variant="outline" onClick={() => { setIsEditing(false); setEditForm({ ...userData }); }}>Cancel</Button>
+                  <Button onClick={handleSaveProfile} className="bg-[#22C55E] text-black hover:bg-[#22C55E]/90">Save Changes</Button>
                 </CardFooter>
               </Card>
             ) : (
               <>
-                {/* Retrofit Vehicles Information */}
-                <Card className="bg-gray-900 border-gray-800 hover:border-gray-700 transition-all">
+                <Card className="bg-[#121212] border-[#2A2A2E]">
                   <CardHeader>
                     <CardTitle className="text-white flex items-center">
-                      <Bike className="mr-2 h-5 w-5 text-revithalize-green" />
-                      My Retrofit Vehicles
+                      <Bike className="mr-2 h-5 w-5 text-[#22C55E]" />
+                      My Connected Bike
                     </CardTitle>
-                    <CardDescription className="text-gray-400">
-                      Manage your connected retrofit electric vehicles
-                    </CardDescription>
+                    <CardDescription className="text-gray-400">Your retrofit electric vehicle</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="p-4 bg-gray-800 rounded-lg border border-gray-700 hover:border-revithalize-green/50 transition-colors cursor-pointer hover:scale-105 transition-transform">
-                      <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-                        <div className="flex items-center gap-3 mb-3 md:mb-0">
-                          <div className="w-12 h-12 bg-revithalize-dark rounded-lg flex items-center justify-center">
-                            <Bike className="h-6 w-6 text-revithalize-green" />
-                          </div>
-                          <div>
-                            <h3 className="text-white font-medium">Hero Honda Passion</h3>
-                            <p className="text-sm text-gray-400">Added May 15, 2023</p>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="bg-gray-900 px-3 py-1 rounded-full text-xs text-white">
-                            75% Charged
-                          </div>
-                          <div className="bg-revithalize-green/20 text-revithalize-green px-3 py-1 rounded-full text-xs">
-                            Active
-                          </div>
+                    <div className="p-4 bg-[#1C1C1E] rounded-xl border border-[#2A2A2E] flex flex-col sm:flex-row sm:items-center gap-4">
+                      <img src={bikeHero} alt="Bike" className="w-32 h-20 object-contain mx-auto sm:mx-0" />
+                      <div className="flex-1 text-center sm:text-left">
+                        <h3 className="text-white font-semibold">Hero Honda Passion Pro</h3>
+                        <p className="text-xs text-gray-400">Retrofit Electric Conversion</p>
+                        <div className="mt-2 flex flex-wrap gap-2 justify-center sm:justify-start">
+                          <span className="bg-[#22C55E]/15 text-[#22C55E] px-2.5 py-1 rounded-full text-xs">Active</span>
+                          <span className="bg-[#1E6BFF]/15 text-[#1E6BFF] px-2.5 py-1 rounded-full text-xs">82% Charged</span>
                         </div>
                       </div>
-                    </div>
-
-                    <div className="mt-4 flex justify-center">
-                      <Button 
-                        variant="outline" 
-                        className="border-dashed border-gray-700 hover:border-revithalize-green hover:bg-gray-800 hover:scale-105 transition-all"
-                        onClick={() => {
-                          toast.info('Retrofit vehicle addition functionality coming soon!');
-                          navigate('/map');
-                        }}
-                      >
-                        <span className="mr-2 text-lg">+</span> Add New Retrofit Vehicle
-                      </Button>
                     </div>
                   </CardContent>
                 </Card>
 
-                {/* Usage Statistics */}
-                <Card className="bg-gray-900 border-gray-800 hover:border-gray-700 transition-all">
+                <Card className="bg-[#121212] border-[#2A2A2E]">
                   <CardHeader>
-                    <CardTitle className="text-white">Retrofit Usage Statistics</CardTitle>
-                    <CardDescription className="text-gray-400">
-                      Your retrofit EV usage over the last 30 days
-                    </CardDescription>
+                    <CardTitle className="text-white">Ride Statistics</CardTitle>
+                    <CardDescription className="text-gray-400">Last 30 days</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700/50 transition-colors">
-                        <p className="text-gray-400 text-sm mb-1">Total Distance</p>
-                        <p className="text-2xl font-bold text-white">437 km</p>
-                        <div className="mt-2 text-xs text-green-400 flex items-center">
-                          <span className="mr-1">↑</span> 12% from last month
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                      {[
+                        { label: 'Distance', value: '437 km' },
+                        { label: 'Energy', value: '89 kWh' },
+                        { label: 'Sessions', value: '17' },
+                      ].map((s) => (
+                        <div key={s.label} className="bg-[#1C1C1E] p-4 rounded-xl border border-[#2A2A2E]">
+                          <p className="text-gray-400 text-xs mb-1">{s.label}</p>
+                          <p className="text-xl font-bold text-white">{s.value}</p>
                         </div>
-                      </div>
-                      
-                      <div className="bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700/50 transition-colors">
-                        <p className="text-gray-400 text-sm mb-1">Energy Used</p>
-                        <p className="text-2xl font-bold text-white">89 kWh</p>
-                        <div className="mt-2 text-xs text-red-400 flex items-center">
-                          <span className="mr-1">↓</span> 5% from last month
-                        </div>
-                      </div>
-                      
-                      <div className="bg-gray-800 p-4 rounded-lg border border-gray-700 hover:bg-gray-700/50 transition-colors">
-                        <p className="text-gray-400 text-sm mb-1">Charging Sessions</p>
-                        <p className="text-2xl font-bold text-white">17</p>
-                        <div className="mt-2 text-xs text-green-400 flex items-center">
-                          <span className="mr-1">↑</span> 8% from last month
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="mt-4 flex justify-between">
-                      <Button 
-                        className="bg-revithalize-blue hover:bg-blue-600 text-black hover:scale-105 transition-all"
-                        onClick={() => navigate('/analytics')}
-                      >
-                        View Detailed Analytics
-                      </Button>
-                      
-                      <Button 
-                        className="bg-revithalize-green hover:bg-green-600 text-black hover:scale-105 transition-all"
-                        onClick={() => navigate('/map')}
-                      >
-                        View Charging Map
-                      </Button>
+                      ))}
                     </div>
                   </CardContent>
                 </Card>
