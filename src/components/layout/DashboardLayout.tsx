@@ -186,21 +186,21 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
 
       {/* Enhanced Sidebar */}
       <aside
-        className={cn(
-          "fixed inset-y-0 left-0 z-[60] bg-black/95 backdrop-blur-sm border-r border-gray-800 w-64 transform transition-all duration-300 ease-in-out md:translate-x-0 shadow-xl flex flex-col",
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        )}
-      >
         <div className="flex-shrink-0 flex items-center justify-between p-4 border-b border-gray-800/50">
-          <h1 className="text-2xl font-poppins font-bold text-transparent bg-clip-text bg-gradient-to-r from-revithalize-green to-revithalize-blue">
-            ReVithalize
-          </h1>
-          {/* Single close button for mobile - only show when sidebar is open */}
+          <Link to={isFleet ? '/fleet-dashboard' : '/dashboard'} className="flex items-center">
+            <Logo size="md" />
+          </Link>
           {isMobile && (
             <button 
               onClick={() => setSidebarOpen(false)}
               className="p-2 rounded-md text-gray-400 hover:bg-gray-800 hover:text-white transition-colors"
               aria-label="Close sidebar"
+            >
+              <X size={20} />
+            </button>
+          )}
+        </div>
+
             >
               <X size={20} />
             </button>
@@ -221,78 +221,38 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
               >
                 <NavItem
                   icon={item.icon}
-                  label={item.label}
-                  to={item.to}
-                  active={location.pathname === item.to}
-                />
-              </div>
-            ))}
-            
+
+            {isFleet && (
+              <>
+                <div className="mt-6 mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  Fleet Tools
+                </div>
+                {fleetTools.map((item, index) => (
+                  <div key={item.to} className="animate-fade-in" style={{ animationDelay: `${(index + mainNavItems.length) * 30}ms` }}>
+                    <NavItem icon={item.icon} label={item.label} to={item.to} active={location.pathname === item.to} />
+                  </div>
+                ))}
+              </>
+            )}
+
             <div className="mt-6 mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-              Professional Tools
-            </div>
-            {professionalTools.map((item, index) => (
-              <div 
-                key={item.to}
-                className="animate-fade-in"
-                style={{ animationDelay: `${(index + mainNavItems.length) * 50}ms` }}
-              >
-                <NavItem
-                  icon={item.icon}
-                  label={item.label}
-                  to={item.to}
-                  active={location.pathname === item.to}
-                />
-              </div>
-            ))}
-            
-            <div className="mt-6 mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-              Dashboard Features
-            </div>
-            {dashboardFeatures.map((item, index) => (
-              <div 
-                key={item.to}
-                className="animate-fade-in"
-                style={{ animationDelay: `${(index + mainNavItems.length + professionalTools.length) * 50}ms` }}
-              >
-                <NavItem
-                  icon={item.icon}
-                  label={item.label}
-                  to={item.to}
-                  active={location.pathname === item.to}
-                />
-              </div>
-            ))}
-            
-            <div className="mt-6 mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider innovative-features-section">
               Smart Features
             </div>
-            {innovativeFeatures.map((item, index) => (
-              <div 
-                key={item.to}
-                className="animate-fade-in"
-                style={{ animationDelay: `${(index + mainNavItems.length + professionalTools.length + dashboardFeatures.length) * 50}ms` }}
-              >
-                <NavItem
-                  icon={item.icon}
-                  label={item.label}
-                  to={item.to}
-                  active={location.pathname === item.to}
-                />
+            {smartFeatures.map((item, index) => (
+              <div key={item.to} className="animate-fade-in" style={{ animationDelay: `${index * 30}ms` }}>
+                <NavItem icon={item.icon} label={item.label} to={item.to} active={location.pathname === item.to} />
               </div>
             ))}
-            
+
             <div className="mt-6 mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
               Account
             </div>
             {secondaryNavItems.map((item, index) => (
-              <div 
-                key={item.to}
-                className="animate-fade-in"
-                style={{ animationDelay: `${(index + mainNavItems.length + professionalTools.length + dashboardFeatures.length + innovativeFeatures.length) * 50}ms` }}
-              >
-                <NavItem
-                  icon={item.icon}
+              <div key={item.to} className="animate-fade-in" style={{ animationDelay: `${index * 30}ms` }}>
+                <NavItem icon={item.icon} label={item.label} to={item.to} active={location.pathname === item.to} />
+              </div>
+            ))}
+
                   label={item.label}
                   to={item.to}
                   active={location.pathname === item.to}
