@@ -308,48 +308,20 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
           </div>
         </div>
         
-        {/* Enhanced Mobile bottom navigation */}
+        {/* Mobile bottom navigation */}
         <div className="fixed inset-x-0 bottom-0 bg-black/95 backdrop-blur-md border-t border-gray-800 md:hidden z-30 shadow-2xl">
           <div className="flex justify-around items-center py-3">
             {mobileNavItems.map((item, index) => {
               const Icon = item.icon;
-              const active = item.to ? location.pathname === item.to : false;
-              
-              if ('action' in item) {
-                return (
-                  <button 
-                    key={index} 
-                    onClick={item.action}
-                    className={cn(
-                      "flex flex-col items-center p-2 transition-all duration-200",
-                      active 
-                        ? "text-revithalize-green" 
-                        : "text-gray-400 hover:text-gray-200"
-                    )}
-                    style={{ animationDelay: `${index * 100}ms` }}
-                  >
-                    <div className={cn(
-                      "flex items-center justify-center h-10 w-10 rounded-full mb-1",
-                      active && "bg-revithalize-green/10"
-                    )}>
-                      <Icon size={22} className="text-revithalize-green animate-pulse" />
-                    </div>
-                    <span className="text-xs font-poppins">{item.label}</span>
-                  </button>
-                );
-              }
-              
+              const active = location.pathname === item.to;
               return (
-                <Link 
-                  key={index} 
+                <Link
+                  key={index}
                   to={item.to}
                   className={cn(
                     "flex flex-col items-center p-2 transition-all duration-200",
-                    active 
-                      ? "text-revithalize-green" 
-                      : "text-gray-400 hover:text-gray-200"
+                    active ? "text-revithalize-green" : "text-gray-400 hover:text-gray-200"
                   )}
-                  style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <div className={cn(
                     "flex items-center justify-center h-10 w-10 rounded-full mb-1",
@@ -357,12 +329,13 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
                   )}>
                     <Icon size={22} className={active ? "animate-pulse" : ""} />
                   </div>
-                  <span className="text-xs font-poppins">{item.label}</span>
+                  <span className="text-[11px] font-poppins font-medium">{item.label}</span>
                 </Link>
               );
             })}
           </div>
         </div>
+
       </main>
     </div>
   );
