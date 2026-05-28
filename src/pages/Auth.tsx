@@ -15,6 +15,8 @@ import {
   Loader2, Lock, Fingerprint, UserCheck, Mail, Bike, User, Building
 } from 'lucide-react';
 import { cn } from "@/lib/utils";
+import { Logo } from '@/components/branding/Logo';
+
 import { supabase } from '@/integrations/supabase/client';
 
 // Login form schema
@@ -216,16 +218,12 @@ export default function Auth() {
       
       <div className="w-full max-w-md space-y-6 animate-fade-in z-10">
         <div className="text-center mb-8">
-          <div className="flex justify-center mb-3">
-            <div className="p-2 rounded-full bg-gradient-to-br from-revithalize-dark to-black border border-revithalize-green/20 shadow-lg">
-              <Bike className="h-10 w-10 text-revithalize-green animate-pulse" />
-            </div>
+          <div className="flex justify-center mb-4 animate-scale-in">
+            <Logo size="xl" />
           </div>
-          <h1 className="text-4xl font-poppins font-bold text-transparent bg-clip-text bg-gradient-to-r from-revithalize-green to-revithalize-blue mb-2 animate-scale-in">
-            ReVithalize Mobilitric
-          </h1>
-          <p className="text-gray-400 animate-fade-in">Smart Retrofitting Solutions for India</p>
+          <p className="text-gray-400 animate-fade-in text-sm">Smart Retrofitting Solutions for Bharat</p>
         </div>
+
         
         <Tabs defaultValue="login" value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-2 bg-gray-900/80 backdrop-blur-sm rounded-xl p-1 shadow-xl border border-gray-800">

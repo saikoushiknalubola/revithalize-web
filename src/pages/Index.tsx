@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { LoadingAnimation } from '@/components/animations/LoadingAnimation';
+import { Logo } from '@/components/branding/Logo';
 import { supabase } from '@/integrations/supabase/client';
+
 
 const Index = () => {
   const navigate = useNavigate();
@@ -15,7 +17,8 @@ const Index = () => {
           .from('profiles')
           .select('user_type')
           .eq('id', session.user.id)
-          .single();
+          .maybeSingle();
+
         
         if (profile?.user_type === 'fleet') {
           navigate('/fleet-dashboard');
@@ -43,9 +46,11 @@ const Index = () => {
               <div className="absolute inset-0 rounded-full bg-gradient-to-r from-orange-500/20 to-green-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             </div>
           </div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-heading font-bold text-revithalize-green mb-3 md:mb-4 leading-tight px-4 animate-fade-in hover:scale-105 transition-transform duration-300" style={{ animationDelay: '200ms' }}>
-            ReVithalize Mobilitric
-          </h1>
+          <div className="flex justify-center mb-4 animate-fade-in" style={{ animationDelay: '200ms' }}>
+            <Logo size="xl" className="md:!h-24" />
+          </div>
+          <p className="sr-only">ReVithalize Mobilitric</p>
+
           <p className="text-sm sm:text-base md:text-lg lg:text-xl text-revithalize-blue font-semibold mb-2 animate-fade-in tracking-wide" style={{ animationDelay: '300ms' }}>
             Sustainable Mobility for the Future
           </p>
