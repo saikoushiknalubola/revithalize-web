@@ -28,6 +28,8 @@ import Subscription from "./pages/Subscription";
 
 // Professional Feature Pages
 import FleetManagement from "./pages/FleetManagement";
+import FleetDashboard from "./pages/FleetDashboard";
+
 import AdvancedAnalytics from "./pages/AdvancedAnalytics";
 import SystemMonitoring from "./pages/SystemMonitoring";
 import EnergyOptimization from "./pages/EnergyOptimization";
@@ -66,6 +68,8 @@ const App = () => (
           {/* Protected routes */}
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/dashboard/:feature" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/fleet-dashboard" element={<ProtectedRoute><FleetDashboard /></ProtectedRoute>} />
+
           <Route path="/vehicle" element={<ProtectedRoute><VehicleDetails /></ProtectedRoute>} />
           <Route path="/map" element={<ProtectedRoute><MapView /></ProtectedRoute>} />
           <Route path="/analytics" element={<ProtectedRoute><BatteryAnalytics /></ProtectedRoute>} />
