@@ -4,15 +4,16 @@ import { Battery, Gauge, Map, Activity, Shield, TrendingUp, Truck, Monitor, Brai
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
+import { supabase } from '@/integrations/supabase/client';
 import { BikeHeroSection } from '@/components/features/BikeHeroSection';
 import { BikeStatCard } from '@/components/mobile/BikeStatCard';
 import { BikeBottomNav } from '@/components/layout/BikeBottomNav';
 import { BatteryMetrics } from '@/components/features/BatteryMetrics';
 import { ChargingScheduler } from '@/components/features/ChargingScheduler';
 import { EcoScore } from '@/components/features/EcoScore';
-import { FleetOverview } from '@/components/features/FleetOverview';
 import { IoTInsights } from '@/components/features/IoTInsights';
 import { ProfessionalQuickActions } from '@/components/professional/ProfessionalQuickActions';
+
 
 // Static data
 const batteryLevel = 82;
@@ -45,7 +46,7 @@ export default function Dashboard() {
 
   const navigate = useNavigate();
   const { feature } = useParams<{ feature?: string }>();
-  const [userName, setUserName] = useState('Koushik');
+  const [userName, setUserName] = useState('Rider');
   const [isMobile, setIsMobile] = useState(false);
   const [activeFeature, setActiveFeature] = useState<string | null>(null);
 
@@ -57,8 +58,29 @@ export default function Dashboard() {
   }, []);
 
   useEffect(() => {
+    (async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      const { data } = await supabase
+        .from('profiles')
+        .select('full_name, user_type')
+        .eq('id', user.id)
+        .maybeSingle();
+      if (data?.user_type === 'fleet') {
+        navigate('/fleet-dashboard', { replace: true });
+        return;
+      }
+      if (data?.full_name) {
+        const first = data.full_name.split(' ')[0];
+        setUserName(first);
+      }
+    })();
+  }, [navigate]);
+
+  useEffect(() => {
     if (feature) setActiveFeature(feature);
   }, [feature]);
+
 
   if (isMobile) {
     return (
