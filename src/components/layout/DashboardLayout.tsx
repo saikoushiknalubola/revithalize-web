@@ -103,68 +103,73 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
   };
 
 
-  const mainNavItems = [
-    { icon: Home, label: "Dashboard", to: "/dashboard" },
-    { icon: Bike, label: "Vehicle", to: "/vehicle" },
-    { icon: MapPin, label: "Map", to: "/map" },
-    { icon: BarChart2, label: "Analytics", to: "/analytics" },
+  const isFleet = userType === 'fleet';
+
+  const mainNavItems = isFleet
+    ? [
+        { icon: LayoutDashboard, label: 'Fleet Dashboard', to: '/fleet-dashboard' },
+        { icon: Truck, label: 'Fleet Management', to: '/fleet-management' },
+        { icon: MapPin, label: 'Live Map', to: '/map' },
+        { icon: BarChart2, label: 'Analytics', to: '/advanced-analytics' },
+      ]
+    : [
+        { icon: Home, label: 'Dashboard', to: '/dashboard' },
+        { icon: Bike, label: 'My Vehicle', to: '/vehicle' },
+        { icon: MapPin, label: 'Map', to: '/map' },
+        { icon: BarChart2, label: 'Analytics', to: '/analytics' },
+      ];
+
+  // Fleet-only tools (hidden for individual users)
+  const fleetTools = [
+    { icon: Truck, label: 'Fleet Management', to: '/fleet-management' },
+    { icon: TrendingUp, label: 'Advanced Analytics', to: '/advanced-analytics' },
+    { icon: Monitor, label: 'System Monitoring', to: '/system-monitoring' },
+    { icon: Zap, label: 'Energy Optimization', to: '/energy-optimization' },
+    { icon: Brain, label: 'Predictive Analytics', to: '/predictive-analytics' },
+    { icon: Plug, label: 'Integration Hub', to: '/integration-hub' },
+    { icon: FileCheck, label: 'Compliance', to: '/compliance-manager' },
+    { icon: UserCheck, label: 'Customers', to: '/customer-management' },
+    { icon: FileBarChart, label: 'Reports', to: '/reports' },
+    { icon: Lock, label: 'Security', to: '/security' },
+    { icon: Lightbulb, label: 'AI Insights', to: '/ai-insights' },
   ];
 
-  const professionalTools = [
-    { icon: Truck, label: "Fleet Management", to: "/fleet-management" },
-    { icon: TrendingUp, label: "Advanced Analytics", to: "/advanced-analytics" },
-    { icon: Monitor, label: "System Monitoring", to: "/system-monitoring" },
-    { icon: Zap, label: "Energy Optimization", to: "/energy-optimization" },
-    { icon: Brain, label: "Predictive Analytics", to: "/predictive-analytics" },
-    { icon: Settings, label: "Performance Optimization", to: "/performance-optimization" },
-    { icon: Plug, label: "Integration Hub", to: "/integration-hub" },
-    { icon: FileCheck, label: "Compliance Manager", to: "/compliance-manager" },
-    { icon: BatteryCharging, label: "Charging Intelligence", to: "/charging-intelligence" },
-    { icon: Bell, label: "Notifications", to: "/notifications" },
-    { icon: UserCheck, label: "Customer Management", to: "/customer-management" },
-    { icon: Lock, label: "Security", to: "/security" },
-    { icon: FileBarChart, label: "Reports", to: "/reports" },
-    { icon: Lightbulb, label: "AI Insights", to: "/ai-insights" },
-  ];
-
-  const innovativeFeatures = [
-    { icon: Shield, label: "Battery Twin", to: "/battery-twin" },
-    { icon: Leaf, label: "Eco Program", to: "/eco-program" },
-    { icon: ScanLine, label: "AI Range", to: "/range-prediction" },
-    { icon: Cpu, label: "Smart Grid", to: "/smart-grid" },
-  ];
-
-  const dashboardFeatures = [
-    { icon: Building2, label: "Company Vision", to: "/company-vision" },
-    { icon: Activity, label: "Carbon Tracker", to: "/carbon-tracker" },
-    { icon: Wrench, label: "Maintenance AI", to: "/maintenance-ai" },
-    { icon: Users, label: "Energy Network", to: "/energy-network" },
+  // Shared / individual-friendly features
+  const smartFeatures = [
+    { icon: Shield, label: 'Battery Twin', to: '/battery-twin' },
+    { icon: Leaf, label: 'Eco Program', to: '/eco-program' },
+    { icon: ScanLine, label: 'AI Range', to: '/range-prediction' },
+    { icon: Cpu, label: 'Smart Grid', to: '/smart-grid' },
+    { icon: Activity, label: 'Carbon Tracker', to: '/carbon-tracker' },
+    { icon: Wrench, label: 'Maintenance', to: '/maintenance-ai' },
+    { icon: BatteryCharging, label: 'Charging', to: '/charging-intelligence' },
+    { icon: Bell, label: 'Notifications', to: '/notifications' },
   ];
 
   const secondaryNavItems = [
-    { icon: User, label: "Profile", to: "/profile" },
-    { icon: Crown, label: "Subscription", to: "/subscription" },
-    { icon: HelpCircle, label: "Support", to: "/support" },
-    { icon: Info, label: "About", to: "/about" },
-    { icon: Settings, label: "Settings", to: "/settings" },
+    { icon: User, label: 'Profile', to: '/profile' },
+    { icon: Crown, label: 'Subscription', to: '/subscription' },
+    { icon: HelpCircle, label: 'Support', to: '/support' },
+    { icon: Info, label: 'About', to: '/about' },
+    { icon: Settings, label: 'Settings', to: '/settings' },
   ];
 
-  const mobileNavItems = [
-    { icon: Home, label: "Dashboard", to: "/dashboard" },
-    { icon: Bike, label: "Vehicle", to: "/vehicle" },
-    { icon: MapPin, label: "Map", to: "/map" },
-    { 
-      icon: Shield, 
-      label: "Features", 
-      action: () => {
-        setSidebarOpen(true);
-        setTimeout(() => {
-          document.querySelector('.innovative-features-section')?.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
-      }
-    },
-    { icon: User, label: "Profile", to: "/profile" },
-  ];
+  const mobileNavItems = isFleet
+    ? [
+        { icon: LayoutDashboard, label: 'Fleet', to: '/fleet-dashboard' },
+        { icon: Truck, label: 'Vehicles', to: '/fleet-management' },
+        { icon: MapPin, label: 'Map', to: '/map' },
+        { icon: BarChart2, label: 'Reports', to: '/reports' },
+        { icon: User, label: 'Profile', to: '/profile' },
+      ]
+    : [
+        { icon: Home, label: 'Home', to: '/dashboard' },
+        { icon: Bike, label: 'Vehicle', to: '/vehicle' },
+        { icon: MapPin, label: 'Map', to: '/map' },
+        { icon: Wrench, label: 'Service', to: '/maintenance-ai' },
+        { icon: User, label: 'Profile', to: '/profile' },
+      ];
+
 
   return (
     <div className="flex min-h-screen bg-black font-poppins overflow-hidden">
