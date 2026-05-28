@@ -35,12 +35,13 @@ const recentRides = [
 
 const quickAccessFeatures = [
   { id: 'fleet', title: "Fleet Management", icon: Truck, route: "/fleet-management", color: "from-blue-900/80 to-blue-600/40", iconColor: "text-blue-300", stats: "12 Vehicles" },
-  { id: 'analytics', title: "Advanced Analytics", icon: TrendingUp, route: "/advanced-analytics", color: "from-purple-900/80 to-purple-600/40", iconColor: "text-purple-300", stats: "24 Reports" },
-  { id: 'monitoring', title: "System Monitoring", icon: Monitor, route: "/system-monitoring", color: "from-green-900/80 to-green-600/40", iconColor: "text-green-300", stats: "All Systems OK" },
-  { id: 'ai-insights', title: "AI Insights", icon: Brain, route: "/ai-insights", color: "from-orange-900/80 to-orange-600/40", iconColor: "text-orange-300", stats: "5 New Insights" },
+const quickAccessFeatures = [
+  { id: 'battery-twin', title: 'Battery Twin', icon: Shield, route: '/battery-twin', color: 'from-blue-900/80 to-blue-600/40', iconColor: 'text-blue-300', stats: 'Health 98%' },
+  { id: 'eco-program', title: 'Eco Program', icon: TrendingUp, route: '/eco-program', color: 'from-green-900/80 to-green-600/40', iconColor: 'text-green-300', stats: '234kg CO₂ saved' },
+  { id: 'charging', title: 'Charging', icon: Battery, route: '/charging-intelligence', color: 'from-orange-900/80 to-orange-600/40', iconColor: 'text-orange-300', stats: 'Smart Schedule' },
+  { id: 'maintenance', title: 'Maintenance', icon: Brain, route: '/maintenance-ai', color: 'from-purple-900/80 to-purple-600/40', iconColor: 'text-purple-300', stats: 'Next: 320 km' },
 ];
 
-export default function Dashboard() {
   const navigate = useNavigate();
   const { feature } = useParams<{ feature?: string }>();
   const [userName, setUserName] = useState('Koushik');
