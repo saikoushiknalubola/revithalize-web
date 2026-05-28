@@ -15,7 +15,8 @@ const Index = () => {
       if (session) {
         const { data: profile } = await supabase
           .from('profiles')
-          .select('user_type')
+          .maybeSingle();
+
           .eq('id', session.user.id)
           .single();
         
