@@ -265,10 +265,10 @@ export default function Dashboard() {
           <ChargingScheduler />
         </div>
 
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6">
           <EcoScore score={efficiencyScore} scoreChange={3} />
-          <FleetOverview />
         </div>
+
 
         {/* IoT + Quick Actions */}
         <div className="grid grid-cols-3 gap-6">
