@@ -184,14 +184,19 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
         </button>
       )}
 
-      {/* Enhanced Sidebar */}
+      {/* Sidebar */}
       <aside
+        className={cn(
+          "fixed inset-y-0 left-0 z-[60] bg-black/95 backdrop-blur-sm border-r border-gray-800 w-64 transform transition-all duration-300 ease-in-out md:translate-x-0 shadow-xl flex flex-col",
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        )}
+      >
         <div className="flex-shrink-0 flex items-center justify-between p-4 border-b border-gray-800/50">
           <Link to={isFleet ? '/fleet-dashboard' : '/dashboard'} className="flex items-center">
             <Logo size="md" />
           </Link>
           {isMobile && (
-            <button 
+            <button
               onClick={() => setSidebarOpen(false)}
               className="p-2 rounded-md text-gray-400 hover:bg-gray-800 hover:text-white transition-colors"
               aria-label="Close sidebar"
@@ -201,26 +206,16 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
           )}
         </div>
 
-            >
-              <X size={20} />
-            </button>
-          )}
-        </div>
-
-        {/* Scrollable content */}
         <div className="flex-1 overflow-y-auto py-4 px-4">
           <nav className="flex flex-col gap-2">
             <div className="mb-1 px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-              Main
+              {isFleet ? 'Fleet' : 'Main'}
             </div>
             {mainNavItems.map((item, index) => (
-              <div 
-                key={item.to}
-                className="animate-fade-in"
-                style={{ animationDelay: `${index * 50}ms` }}
-              >
-                <NavItem
-                  icon={item.icon}
+              <div key={item.to} className="animate-fade-in" style={{ animationDelay: `${index * 30}ms` }}>
+                <NavItem icon={item.icon} label={item.label} to={item.to} active={location.pathname === item.to} />
+              </div>
+            ))}
 
             {isFleet && (
               <>
@@ -228,7 +223,7 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
                   Fleet Tools
                 </div>
                 {fleetTools.map((item, index) => (
-                  <div key={item.to} className="animate-fade-in" style={{ animationDelay: `${(index + mainNavItems.length) * 30}ms` }}>
+                  <div key={item.to} className="animate-fade-in" style={{ animationDelay: `${index * 30}ms` }}>
                     <NavItem icon={item.icon} label={item.label} to={item.to} active={location.pathname === item.to} />
                   </div>
                 ))}
@@ -252,15 +247,9 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
                 <NavItem icon={item.icon} label={item.label} to={item.to} active={location.pathname === item.to} />
               </div>
             ))}
-
-                  label={item.label}
-                  to={item.to}
-                  active={location.pathname === item.to}
-                />
-              </div>
-            ))}
           </nav>
         </div>
+
 
         {/* Enhanced Footer */}
         <div className="flex-shrink-0 p-4 border-t border-gray-800/50">
