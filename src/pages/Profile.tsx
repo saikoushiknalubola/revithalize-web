@@ -65,20 +65,19 @@ export default function Profile() {
         .from('profiles')
         .select('*')
         .eq('id', user.id)
-        .maybeSingle();
-
+      const p: any = profile || {};
       const meta: any = user.user_metadata || {};
-      const name = profile?.full_name || meta.full_name || meta.name || user.email?.split('@')[0] || 'Rider';
+      const name = p.full_name || meta.full_name || meta.name || user.email?.split('@')[0] || 'Rider';
       const joinDate = new Date(user.created_at).toLocaleDateString('en-IN', { month: 'long', year: 'numeric' });
 
       const data: UserData = {
         name,
         email: user.email || '',
-        phone: profile?.phone || meta.phone || '',
-        address: profile?.address || '',
-        city: profile?.city || '',
-        occupation: profile?.occupation || '',
-        company: profile?.company || '',
+        phone: meta.phone || '',
+        address: '',
+        city: '',
+        occupation: '',
+        company: p.company_name || '',
         joinDate,
         initials: getInitials(name),
       };
@@ -95,15 +94,9 @@ export default function Profile() {
       .from('profiles')
       .update({
         full_name: editForm.name,
-        phone: editForm.phone,
-      })
+        company_name: editForm.company,
+      } as any)
       .eq('id', user.id);
-    if (error) {
-      toast.error('Could not save profile');
-      return;
-    }
-    setUserData({ ...editForm, initials: getInitials(editForm.name) });
-    setIsEditing(false);
     toast.success('Profile updated');
   };
 
