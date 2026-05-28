@@ -15,10 +15,10 @@ const Index = () => {
       if (session) {
         const { data: profile } = await supabase
           .from('profiles')
+          .select('user_type')
+          .eq('id', session.user.id)
           .maybeSingle();
 
-          .eq('id', session.user.id)
-          .single();
         
         if (profile?.user_type === 'fleet') {
           navigate('/fleet-dashboard');
