@@ -1,11 +1,13 @@
 
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, Battery, MapPin, BarChart2, User, Settings, Menu, X, LogOut, Bike, HelpCircle, Info, Shield, Leaf, ScanLine, Cpu, Building2, Activity, Wrench, Users, Truck, TrendingUp, Monitor, Zap, Brain, Plug, FileCheck, BatteryCharging, Bell, UserCheck, Lock, FileBarChart, Lightbulb, Crown } from 'lucide-react';
+import { Home, Battery, MapPin, BarChart2, User, Settings, Menu, X, LogOut, Bike, HelpCircle, Info, Shield, Leaf, ScanLine, Cpu, Building2, Activity, Wrench, Users, Truck, TrendingUp, Monitor, Zap, Brain, Plug, FileCheck, BatteryCharging, Bell, UserCheck, Lock, FileBarChart, Lightbulb, Crown, LayoutDashboard } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useState, useEffect } from 'react';
 import { useScreenSize } from '@/hooks/use-mobile';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
+import { Logo } from '@/components/branding/Logo';
 
 interface NavItemProps {
   icon: React.ElementType;
@@ -67,7 +69,8 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { isMobile } = useScreenSize();
   const [userName, setUserName] = useState('');
-  
+  const [userType, setUserType] = useState<'individual' | 'fleet'>('individual');
+
   // Static battery data for consistency
   const batteryData = { level: 82, range: 118 };
 
@@ -78,21 +81,27 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
     }
   }, [location.pathname, isMobile]);
 
-  // Get user data
+  // Get user data from Supabase (no static localStorage)
   useEffect(() => {
-    const userData = localStorage.getItem('user');
-    if (userData) {
-      const user = JSON.parse(userData);
-      setUserName(user.fullName || user.name || 'User');
-    }
+    (async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      const { data } = await supabase
+        .from('profiles')
+        .select('full_name, user_type')
+        .eq('id', user.id)
+        .maybeSingle();
+      if (data?.full_name) setUserName(data.full_name);
+      if (data?.user_type === 'fleet') setUserType('fleet');
+    })();
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem('isAuthenticated');
-    localStorage.removeItem('user');
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     toast.success('Logged out successfully');
     navigate('/auth');
   };
+
 
   const mainNavItems = [
     { icon: Home, label: "Dashboard", to: "/dashboard" },
