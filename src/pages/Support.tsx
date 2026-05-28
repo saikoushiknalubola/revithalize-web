@@ -342,10 +342,10 @@ export default function Support() {
                   <motion.div 
                     key={i} 
                     className={`${center.isHeadquarters ? 'bg-gradient-to-br from-gray-800/90 to-gray-900/90 border border-revithalize-green/30' : 'bg-gray-800/50'} p-4 rounded-lg hover:bg-gray-800 transition-colors cursor-pointer`}
+                    whileHover={{ scale: 1.02, y: -5 }}
                     transition={{ type: "spring" as const, stiffness: 300 }}
-
-                    transition={{ type: "spring", stiffness: 300 }}
                   >
+
                     <div className="flex items-start">
                       {center.isHeadquarters ? (
                         <div className="bg-revithalize-green/20 p-1.5 rounded-full mr-3">
