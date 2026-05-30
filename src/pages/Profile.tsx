@@ -11,7 +11,7 @@ import {
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import bikeHero from '@/assets/electric-bike-hero.png';
+
 
 interface UserData {
   name: string;
@@ -212,13 +212,15 @@ export default function Profile() {
                   </CardHeader>
                   <CardContent>
                     <div className="p-4 bg-[#1C1C1E] rounded-xl border border-[#2A2A2E] flex flex-col sm:flex-row sm:items-center gap-4">
-                      <img src={bikeHero} alt="Bike" className="w-32 h-20 object-contain mx-auto sm:mx-0" />
+                      <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-revithalize-green/25 to-revithalize-blue/15 border border-revithalize-green/20 flex items-center justify-center mx-auto sm:mx-0">
+                        <Bike className="w-8 h-8 text-revithalize-green" />
+                      </div>
                       <div className="flex-1 text-center sm:text-left">
                         <h3 className="text-white font-semibold">Hero Honda Passion Pro</h3>
                         <p className="text-xs text-gray-400">Retrofit Electric Conversion</p>
                         <div className="mt-2 flex flex-wrap gap-2 justify-center sm:justify-start">
-                          <span className="bg-[#22C55E]/15 text-[#22C55E] px-2.5 py-1 rounded-full text-xs">Active</span>
-                          <span className="bg-[#1E6BFF]/15 text-[#1E6BFF] px-2.5 py-1 rounded-full text-xs">82% Charged</span>
+                          <span className="bg-revithalize-green/15 text-revithalize-green px-2.5 py-1 rounded-full text-xs">Active</span>
+                          <span className="bg-revithalize-blue/15 text-revithalize-blue px-2.5 py-1 rounded-full text-xs">82% Charged</span>
                         </div>
                       </div>
                     </div>
