@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import bikeHero from '@/assets/electric-bike-hero.png';
+
 interface CircularProgressProps {
   value: number;
   size?: number;
@@ -10,7 +9,7 @@ interface CircularProgressProps {
   subtext?: string;
 }
 
-export function CircularProgress({ value, size = 160, strokeWidth = 10, color = '#1E6BFF', label = 'Battery', subtext }: CircularProgressProps) {
+export function CircularProgress({ value, size = 180, strokeWidth = 12, color = '#00FF94', label = 'Battery', subtext }: CircularProgressProps) {
   const [animatedValue, setAnimatedValue] = useState(0);
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
@@ -24,25 +23,22 @@ export function CircularProgress({ value, size = 160, strokeWidth = 10, color = 
   return (
     <div className="flex flex-col items-center">
       <div className="relative" style={{ width: size, height: size }}>
-        {/* Glow effect */}
         <div
           className="absolute inset-0 rounded-full"
           style={{
-            background: `radial-gradient(circle, ${color}20 0%, transparent 70%)`,
-            filter: 'blur(8px)',
+            background: `radial-gradient(circle, ${color}25 0%, transparent 70%)`,
+            filter: 'blur(12px)',
           }}
         />
         <svg width={size} height={size} className="relative z-10 -rotate-90">
-          {/* Background track */}
           <circle
             cx={size / 2}
             cy={size / 2}
             r={radius}
             fill="none"
-            stroke="#2A2A2E"
+            stroke="#1F1F23"
             strokeWidth={strokeWidth}
           />
-          {/* Progress arc */}
           <circle
             cx={size / 2}
             cy={size / 2}
@@ -53,17 +49,16 @@ export function CircularProgress({ value, size = 160, strokeWidth = 10, color = 
             strokeLinecap="round"
             strokeDasharray={circumference}
             strokeDashoffset={offset}
-            style={{ transition: 'stroke-dashoffset 1s ease-out' }}
+            style={{ transition: 'stroke-dashoffset 1.2s ease-out' }}
           />
         </svg>
-        {/* Center content */}
         <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
-          <span className="text-3xl font-bold text-white">{value}%</span>
-          <span className="text-xs text-[#A1A1AA] mt-0.5">{label}</span>
+          <span className="text-4xl font-bold text-white tracking-tight">{value}<span className="text-2xl text-gray-400">%</span></span>
+          <span className="text-[11px] uppercase tracking-widest text-gray-500 mt-1">{label}</span>
         </div>
       </div>
       {subtext && (
-        <p className="text-xs text-[#A1A1AA] mt-2 text-center">{subtext}</p>
+        <p className="text-xs text-gray-400 mt-3 text-center">{subtext}</p>
       )}
     </div>
   );
@@ -83,40 +78,22 @@ export function BikeHeroSection({
   isConnected = true,
 }: BikeHeroSectionProps) {
   return (
-    <div className="flex flex-col items-center space-y-4">
-      {/* Bike Name + Connected Badge */}
-      <div className="flex items-center gap-3">
-        <h2 className="text-lg font-bold text-white font-poppins">{bikeName}</h2>
-        <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${isConnected ? 'bg-[#22C55E]/15 text-[#22C55E]' : 'bg-red-500/15 text-red-400'}`}>
-          <div className={`w-1.5 h-1.5 rounded-full ${isConnected ? 'bg-[#22C55E] animate-pulse' : 'bg-red-400'}`} />
-          {isConnected ? 'Connected' : 'Offline'}
+    <div className="flex flex-col items-center space-y-3">
+      <div className="flex items-center gap-2">
+        <h2 className="text-base font-semibold text-white tracking-tight">{bikeName}</h2>
+        <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-medium ${isConnected ? 'bg-revithalize-green/15 text-revithalize-green' : 'bg-red-500/15 text-red-400'}`}>
+          <div className={`w-1.5 h-1.5 rounded-full ${isConnected ? 'bg-revithalize-green animate-pulse' : 'bg-red-400'}`} />
+          {isConnected ? 'LIVE' : 'OFFLINE'}
         </div>
       </div>
 
-      {/* Hero Bike Image with glow */}
-      <div className="relative w-full flex items-center justify-center py-2">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-64 h-32 rounded-full bg-[#1E6BFF]/10 blur-2xl" />
-        </div>
-        <motion.img
-          src={bikeHero}
-          alt="Hero Honda Passion Pro"
-          className="relative z-10 w-72 h-44 object-contain drop-shadow-2xl"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-          style={{ filter: 'drop-shadow(0 0 24px rgba(34, 197, 94, 0.35))' }}
-        />
-      </div>
-
-      {/* Circular Progress - Battery */}
       <CircularProgress
         value={batteryLevel}
-        size={160}
-        strokeWidth={12}
-        color="#1E6BFF"
+        size={200}
+        strokeWidth={14}
+        color="#00FF94"
         label="Battery"
-        subtext={`Approx. ${range} km range remaining`}
+        subtext={`${range} km range remaining`}
       />
     </div>
   );
