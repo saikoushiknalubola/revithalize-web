@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { Battery, Gauge, Map, Activity, Shield, TrendingUp, Truck, Monitor, Brain, ArrowRight, Bell, Settings } from 'lucide-react';
+import { Battery, Gauge, Map, Activity, Shield, TrendingUp, ArrowRight, Bell, Settings, Leaf, Zap, Wrench } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
@@ -8,24 +8,19 @@ import { supabase } from '@/integrations/supabase/client';
 import { BikeHeroSection } from '@/components/features/BikeHeroSection';
 import { BikeStatCard } from '@/components/mobile/BikeStatCard';
 import { BikeBottomNav } from '@/components/layout/BikeBottomNav';
+import { Logo } from '@/components/branding/Logo';
 import { BatteryMetrics } from '@/components/features/BatteryMetrics';
 import { ChargingScheduler } from '@/components/features/ChargingScheduler';
 import { EcoScore } from '@/components/features/EcoScore';
 import { IoTInsights } from '@/components/features/IoTInsights';
 import { ProfessionalQuickActions } from '@/components/professional/ProfessionalQuickActions';
 
-
 // Static data
 const batteryLevel = 82;
-const voltage = 51.2;
-const temperature = 32;
 const health = 98;
 const range = 118;
-const powerConsumption = 42;
-const chargingStatus = 'Not Charging';
 const efficiencyScore = 87;
 const totalDistance = 12450;
-const carbonSaved = 234.5;
 const energyCost = 3745.50;
 
 const recentRides = [
@@ -35,10 +30,10 @@ const recentRides = [
 ];
 
 const quickAccessFeatures = [
-  { id: 'battery-twin', title: 'Battery Twin', icon: Shield, route: '/battery-twin', color: 'from-blue-900/80 to-blue-600/40', iconColor: 'text-blue-300', stats: 'Health 98%' },
-  { id: 'eco-program', title: 'Eco Program', icon: TrendingUp, route: '/eco-program', color: 'from-green-900/80 to-green-600/40', iconColor: 'text-green-300', stats: '234kg CO₂ saved' },
-  { id: 'charging', title: 'Charging', icon: Battery, route: '/charging-intelligence', color: 'from-orange-900/80 to-orange-600/40', iconColor: 'text-orange-300', stats: 'Smart Schedule' },
-  { id: 'maintenance', title: 'Maintenance', icon: Brain, route: '/maintenance-ai', color: 'from-purple-900/80 to-purple-600/40', iconColor: 'text-purple-300', stats: 'Next: 320 km' },
+  { id: 'battery', title: 'Battery Health', icon: Shield, route: '/battery-twin', color: 'from-emerald-900/60 to-emerald-700/20', iconColor: 'text-revithalize-green', stats: '98% healthy' },
+  { id: 'eco', title: 'Eco Impact', icon: Leaf, route: '/eco-program', color: 'from-green-900/60 to-green-700/20', iconColor: 'text-revithalize-green', stats: '234kg CO₂ saved' },
+  { id: 'charging', title: 'Charging', icon: Zap, route: '/charging-intelligence', color: 'from-emerald-900/60 to-teal-700/20', iconColor: 'text-revithalize-green', stats: 'Smart schedule' },
+  { id: 'service', title: 'Service', icon: Wrench, route: '/maintenance-ai', color: 'from-teal-900/60 to-emerald-700/20', iconColor: 'text-revithalize-green', stats: 'Next: 320 km' },
 ];
 
 export default function Dashboard() {
@@ -86,30 +81,35 @@ export default function Dashboard() {
     return (
       <div className="min-h-screen bg-black pb-28">
         <div className="max-w-[420px] mx-auto px-4">
-          {/* Header */}
-          <div className="flex items-center justify-between pt-6 pb-4">
-            <div>
-              <p className="text-xs text-[#A1A1AA] font-poppins">Welcome back,</p>
-              <h1 className="text-xl font-bold text-white font-poppins">{userName}</h1>
-            </div>
+          {/* Header with Logo */}
+          <header className="flex items-center justify-between pt-5 pb-4">
+            <Logo size="sm" className="h-8" />
             <div className="flex items-center gap-2">
               <button
                 onClick={() => navigate('/notification-center')}
-                className="w-9 h-9 rounded-full bg-[#1C1C1E] border border-[#2A2A2E] flex items-center justify-center"
+                aria-label="Notifications"
+                className="w-10 h-10 rounded-full bg-[#111111] border border-[#1F1F23] flex items-center justify-center active:scale-95 transition"
               >
-                <Bell className="w-4 h-4 text-[#A1A1AA]" />
+                <Bell className="w-4 h-4 text-gray-300" />
               </button>
               <button
                 onClick={() => navigate('/settings')}
-                className="w-9 h-9 rounded-full bg-[#1C1C1E] border border-[#2A2A2E] flex items-center justify-center"
+                aria-label="Settings"
+                className="w-10 h-10 rounded-full bg-[#111111] border border-[#1F1F23] flex items-center justify-center active:scale-95 transition"
               >
-                <Settings className="w-4 h-4 text-[#A1A1AA]" />
+                <Settings className="w-4 h-4 text-gray-300" />
               </button>
             </div>
+          </header>
+
+          {/* Greeting */}
+          <div className="mb-4">
+            <p className="text-xs text-gray-500">Welcome back,</p>
+            <h1 className="text-2xl font-bold text-white tracking-tight">{userName}</h1>
           </div>
 
-          {/* Hero Bike Section */}
-          <div className="bg-[#0A0A0A] border border-[#2A2A2E] rounded-3xl p-6 mb-4">
+          {/* Hero Battery Section */}
+          <div className="bg-gradient-to-b from-[#0D0D0D] to-[#070707] border border-[#1F1F23] rounded-3xl p-6 mb-4 shadow-xl shadow-emerald-500/5">
             <BikeHeroSection
               bikeName="Hero Honda Passion Pro"
               batteryLevel={batteryLevel}
@@ -119,43 +119,16 @@ export default function Dashboard() {
           </div>
 
           {/* Stat Cards Grid */}
-          <div className="grid grid-cols-2 gap-3 mb-4">
-            <BikeStatCard icon={Battery} value={`${batteryLevel}%`} label="Battery Level" iconColor="#1E6BFF" />
-            <BikeStatCard icon={Gauge} value={`${health}%`} label="Engine Health" iconColor="#22C55E" />
-            <BikeStatCard icon={Map} value={`${range} km`} label="Range Left" iconColor="#F59E0B" />
-            <BikeStatCard icon={Activity} value={`${totalDistance.toLocaleString()} km`} label="Total Distance" iconColor="#A855F7" />
-          </div>
-
-          {/* Recent Rides */}
-          <div className="mb-4">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-base font-semibold text-white font-poppins">Recent Rides</h3>
-              <button
-                onClick={() => navigate('/advanced-analytics')}
-                className="text-xs text-[#1E6BFF] font-medium"
-              >
-                See All
-              </button>
-            </div>
-            <div className="space-y-2">
-              {recentRides.map((ride) => (
-                <div key={ride.id} className="bg-[#1C1C1E] border border-[#2A2A2E] rounded-2xl p-4">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm font-medium text-white">{ride.route}</span>
-                    <span className="text-xs text-[#1E6BFF] font-semibold">{ride.distance}</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-[#A1A1AA]">{ride.date}</span>
-                    <span className="text-xs text-[#A1A1AA]">{ride.duration}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
+          <div className="grid grid-cols-2 gap-3 mb-5">
+            <BikeStatCard icon={Battery} value={`${batteryLevel}%`} label="Battery" iconColor="#00FF94" />
+            <BikeStatCard icon={Gauge} value={`${health}%`} label="Engine Health" iconColor="#00FF94" />
+            <BikeStatCard icon={Map} value={`${range} km`} label="Range" iconColor="#00B8FF" />
+            <BikeStatCard icon={Activity} value={`${totalDistance.toLocaleString()}`} label="Total km" iconColor="#00B8FF" />
           </div>
 
           {/* Quick Access */}
-          <div className="mb-4">
-            <h3 className="text-base font-semibold text-white font-poppins mb-3">Quick Access</h3>
+          <section className="mb-5">
+            <h3 className="text-sm font-semibold text-white mb-3 tracking-wide uppercase text-gray-400">Quick Access</h3>
             <div className="grid grid-cols-2 gap-3">
               {quickAccessFeatures.map((feat) => {
                 const Icon = feat.icon;
@@ -164,19 +137,45 @@ export default function Dashboard() {
                     key={feat.id}
                     onClick={() => navigate(feat.route)}
                     whileTap={{ scale: 0.97 }}
-                    className={`bg-gradient-to-br ${feat.color} border border-[#2A2A2E] rounded-2xl p-4 text-left`}
+                    className={`bg-gradient-to-br ${feat.color} border border-[#1F1F23] rounded-2xl p-4 text-left`}
                   >
                     <Icon className={`w-5 h-5 ${feat.iconColor} mb-2`} />
                     <p className="text-sm font-semibold text-white leading-tight">{feat.title}</p>
-                    <p className="text-xs text-[#A1A1AA] mt-1">{feat.stats}</p>
+                    <p className="text-[11px] text-gray-400 mt-1">{feat.stats}</p>
                   </motion.button>
                 );
               })}
             </div>
-          </div>
+          </section>
+
+          {/* Recent Rides */}
+          <section className="mb-4">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-400">Recent Rides</h3>
+              <button
+                onClick={() => navigate('/advanced-analytics')}
+                className="text-xs text-revithalize-green font-medium"
+              >
+                See all
+              </button>
+            </div>
+            <div className="space-y-2">
+              {recentRides.map((ride) => (
+                <div key={ride.id} className="bg-[#0F0F0F] border border-[#1F1F23] rounded-2xl p-4">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-sm font-medium text-white">{ride.route}</span>
+                    <span className="text-xs text-revithalize-green font-semibold">{ride.distance}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] text-gray-500">{ride.date}</span>
+                    <span className="text-[11px] text-gray-500">{ride.duration}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
         </div>
 
-        {/* Fixed Bottom Nav */}
         <BikeBottomNav />
       </div>
     );
