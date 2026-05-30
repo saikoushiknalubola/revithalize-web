@@ -65,6 +65,7 @@ export default function Profile() {
         .from('profiles')
         .select('*')
         .eq('id', user.id)
+        .maybeSingle();
       const p: any = profile || {};
       const meta: any = user.user_metadata || {};
       const name = p.full_name || meta.full_name || meta.name || user.email?.split('@')[0] || 'Rider';
