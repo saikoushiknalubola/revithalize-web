@@ -83,7 +83,7 @@ export default function Dashboard() {
         <div className="max-w-[420px] mx-auto px-4">
           {/* Header with Logo */}
           <header className="flex items-center justify-between pt-5 pb-4">
-            <Logo size="sm" className="h-8" />
+            <Logo size="lg" className="h-10" />
             <div className="flex items-center gap-2">
               <button
                 onClick={() => navigate('/notification-center')}
