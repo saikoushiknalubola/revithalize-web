@@ -7,7 +7,6 @@ import { motion } from 'framer-motion';
 import { supabase } from '@/integrations/supabase/client';
 import { BikeHeroSection } from '@/components/features/BikeHeroSection';
 import { BikeStatCard } from '@/components/mobile/BikeStatCard';
-import { BikeBottomNav } from '@/components/layout/BikeBottomNav';
 import { Logo } from '@/components/branding/Logo';
 import { BatteryMetrics } from '@/components/features/BatteryMetrics';
 import { ChargingScheduler } from '@/components/features/ChargingScheduler';
