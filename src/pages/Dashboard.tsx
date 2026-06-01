@@ -79,105 +79,80 @@ export default function Dashboard() {
 
   if (isMobile) {
     return (
-      <div className="min-h-screen bg-black pb-28">
-        <div className="max-w-[420px] mx-auto px-4">
-          {/* Header with Logo */}
-          <header className="flex items-center justify-between pt-5 pb-4">
-            <Logo size="lg" className="h-10" />
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => navigate('/notification-center')}
-                aria-label="Notifications"
-                className="w-10 h-10 rounded-full bg-[#111111] border border-[#1F1F23] flex items-center justify-center active:scale-95 transition"
-              >
-                <Bell className="w-4 h-4 text-gray-300" />
-              </button>
-              <button
-                onClick={() => navigate('/settings')}
-                aria-label="Settings"
-                className="w-10 h-10 rounded-full bg-[#111111] border border-[#1F1F23] flex items-center justify-center active:scale-95 transition"
-              >
-                <Settings className="w-4 h-4 text-gray-300" />
-              </button>
-            </div>
-          </header>
-
-          {/* Greeting */}
-          <div className="mb-4">
-            <p className="text-xs text-gray-500">Welcome back,</p>
-            <h1 className="text-2xl font-bold text-white tracking-tight">{userName}</h1>
-          </div>
-
-          {/* Hero Battery Section */}
-          <div className="bg-gradient-to-b from-[#0D0D0D] to-[#070707] border border-[#1F1F23] rounded-3xl p-6 mb-4 shadow-xl shadow-emerald-500/5">
-            <BikeHeroSection
-              bikeName="Hero Honda Passion Pro"
-              batteryLevel={batteryLevel}
-              range={range}
-              isConnected={true}
-            />
-          </div>
-
-          {/* Stat Cards Grid */}
-          <div className="grid grid-cols-2 gap-3 mb-5">
-            <BikeStatCard icon={Battery} value={`${batteryLevel}%`} label="Battery" iconColor="#00FF94" />
-            <BikeStatCard icon={Gauge} value={`${health}%`} label="Engine Health" iconColor="#00FF94" />
-            <BikeStatCard icon={Map} value={`${range} km`} label="Range" iconColor="#00B8FF" />
-            <BikeStatCard icon={Activity} value={`${totalDistance.toLocaleString()}`} label="Total km" iconColor="#00B8FF" />
-          </div>
-
-          {/* Quick Access */}
-          <section className="mb-5">
-            <h3 className="text-sm font-semibold text-white mb-3 tracking-wide uppercase text-gray-400">Quick Access</h3>
-            <div className="grid grid-cols-2 gap-3">
-              {quickAccessFeatures.map((feat) => {
-                const Icon = feat.icon;
-                return (
-                  <motion.button
-                    key={feat.id}
-                    onClick={() => navigate(feat.route)}
-                    whileTap={{ scale: 0.97 }}
-                    className={`bg-gradient-to-br ${feat.color} border border-[#1F1F23] rounded-2xl p-4 text-left`}
-                  >
-                    <Icon className={`w-5 h-5 ${feat.iconColor} mb-2`} />
-                    <p className="text-sm font-semibold text-white leading-tight">{feat.title}</p>
-                    <p className="text-[11px] text-gray-400 mt-1">{feat.stats}</p>
-                  </motion.button>
-                );
-              })}
-            </div>
-          </section>
-
-          {/* Recent Rides */}
-          <section className="mb-4">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-400">Recent Rides</h3>
-              <button
-                onClick={() => navigate('/advanced-analytics')}
-                className="text-xs text-revithalize-green font-medium"
-              >
-                See all
-              </button>
-            </div>
-            <div className="space-y-2">
-              {recentRides.map((ride) => (
-                <div key={ride.id} className="bg-[#0F0F0F] border border-[#1F1F23] rounded-2xl p-4">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm font-medium text-white">{ride.route}</span>
-                    <span className="text-xs text-revithalize-green font-semibold">{ride.distance}</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] text-gray-500">{ride.date}</span>
-                    <span className="text-[11px] text-gray-500">{ride.duration}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
+      <DashboardLayout activeFeature={activeFeature} setActiveFeature={setActiveFeature}>
+        {/* Greeting */}
+        <div className="mb-4">
+          <p className="text-xs text-gray-500">Welcome back,</p>
+          <h1 className="text-2xl font-bold text-white tracking-tight">{userName}</h1>
         </div>
 
-        <BikeBottomNav />
-      </div>
+        {/* Hero Battery Section */}
+        <div className="bg-gradient-to-b from-[#0D0D0D] to-[#070707] border border-[#1F1F23] rounded-3xl p-6 mb-4 shadow-xl shadow-emerald-500/5">
+          <BikeHeroSection
+            bikeName="Hero Honda Passion Pro"
+            batteryLevel={batteryLevel}
+            range={range}
+            isConnected={true}
+          />
+        </div>
+
+        {/* Stat Cards Grid */}
+        <div className="grid grid-cols-2 gap-3 mb-5">
+          <BikeStatCard icon={Battery} value={`${batteryLevel}%`} label="Battery" iconColor="#00FF94" />
+          <BikeStatCard icon={Gauge} value={`${health}%`} label="Engine Health" iconColor="#00FF94" />
+          <BikeStatCard icon={Map} value={`${range} km`} label="Range" iconColor="#00B8FF" />
+          <BikeStatCard icon={Activity} value={`${totalDistance.toLocaleString()}`} label="Total km" iconColor="#00B8FF" />
+        </div>
+
+        {/* Quick Access */}
+        <section className="mb-5">
+          <h3 className="text-xs font-semibold mb-3 tracking-wide uppercase text-gray-400">Quick Access</h3>
+          <div className="grid grid-cols-2 gap-3">
+            {quickAccessFeatures.map((feat) => {
+              const Icon = feat.icon;
+              return (
+                <motion.button
+                  key={feat.id}
+                  onClick={() => navigate(feat.route)}
+                  whileTap={{ scale: 0.97 }}
+                  className={`bg-gradient-to-br ${feat.color} border border-[#1F1F23] rounded-2xl p-4 text-left`}
+                >
+                  <Icon className={`w-5 h-5 ${feat.iconColor} mb-2`} />
+                  <p className="text-sm font-semibold text-white leading-tight">{feat.title}</p>
+                  <p className="text-[11px] text-gray-400 mt-1">{feat.stats}</p>
+                </motion.button>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* Recent Rides */}
+        <section className="mb-4">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-400">Recent Rides</h3>
+            <button
+              onClick={() => navigate('/analytics')}
+              className="text-xs text-revithalize-green font-medium"
+            >
+              See all
+            </button>
+          </div>
+          <div className="space-y-2">
+            {recentRides.map((ride) => (
+              <div key={ride.id} className="bg-[#0F0F0F] border border-[#1F1F23] rounded-2xl p-4">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-sm font-medium text-white">{ride.route}</span>
+                  <span className="text-xs text-revithalize-green font-semibold">{ride.distance}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] text-gray-500">{ride.date}</span>
+                  <span className="text-[11px] text-gray-500">{ride.duration}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      </DashboardLayout>
     );
   }
 
