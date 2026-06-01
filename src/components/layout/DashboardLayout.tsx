@@ -164,7 +164,7 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
       ]
     : [
         { icon: Home, label: 'Home', to: '/dashboard' },
-        { icon: Bike, label: 'Vehicle', to: '/vehicle' },
+        { icon: BarChart2, label: 'Stats', to: '/advanced-analytics' },
         { icon: MapPin, label: 'Map', to: '/map' },
         { icon: Wrench, label: 'Service', to: '/maintenance-ai' },
         { icon: User, label: 'Profile', to: '/profile' },
