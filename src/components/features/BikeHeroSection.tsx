@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useScreenSize } from '@/hooks/use-mobile';
 
 interface CircularProgressProps {
   value: number;
@@ -77,10 +78,12 @@ export function BikeHeroSection({
   range = 118,
   isConnected = true,
 }: BikeHeroSectionProps) {
+  const { isMobile } = useScreenSize();
+
   return (
     <div className="flex flex-col items-center space-y-3">
-      <div className="flex items-center gap-2">
-        <h2 className="text-base font-semibold text-white tracking-tight">{bikeName}</h2>
+      <div className="flex max-w-full flex-wrap items-center justify-center gap-2 text-center">
+        <h2 className="min-w-0 text-sm sm:text-base font-semibold text-white tracking-tight">{bikeName}</h2>
         <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-medium ${isConnected ? 'bg-revithalize-green/15 text-revithalize-green' : 'bg-red-500/15 text-red-400'}`}>
           <div className={`w-1.5 h-1.5 rounded-full ${isConnected ? 'bg-revithalize-green animate-pulse' : 'bg-red-400'}`} />
           {isConnected ? 'LIVE' : 'OFFLINE'}
@@ -89,8 +92,8 @@ export function BikeHeroSection({
 
       <CircularProgress
         value={batteryLevel}
-        size={200}
-        strokeWidth={14}
+        size={isMobile ? 168 : 200}
+        strokeWidth={isMobile ? 12 : 14}
         color="#00FF94"
         label="Battery"
         subtext={`${range} km range remaining`}

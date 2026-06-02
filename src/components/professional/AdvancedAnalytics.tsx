@@ -32,10 +32,10 @@ export function AdvancedAnalytics() {
   return (
     <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700 shadow-xl">
       <CardHeader className="pb-4">
-        <CardTitle className="text-white text-xl flex items-center">
-          <Brain className="mr-3 h-6 w-6 text-revithalize-green" />
+        <CardTitle className="text-white text-lg sm:text-xl flex flex-wrap items-center gap-2">
+          <Brain className="h-5 w-5 sm:h-6 sm:w-6 text-revithalize-green" />
           Advanced Analytics
-          <div className="ml-auto bg-revithalize-blue/20 px-3 py-1 rounded-full">
+          <div className="sm:ml-auto bg-revithalize-blue/20 px-3 py-1 rounded-full">
             <span className="text-xs font-medium text-revithalize-blue">AI-Powered</span>
           </div>
         </CardTitle>
@@ -53,7 +53,7 @@ export function AdvancedAnalytics() {
               <motion.button
                 key={metric.id}
                 onClick={() => setSelectedMetric(metric.id)}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg border transition-all ${
+                className={`flex min-w-0 flex-1 items-center justify-center gap-2 px-3 py-2 rounded-lg border transition-all sm:flex-none sm:px-4 ${
                   selectedMetric === metric.id
                     ? 'bg-revithalize-green/20 border-revithalize-green text-revithalize-green'
                     : 'bg-gray-800/50 border-gray-600 text-gray-400 hover:border-gray-500'
@@ -62,7 +62,7 @@ export function AdvancedAnalytics() {
                 whileTap={{ scale: 0.98 }}
               >
                 <Icon className={`h-4 w-4 ${metric.color}`} />
-                <span className="text-sm font-medium">{metric.label}</span>
+                <span className="text-xs sm:text-sm font-medium leading-tight">{metric.label}</span>
               </motion.button>
             );
           })}
@@ -71,8 +71,8 @@ export function AdvancedAnalytics() {
         {/* Analytics Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Performance Trends */}
-          <div className="bg-gradient-to-r from-gray-800/50 to-gray-700/50 rounded-xl p-6 border border-gray-600/30">
-            <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
+          <div className="bg-gradient-to-r from-gray-800/50 to-gray-700/50 rounded-xl p-4 sm:p-6 border border-gray-600/30 min-w-0">
+            <h3 className="text-base sm:text-lg font-semibold text-white mb-4 flex items-center">
               <Activity className="mr-2 h-5 w-5 text-green-400" />
               Performance Trends
             </h3>
@@ -105,8 +105,8 @@ export function AdvancedAnalytics() {
           </div>
 
           {/* Usage Distribution */}
-          <div className="bg-gradient-to-r from-gray-800/50 to-gray-700/50 rounded-xl p-6 border border-gray-600/30">
-            <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
+          <div className="bg-gradient-to-r from-gray-800/50 to-gray-700/50 rounded-xl p-4 sm:p-6 border border-gray-600/30 min-w-0">
+            <h3 className="text-base sm:text-lg font-semibold text-white mb-4 flex items-center">
               <Target className="mr-2 h-5 w-5 text-blue-400" />
               Usage Distribution
             </h3>

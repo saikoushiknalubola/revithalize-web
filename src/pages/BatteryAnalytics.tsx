@@ -386,17 +386,17 @@ export default function BatteryAnalytics() {
   return (
     <DashboardLayout>
       <motion.div 
-        className="space-y-6"
+        className="space-y-4 md:space-y-6"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
         <header className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-heading font-bold text-white">Battery Analytics</h1>
-            <p className="text-gray-400 mt-1">Insights and predictions for your EV battery</p>
+            <h1 className="text-2xl md:text-3xl font-heading font-bold text-white">Battery Analytics</h1>
+            <p className="text-gray-400 mt-1 text-sm md:text-base">Insights and predictions for your EV battery</p>
           </div>
-          <div className="flex flex-wrap gap-3">
+          <div className="grid w-full grid-cols-1 gap-2 sm:flex sm:w-auto sm:flex-wrap sm:gap-3">
             <Button 
               onClick={handleDownloadBatteryReport}
               className="bg-revithalize-green hover:bg-green-600 text-black font-medium"
@@ -418,13 +418,13 @@ export default function BatteryAnalytics() {
 
         <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid grid-cols-3 mb-6 bg-gray-800 p-1 w-full max-w-md mx-auto">
-            <TabsTrigger value="overview" className="text-sm">
+            <TabsTrigger value="overview" className="text-xs sm:text-sm">
               Overview
             </TabsTrigger>
-            <TabsTrigger value="detailed" className="text-sm">
+            <TabsTrigger value="detailed" className="text-xs sm:text-sm">
               Detailed Analysis
             </TabsTrigger>
-            <TabsTrigger value="historical" className="text-sm">
+            <TabsTrigger value="historical" className="text-xs sm:text-sm">
               Historical Data
             </TabsTrigger>
           </TabsList>
@@ -597,16 +597,16 @@ export default function BatteryAnalytics() {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3, delay: index * 0.1 }}
-                      className="flex justify-between items-center p-3 bg-gray-800 rounded-lg hover:bg-gray-750 transition-colors"
+                      className="flex flex-col gap-3 p-3 bg-gray-800 rounded-lg hover:bg-gray-750 transition-colors sm:flex-row sm:justify-between sm:items-center"
                     >
-                      <div className="flex items-center">
-                        <Calendar className="h-4 w-4 text-revithalize-green mr-3" />
-                        <div>
+                      <div className="flex min-w-0 items-center">
+                        <Calendar className="h-4 w-4 text-revithalize-green mr-3 shrink-0" />
+                        <div className="min-w-0">
                           <p className="text-white text-sm font-medium">{report.title}</p>
                           <p className="text-gray-400 text-xs">{report.date}</p>
                         </div>
                       </div>
-                      <div className="flex gap-2">
+                      <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:w-auto">
                         <Button 
                           size="sm" 
                           variant="outline" 

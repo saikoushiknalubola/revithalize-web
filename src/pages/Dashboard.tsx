@@ -86,7 +86,7 @@ export default function Dashboard() {
         </div>
 
         {/* Hero Battery Section */}
-        <div className="bg-gradient-to-b from-[#0D0D0D] to-[#070707] border border-[#1F1F23] rounded-3xl p-6 mb-4 shadow-xl shadow-emerald-500/5">
+        <div className="bg-gradient-to-b from-[#0D0D0D] to-[#070707] border border-[#1F1F23] rounded-3xl p-4 sm:p-6 mb-4 shadow-xl shadow-emerald-500/5">
           <BikeHeroSection
             bikeName="Hero Honda Passion Pro"
             batteryLevel={batteryLevel}
@@ -104,7 +104,7 @@ export default function Dashboard() {
         </div>
 
         {/* Quick Access */}
-        <section className="mb-5">
+        <section className="mb-8">
           <h3 className="text-xs font-semibold mb-3 tracking-wide uppercase text-gray-400">Quick Access</h3>
           <div className="grid grid-cols-2 gap-3">
             {quickAccessFeatures.map((feat) => {
@@ -114,11 +114,11 @@ export default function Dashboard() {
                   key={feat.id}
                   onClick={() => navigate(feat.route)}
                   whileTap={{ scale: 0.97 }}
-                  className={`bg-gradient-to-br ${feat.color} border border-[#1F1F23] rounded-2xl p-4 text-left`}
+                  className={`bg-gradient-to-br ${feat.color} border border-[#1F1F23] rounded-2xl p-3 sm:p-4 text-left min-w-0`}
                 >
                   <Icon className={`w-5 h-5 ${feat.iconColor} mb-2`} />
                   <p className="text-sm font-semibold text-white leading-tight">{feat.title}</p>
-                  <p className="text-[11px] text-gray-400 mt-1">{feat.stats}</p>
+                  <p className="text-[11px] text-gray-400 mt-1 leading-snug">{feat.stats}</p>
                 </motion.button>
               );
             })}
@@ -139,11 +139,11 @@ export default function Dashboard() {
           <div className="space-y-2">
             {recentRides.map((ride) => (
               <div key={ride.id} className="bg-[#0F0F0F] border border-[#1F1F23] rounded-2xl p-4">
-                <div className="flex items-center justify-between mb-1">
+                <div className="flex flex-wrap items-center justify-between gap-1 mb-1">
                   <span className="text-sm font-medium text-white">{ride.route}</span>
                   <span className="text-xs text-revithalize-green font-semibold">{ride.distance}</span>
                 </div>
-                <div className="flex items-center justify-between">
+                <div className="flex flex-wrap items-center justify-between gap-1">
                   <span className="text-[11px] text-gray-500">{ride.date}</span>
                   <span className="text-[11px] text-gray-500">{ride.duration}</span>
                 </div>

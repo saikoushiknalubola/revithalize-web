@@ -25,19 +25,19 @@ const energyBreakdown = [
 export default function AdvancedAnalytics() {
   return (
     <DashboardLayout>
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
+      <div className="space-y-4 md:space-y-6">
+        <div className="flex flex-col items-start gap-3 md:flex-row md:items-center md:justify-between">
+          <div className="min-w-0">
             <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-revithalize-green to-revithalize-blue">
               Advanced Analytics
             </h1>
-            <p className="text-gray-400 mt-2">
+            <p className="text-gray-400 mt-2 text-sm md:text-base">
               Deep insights and comprehensive data analysis for your electric vehicle
             </p>
           </div>
-          <div className="flex space-x-2">
+          <div className="flex w-full md:w-auto md:space-x-2">
             <Card className="bg-gray-900/80 border-green-500/30 backdrop-blur-sm">
-              <CardContent className="p-4">
+              <CardContent className="p-3 md:p-4">
                 <div className="flex items-center space-x-2">
                   <Award className="h-5 w-5 text-green-400" />
                   <span className="text-sm font-medium text-green-400">Efficiency Champion</span>
@@ -48,7 +48,7 @@ export default function AdvancedAnalytics() {
         </div>
 
         {/* Key Performance Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6">
           <Card className="bg-gray-900/80 border-gray-700/50 backdrop-blur-sm">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-gray-400 flex items-center">
@@ -103,7 +103,7 @@ export default function AdvancedAnalytics() {
         </div>
 
         {/* Performance Trends */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
           <Card className="bg-gray-900/80 border-gray-700/50 backdrop-blur-sm">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
@@ -115,7 +115,7 @@ export default function AdvancedAnalytics() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={260}>
                 <RechartsLineChart data={performanceData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
                   <XAxis dataKey="month" stroke="#9CA3AF" />
@@ -145,7 +145,7 @@ export default function AdvancedAnalytics() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={240}>
                 <RechartsPieChart>
                   <Pie
                     data={energyBreakdown}
@@ -185,7 +185,7 @@ export default function AdvancedAnalytics() {
         <AdvancedAnalyticsComponent />
 
         {/* Additional Insights */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
           <Card className="bg-gray-900/80 border-gray-700/50 backdrop-blur-sm">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
