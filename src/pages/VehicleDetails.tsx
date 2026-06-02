@@ -63,14 +63,14 @@ export default function VehicleDetails() {
   return (
     <DashboardLayout>
       <div className="space-y-6">
-        <header className="flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-heading font-bold text-white">Vehicle Details</h1>
-            <p className="text-gray-400 mt-1">Hero Honda Passion AP02SK2409</p>
+        <header className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
+          <div className="min-w-0">
+            <h1 className="text-2xl md:text-3xl font-heading font-bold text-white">Vehicle Details</h1>
+            <p className="text-gray-400 mt-1 text-sm md:text-base">Hero Honda Passion AP02SK2409</p>
           </div>
           <Button 
             onClick={handleDownloadBatteryReport}
-            className="bg-revithalize-green hover:bg-green-600 text-white"
+            className="w-full sm:w-auto bg-revithalize-green hover:bg-green-600 text-white"
           >
             <FileDown className="mr-2 h-4 w-4" />
             Download Battery Report
@@ -254,8 +254,8 @@ export default function VehicleDetails() {
                 </Card>
               </div>
               
-              <div className="flex justify-end">
-                <button className="px-4 py-2 bg-revithalize-dark hover:bg-gray-800 text-white rounded-lg flex items-center transition-colors">
+              <div className="flex justify-stretch sm:justify-end">
+                <button className="w-full sm:w-auto px-4 py-2 bg-revithalize-dark hover:bg-gray-800 text-white rounded-lg flex items-center justify-center transition-colors">
                   <Settings className="mr-2 h-4 w-4" />
                   Advanced Settings
                 </button>

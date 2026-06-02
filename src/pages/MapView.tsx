@@ -20,24 +20,24 @@ export default function MapView() {
   return (
     <DashboardLayout>
       <motion.div 
-        className="space-y-6"
+        className="space-y-4 md:space-y-6"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
         <header>
-          <h1 className="text-3xl font-heading font-bold text-white">Charging Map</h1>
-          <p className="text-gray-400 mt-1">Find retrofitting stations and charging points</p>
+          <h1 className="text-2xl md:text-3xl font-heading font-bold text-white">Charging Map</h1>
+          <p className="text-gray-400 mt-1 text-sm md:text-base">Find retrofitting stations and charging points</p>
         </header>
 
         <div className="relative">
           {/* Map search controls */}
-          <div className="absolute top-4 left-4 right-4 z-10 flex gap-3">
+           <div className="absolute top-3 left-3 right-3 z-10 flex gap-2 md:top-4 md:left-4 md:right-4 md:gap-3">
             <div className="flex-1 bg-gray-900 border border-gray-800 rounded-lg flex items-center px-3 py-2">
               <Search className="h-5 w-5 text-gray-400 mr-2" />
               <input
                 type="text"
-                placeholder="Search for charging stations..."
+                placeholder={isMobile ? "Search stations..." : "Search for charging stations..."}
                 className="bg-transparent border-none text-white w-full focus:outline-none text-sm"
               />
             </div>
@@ -51,7 +51,7 @@ export default function MapView() {
 
           {/* Nearby charging stations */}
           <div className="mt-6">
-            <h2 className="text-xl font-medium text-white mb-4">Nearby Retrofitting & Charging Stations</h2>
+            <h2 className="text-lg md:text-xl font-medium text-white mb-4">Nearby Retrofitting & Charging Stations</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {[
                 { 
@@ -97,14 +97,14 @@ export default function MapView() {
                   <Card className={`${station.isHeadquarters ? 'bg-gradient-to-br from-gray-900 to-gray-800 border-revithalize-green/30' : 'bg-gradient-to-br from-gray-900 to-gray-800 border-gray-800'} hover:border-gray-700 transition-colors`}>
                     <CardContent className="p-4">
                       <div className="flex items-start gap-3">
-                        <div className={`p-2 rounded-lg ${station.available > 0 ? 'bg-green-900/30' : 'bg-red-900/30'}`}>
+                        <div className={`shrink-0 p-2 rounded-lg ${station.available > 0 ? 'bg-green-900/30' : 'bg-red-900/30'}`}>
                           <MapPin className={`h-5 w-5 ${station.available > 0 ? 'text-green-500' : 'text-red-500'}`} />
                         </div>
                         <div className="flex-1">
-                          <h3 className="font-medium text-white mb-1 flex items-center">
+                          <h3 className="font-medium text-white mb-1 flex flex-wrap items-center gap-1">
                             {station.name}
                             {station.isHeadquarters && (
-                              <span className="ml-2 text-xs bg-revithalize-green/20 text-revithalize-green px-2 py-0.5 rounded-full">
+                              <span className="text-xs bg-revithalize-green/20 text-revithalize-green px-2 py-0.5 rounded-full">
                                 HQ
                               </span>
                             )}
@@ -137,10 +137,10 @@ export default function MapView() {
                             </div>
                           </div>
                           
-                          <div className="mt-3 flex items-center justify-between">
+                          <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                             <p className="text-sm font-medium text-revithalize-green">{station.power} DC Fast Charging</p>
                             <button 
-                              className="text-xs bg-revithalize-dark hover:bg-gray-800 text-white px-3 py-1.5 rounded transition-colors flex items-center"
+                              className="text-xs bg-revithalize-dark hover:bg-gray-800 text-white px-3 py-1.5 rounded transition-colors flex items-center justify-center"
                               onClick={() => handleNavigate(station.address)}
                             >
                               <Navigation className="h-3 w-3 mr-1" />

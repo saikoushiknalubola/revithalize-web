@@ -66,8 +66,8 @@ export function PredictiveMaintenance() {
   return (
     <Card className="bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700">
       <CardHeader>
-        <CardTitle className="text-white flex items-center">
-          <Brain className="mr-2 h-6 w-6 text-purple-400" />
+        <CardTitle className="text-white flex items-center text-lg md:text-xl">
+          <Brain className="mr-2 h-5 w-5 md:h-6 md:w-6 text-purple-400 shrink-0" />
           AI-Powered Predictive Maintenance
         </CardTitle>
         <p className="text-gray-400 text-sm">
@@ -84,19 +84,19 @@ export function PredictiveMaintenance() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-black/30 rounded-lg p-4 border border-gray-700/50"
+                className="bg-black/30 rounded-lg p-3 md:p-4 border border-gray-700/50"
               >
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex items-center">
-                    <Icon className={`h-5 w-5 mr-3 ${getStatusColor(item.status)}`} />
-                    <div>
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between mb-3">
+                  <div className="flex min-w-0 items-center">
+                    <Icon className={`h-5 w-5 mr-3 shrink-0 ${getStatusColor(item.status)}`} />
+                    <div className="min-w-0">
                       <h4 className="text-white font-medium">{item.component}</h4>
                       <p className={`text-sm capitalize ${getStatusColor(item.status)}`}>
                         {item.status}
                       </p>
                     </div>
                   </div>
-                  <div className="text-right">
+                  <div className="sm:text-right">
                     <div className="text-lg font-bold text-white">{item.health.toFixed(1)}%</div>
                     <div className="text-xs text-gray-400">Health Score</div>
                   </div>
@@ -118,13 +118,13 @@ export function PredictiveMaintenance() {
                 </div>
 
                 <div className="space-y-2">
-                  <div className="flex items-center text-sm">
-                    <Clock className="h-4 w-4 text-blue-400 mr-2" />
+                  <div className="flex flex-wrap items-center text-sm gap-x-1">
+                    <Clock className="h-4 w-4 text-blue-400 mr-1 shrink-0" />
                     <span className="text-gray-300">Next maintenance: </span>
-                    <span className="text-blue-400 ml-1">{item.nextMaintenance}</span>
+                    <span className="text-blue-400">{item.nextMaintenance}</span>
                   </div>
                   <div className="flex items-start text-sm">
-                    <Brain className="h-4 w-4 text-purple-400 mr-2 mt-0.5" />
+                    <Brain className="h-4 w-4 text-purple-400 mr-2 mt-0.5 shrink-0" />
                     <span className="text-gray-300">{item.aiPrediction}</span>
                   </div>
                 </div>
@@ -134,12 +134,12 @@ export function PredictiveMaintenance() {
         </div>
 
         <div className="mt-6 bg-gradient-to-r from-purple-900/30 to-blue-900/30 rounded-lg p-4 border border-purple-600/20">
-          <div className="flex items-center justify-between">
-            <div>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="min-w-0">
               <h3 className="text-white font-semibold mb-1">AI Maintenance Score</h3>
               <p className="text-gray-300 text-sm">Your vehicle is performing exceptionally well</p>
             </div>
-            <div className="text-right">
+            <div className="sm:text-right">
               <div className="text-2xl font-bold text-purple-400">A+</div>
               <div className="text-xs text-gray-400">Overall Grade</div>
             </div>
