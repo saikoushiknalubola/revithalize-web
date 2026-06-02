@@ -98,5 +98,29 @@
 
   body {
     @apply bg-background text-foreground font-poppins;
+    overflow-x: hidden;
   }
+
+  html, body, #root {
+    max-width: 100vw;
+  }
+}
+
+/* Global mobile-first responsive safety net.
+   Many existing pages use desktop-only grid/typography classes without sm: prefixes.
+   These rules ensure they behave correctly on small screens without editing every page. */
+@media (max-width: 767px) {
+  .grid.grid-cols-3,
+  .grid.grid-cols-4,
+  .grid.grid-cols-5,
+  .grid.grid-cols-6 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  /* Tame oversized headings on tiny screens */
+  .text-3xl { font-size: 1.5rem; line-height: 2rem; }
+  .text-4xl { font-size: 1.75rem; line-height: 2.25rem; }
+  .text-5xl { font-size: 2rem; line-height: 2.5rem; }
+  .text-6xl { font-size: 2.25rem; line-height: 2.5rem; }
+
+  /* Prevent wide tables / pre / code from breaking layout */
+  table, pre { max-width: 100%; overflow-x: auto; display: block; }
 }
