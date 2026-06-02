@@ -285,12 +285,12 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
 
       {/* Main content */}
       <main className={cn(
-        "flex-1 transition-all duration-300 ease-in-out",
+        "flex-1 transition-all duration-300 ease-in-out w-full min-w-0",
         "md:ml-64",
-        "px-4 md:p-8 pb-28 md:pb-8 pt-16 md:pt-8"
+        "px-3 sm:px-4 md:p-8 pb-28 md:pb-8 pt-16 md:pt-8"
       )}>
         <div className="min-h-screen bg-black">
-          <div className="max-w-[420px] md:max-w-7xl mx-auto">
+          <div className="w-full max-w-full md:max-w-7xl mx-auto">
             {children}
           </div>
         </div>
