@@ -296,7 +296,7 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
         </div>
 
         {/* Mobile bottom navigation */}
-        <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-center px-3 pb-3 md:hidden pointer-events-none">
+        <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-center bg-gradient-to-t from-black via-black/95 to-transparent px-3 pb-3 pt-6 md:hidden pointer-events-none">
           <div className="w-full max-w-[420px] bg-[#0A0A0A]/95 backdrop-blur-xl border border-[#1F1F23] rounded-3xl px-3 py-2.5 shadow-2xl pointer-events-auto">
             <div className="flex items-center justify-around">
               {mobileNavItems.map((item) => {
