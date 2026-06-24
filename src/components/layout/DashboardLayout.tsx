@@ -172,20 +172,20 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
 
 
   return (
-    <div className="flex min-h-screen bg-black font-poppins overflow-hidden">
-      {/* Mobile top bar with logo (replaces hamburger) */}
+    <div className="flex min-h-screen bg-background font-body overflow-hidden">
+      {/* Mobile top bar with brand lockup */}
       {isMobile && (
-        <header className="fixed top-0 inset-x-0 z-40 bg-black/95 backdrop-blur-md border-b border-gray-800/50">
-          <div className="flex items-center justify-between px-4 h-14 max-w-[420px] mx-auto">
-            <Link to={isFleet ? '/fleet-dashboard' : '/dashboard'} className="flex items-center">
-              <Logo size="md" className="h-9" />
+        <header className="fixed top-0 inset-x-0 z-40 bg-background/85 backdrop-blur-xl border-b border-border pt-safe">
+          <div className="flex items-center justify-between px-4 h-14 max-w-[460px] mx-auto">
+            <Link to={isFleet ? '/fleet-dashboard' : '/dashboard'} className="flex items-center min-w-0">
+              <Logo size="md" />
             </Link>
             <button
               onClick={handleLogout}
-              className="text-xs text-gray-400 hover:text-red-400 transition-colors flex items-center gap-1"
+              className="text-muted-foreground hover:text-destructive transition-colors p-2 -mr-2"
               aria-label="Logout"
             >
-              <LogOut size={16} />
+              <LogOut size={18} />
             </button>
           </div>
         </header>
@@ -295,9 +295,9 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
           </div>
         </div>
 
-        {/* Mobile bottom navigation */}
-        <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-center bg-gradient-to-t from-black via-black/95 to-transparent px-3 pb-3 pt-6 md:hidden pointer-events-none">
-          <div className="w-full max-w-[420px] bg-[#0A0A0A]/95 backdrop-blur-xl border border-[#1F1F23] rounded-3xl px-3 py-2.5 shadow-2xl pointer-events-auto">
+        {/* Mobile bottom navigation — premium floating pill */}
+        <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-center bg-gradient-to-t from-background via-background/95 to-transparent px-3 pt-6 pb-safe md:hidden pointer-events-none">
+          <div className="w-full max-w-[460px] bg-surface/90 backdrop-blur-2xl border border-border rounded-full px-2 py-2 shadow-elev pointer-events-auto">
             <div className="flex items-center justify-around">
               {mobileNavItems.map((item) => {
                 const Icon = item.icon;
@@ -306,15 +306,22 @@ export function DashboardLayout({ children, activeFeature, setActiveFeature }: D
                   <Link
                     key={item.to}
                     to={item.to}
-                    className="flex min-w-0 flex-1 flex-col items-center gap-1 relative"
+                    className="flex min-w-0 flex-1 flex-col items-center gap-0.5 py-1.5 relative group"
                   >
-                    <div className={cn(
-                      "w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200",
-                      active ? "bg-revithalize-green/20 ring-1 ring-revithalize-green/50" : "bg-transparent"
+                    <span
+                      className={cn(
+                        "absolute -top-0.5 w-1 h-1 rounded-full transition-all",
+                        active ? "bg-primary shadow-[0_0_8px_rgba(0,255,148,0.8)]" : "bg-transparent"
+                      )}
+                    />
+                    <Icon className={cn(
+                      "w-[22px] h-[22px] transition-colors",
+                      active ? "text-primary" : "text-muted-foreground group-hover:text-foreground"
+                    )} />
+                    <span className={cn(
+                      "text-[10px] font-medium leading-none transition-colors",
+                      active ? "text-primary" : "text-muted-foreground"
                     )}>
-                      <Icon className={cn("w-5 h-5", active ? "text-revithalize-green" : "text-gray-500")} />
-                    </div>
-                    <span className={cn("text-[10px] font-medium leading-none", active ? "text-revithalize-green" : "text-gray-500")}>
                       {item.label}
                     </span>
                   </Link>
