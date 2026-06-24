@@ -49,14 +49,32 @@ export default {
           green: '#00FF94',
           blue: '#00B8FF',
           dark: '#1A1F2C',
-        }
+        },
+        surface: {
+          DEFAULT: 'hsl(var(--surface))',
+          2: 'hsl(var(--surface-2))',
+          3: 'hsl(var(--surface-3))',
+        },
+        warning: 'hsl(var(--warning))',
       },
       fontFamily: {
-        'body': ['Poppins', 'sans-serif'],
-        'heading': ['Poppins', 'sans-serif'],
-        'poppins': ['Poppins', 'sans-serif'],
-        'space': ['Space Grotesk', 'sans-serif'],
-        'syne': ['Syne', 'sans-serif'],
+        'body': ['Manrope', 'sans-serif'],
+        'heading': ['Sora', 'sans-serif'],
+        'sora': ['Sora', 'sans-serif'],
+        'manrope': ['Manrope', 'sans-serif'],
+        'poppins': ['Manrope', 'sans-serif'], // backwards-compat alias
+        'space': ['Sora', 'sans-serif'],
+        'syne': ['Sora', 'sans-serif'],
+      },
+      backgroundImage: {
+        'grad-accent': 'var(--grad-accent)',
+        'grad-glass': 'var(--grad-glass)',
+        'grad-radial-accent': 'var(--grad-radial-accent)',
+      },
+      boxShadow: {
+        'glow': 'var(--shadow-glow)',
+        'card': 'var(--shadow-card)',
+        'elev': 'var(--shadow-elev)',
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-out forwards',
@@ -65,6 +83,7 @@ export default {
         'slide-in-left': 'slideInLeft 0.4s ease-out',
         'slide-in-up': 'slideInUp 0.4s ease-out',
         'pulse': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'pulse-glow': 'pulse-glow 3s ease-in-out infinite',
         'bounce-subtle': 'bounceSlight 2s infinite',
         'glow': 'glow 1.5s ease-in-out infinite alternate',
       },
